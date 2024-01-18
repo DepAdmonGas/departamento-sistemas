@@ -212,7 +212,7 @@ class Sistemas{
         WHERE id_ticket='".$idRegistro."' ";
 
         if (mysqli_query($this->$con, $sql)) {
-        $this->PersonalSistemas($idRegistro);
+        $this->PersonalSistemas($idRegistro,1);
         $Resultado = 1;
         }else{
         $Resultado = 0;
@@ -222,9 +222,13 @@ class Sistemas{
 
     }
 
-    public function PersonalSistemas($idRegistro){
+    public function PersonalSistemas($idRegistro,$opcion){
 
-        $detalle = 'Tienes un nuevo ticket pendiente por atender #0'.$idRegistro;
+        if($opcion == 1){
+            $detalle = 'Tienes un nuevo ticket pendiente por atender #0'.$idRegistro;
+        }else if($opcion == 2){
+            $detalle = 'Tienes un nuevo comentario en Soporte de Sistemas en el Ticket #0'.$idticket;
+        }
 
         $sql = "SELECT 
         tb_usuarios.id,
@@ -315,7 +319,7 @@ class Sistemas{
 
                 if($opcion == 1){
 
-                    $this->PersonalSistemas($idticket);
+                    $this->PersonalSistemas($idticket,2);
 
                 }else if($opcion == 2){
 
