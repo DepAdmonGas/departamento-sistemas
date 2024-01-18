@@ -46,7 +46,7 @@ else if($_POST['Accion'] == 'cancelar-ticket'){
     echo $Resultado;
 }
 else if($_POST['Accion'] == 'guardar-comentario'){
-    $Resultado = $ClassSistemas->GuardarComentario($_POST['idticket'],$_POST['comentario'],$Session_IDUsuarioBD);
+    $Resultado = $ClassSistemas->GuardarComentario($_POST['idticket'],$_POST['comentario'],$Session_IDUsuarioBD,$_POST['opcion']);
     echo $Resultado;
 }
 else if($_POST['Accion'] == 'editar-registro'){

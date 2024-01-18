@@ -1,6 +1,9 @@
 <?php 
 include_once "app/help.php";
-   
+
+if($Session_IDPuestoBD != 2){
+  header("location: soporte");  
+}
 ?>
   
 <!DOCTYPE html>
@@ -86,7 +89,8 @@ $('#Comentario').css('border','');
 let parametros = {
 "Accion" : "guardar-comentario",
 "idticket" : idticket,
-"comentario" : Comentario
+"comentario" : Comentario,
+"opcion" : 2,
 };
 
 $.ajax({

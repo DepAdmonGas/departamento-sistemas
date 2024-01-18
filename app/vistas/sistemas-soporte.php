@@ -115,7 +115,8 @@ include_once "app/help.php";
     let parametros = {
     "Accion" : "guardar-comentario",
     "idticket" : idticket,
-    "comentario" : Comentario
+    "comentario" : Comentario,
+    "opcion" : 1,
     };
 
     $.ajax({

@@ -232,15 +232,13 @@ class Sistemas{
         tb_usuarios_token.token
         FROM tb_usuarios
         INNER JOIN tb_usuarios_token 
-        ON tb_usuarios.id = tb_usuarios_token.id_usuario WHERE tb_usuarios.id_puesto = 2 AND tb_usuarios_token.herramienta = 'token-web' ORDER BY tb_usuarios_token.id DESC LIMIT 1 ";
+        ON tb_usuarios.id = tb_usuarios_token.id_usuario WHERE tb_usuarios.id_puesto = 2 AND tb_usuarios_token.herramienta = 'token-web' ";
         $result = mysqli_query($this->$con, $sql);
         $numero = mysqli_num_rows($result);
-        if($numero > 0){
             while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
                 $token = $row['token'];
                 $this->sendNotification($token,$detalle);
             }
-        }
 
         return true;
       
@@ -268,17 +266,16 @@ class Sistemas{
         );
     
         $ch=curl_init();
-        // Set the url, number of POST vars, POST data
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        // Disabling SSL Certificate support temporarily
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
         $result=curl_exec($ch);
      
         curl_close($ch);
+
     }
 
     //---------- CANCELAR TICKET ----------//
@@ -300,7 +297,7 @@ class Sistemas{
     
     //--------- CREAR COMENTARIO --------//
 
-    public function GuardarComentario($idticket,$comentario,$idPersonal){
+    public function GuardarComentario($idticket,$comentario,$idPersonal,$opcion){
         $detalle = 'Tienes un nuevo comentario en Soporte de Sistemas en el Ticket #0'.$idticket;
         $sql = "INSERT INTO ds_soporte_comentarios (
             id_ticket,
@@ -315,11 +312,21 @@ class Sistemas{
                 )";
             
             if(mysqli_query($this->$con, $sql)){
-                $ClassContenido = new SistemasContenido();
-                $SoporteContenido = $ClassContenido->soporteContenido($idticket);
-                $idSolicitante = $SoporteContenido['idSolicitante'];
-                $token = $this->TokenPersonal($idSolicitante);
-                $this->sendNotification($token,$detalle);
+
+                if($opcion == 1){
+
+                    $this->PersonalSistemas($idticket);
+
+                }else if($opcion == 2){
+
+                    $ClassContenido = new SistemasContenido();
+                    $SoporteContenido = $ClassContenido->soporteContenido($idticket);
+                    $idSolicitante = $SoporteContenido['idSolicitante'];
+                    $token = $this->TokenPersonal($idSolicitante);
+                    $this->sendNotification($token,$detalle);
+
+                }
+
                 $Resultado = 1;
             }else{
                 $Resultado = 0;
@@ -443,7 +450,7 @@ class Sistemas{
 
                 if (mysqli_query($this->$con, $sql)) {
                     mysqli_query($this->$con, $sql2);
-                $ResultComentario = $this->GuardarComentario($idticket,$comentario,$idPersonal);
+                $ResultComentario = $this->GuardarComentario($idticket,$comentario,$idPersonal,2);
                 $Resultado = 1;
                 }else{
                 $Resultado = 0;
@@ -464,7 +471,7 @@ class Sistemas{
 
                 if (mysqli_query($this->$con, $sql)) {
                     mysqli_query($this->$con, $sql2);
-                $ResultComentario = $this->GuardarComentario($idticket,$comentario,$idPersonal);
+                $ResultComentario = $this->GuardarComentario($idticket,$comentario,$idPersonal,2);
                 $Resultado = 1;
                 }else{
                 $Resultado = 0;
