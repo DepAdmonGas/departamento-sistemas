@@ -1,4 +1,4 @@
-<?php 
+<?php  
 include_once "../../app/help.php";
 $con = $ClassConexionBD->conectarBD();
 $idticket = $_GET['idticket'];
@@ -28,7 +28,7 @@ if($soporteContenido['estado'] == 3 || $soporteContenido['estado'] == 4){
 
 <div class="modal-header">
 <h5 class="modal-title">Comentarios</h5>
-<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 
 <div class="modal-body"> 
@@ -74,10 +74,12 @@ $HoraFormato = date("g:i a",strtotime($fechaExplode[1]));
 
 <div class="mb-2 text-secondary mt-2">COMENTARIO:</div>
 <textarea class="form-control rounded-0" id="Comentario"></textarea>
+</div>
 
-<div class="text-end mt-2">
+
+<div class="modal-footer">
 <?=$BotonComentarios;?>
 </div>
 
-</div>
+
 

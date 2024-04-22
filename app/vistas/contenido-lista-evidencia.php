@@ -8,29 +8,31 @@ $result = mysqli_query($con, $sql);
 $numero = mysqli_num_rows($result);
 ?>
 
-<table class="table table-sm table-bordered mt-1 mb-1 pb-1">
-	<thead class="table-light">
+<div class="table-responsive">
+<table class="custom-table" style="font-size: 12px;" width="100%" >
+<thead class="navbar-bg">
+
 		<tr>
             <th class="align-middle">#</th>
-			<th class="align-middle">Descripción de la evidencia</th>
+			<th class="align-middle text-start">Descripción de la evidencia</th>
 			<th class="align-middle text-center" width="24px"><img src="<?=RUTA_IMG_ICONOS;?>descargar.png"></th>
 			<th class="align-middle text-center" width="24px"><img src="<?=RUTA_IMG_ICONOS;?>eliminar.png"></th>
 		</tr>
 	</thead>
-	<tbody>
+    <tbody class="bg-light">
 	<?php
 
 	if ($numero > 0) {
-
+ 
         $num = 1;
-
+ 
 		while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
 		$id = $row['id'];
 		$descripcion = $row['descripcion'];
 
 		echo '<tr>';
-        echo '<td class="align-middle">'.$num.'</td>';
-		echo '<td class="align-middle">'.$descripcion.'</td>';
+        echo '<th class="align-middle">'.$num.'</th>';
+		echo '<td class="align-middle text-start">'.$descripcion.'</td>';
 		echo '<td class="align-middle"><a href="'.RUTA_ARCHIVOS.$row['evidencia'].'" download><img src="'.RUTA_IMG_ICONOS.'descargar.png" ></a></td>';
 		echo '<td class="align-middle"><img src="'.RUTA_IMG_ICONOS.'eliminar.png" onclick="EliminarEvidencia('.$idRegistro.','.$id.')"></td>';
 		echo '</tr>';
@@ -39,7 +41,7 @@ $numero = mysqli_num_rows($result);
 		}
 
 	}else{
-	echo "<tr><td colspan='4' class='text-center'><small>No se encontró información para mostrar</small></td></tr>";
+        echo "<tr style='background-color: #f8f9fa'><th colspan='9' class='text-center text-secondary'><small>No se encontró información para mostrar </small></th></tr>";
 	}
 
 	?>

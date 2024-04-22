@@ -74,7 +74,7 @@ while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
         }else{
             $FechaTerminoReal = FormatoFecha($explode3[0]).', '.date("g:i a",strtotime($explode3[1]));
         }
-
+ 
 		if($row['estado'] == 0){
 
             $estado = 'Creando';
@@ -108,8 +108,9 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 ?>
 <div class="modal-header">
 <h5 class="modal-title">Detalle</h5>
-<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
+
 
 <div class="modal-body"> 
 
@@ -168,18 +169,23 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 <hr>
 
 <h6 class="mt-2 text-secondary">Actividad:</h6>
-<table class="table table-sm table-bordered mt-1 mb-1 pb-1" style="font-size: .8em;">
-	<thead class="table-light">
-		<tr>
-            <th class="align-middle">#</th>
-			<th class="align-middle">Descripción de la actividad</th>
-            <th class="align-middle">Fecha inicio</th>
-            <th class="align-middle">Fecha termino</th>
-            <th class="align-middle">Estado</th>
-			<th class="align-middle text-center" width="24px"><img src="<?=RUTA_IMG_ICONOS;?>descargar.png"></th>
-		</tr>
-	</thead>
-	<tbody>
+
+
+<div class="table-responsive">
+<table class="custom-table" style="font-size: 12px;" width="100%" >
+
+<thead class="navbar-bg">
+	<tr>
+    <th class="align-middle">#</th>
+	<th class="align-middle">Descripción de la actividad</th>
+    <th class="align-middle">Fecha inicio</th>
+    <th class="align-middle">Fecha termino</th>
+    <th class="align-middle">Estado</th>
+	<th class="align-middle text-center" width="24px"><img src="<?=RUTA_IMG_ICONOS;?>descargar.png"></th>
+	</tr>
+</thead>
+
+<tbody class="bg-light">
 	<?php
 
 	if ($numeroActividad > 0) {
@@ -215,7 +221,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         }
 
 		echo '<tr>';
-        echo '<td class="align-middle">'.$numActividad.'</td>';
+        echo '<th class="align-middle">'.$numActividad.'</th>';
 		echo '<td class="align-middle">'.$descripcionActividad.'</td>';
         echo '<td class="align-middle">'.$AtividadFechaInicio.'</td>';
         echo '<td class="align-middle">'.$AtividadFechaTermino.'</td>';
@@ -227,24 +233,27 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 		}
 
 	}else{
-	echo "<tr><td colspan='6' class='text-center'><small>No se encontró información para mostrar</small></td></tr>";
+        echo "<tr style='background-color: #f8f9fa'><th colspan='9' class='text-center text-secondary'><small>No se encontró información para mostrar </small></th></tr>";
 	}
 
 	?>
 	</tbody> 
 	</table>
-
-
+</div>
+  
 <h6 class="text-secondary mt-2">Evidencia:</h6>
-<table class="table table-sm table-bordered mt-1 mb-1 pb-1" style="font-size: .8em;">
-	<thead class="table-light">
-		<tr>
-            <th class="align-middle">#</th>
-			<th class="align-middle">Descripción de la evidencia</th>
-			<th class="align-middle text-center" width="24px"><img src="<?=RUTA_IMG_ICONOS;?>descargar.png"></th>
-		</tr>
-	</thead>
-	<tbody>
+
+<div class="table-responsive">
+<table class="custom-table" style="font-size: 12px;" width="100%" >
+<thead class="navbar-bg">
+    <tr>
+    <th class="align-middle">#</th>
+	<th class="align-middle">Descripción de la evidencia</th>
+	<th class="align-middle text-center" width="24px"><img src="<?=RUTA_IMG_ICONOS;?>descargar.png"></th>
+	</tr>
+</thead>
+
+    <tbody class="bg-light">
 	<?php
 
 	if ($numeroEvidencia > 0) {
@@ -264,11 +273,12 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 		}
 
 	}else{
-	echo "<tr><td colspan='4' class='text-center'><small>No se encontró información para mostrar</small></td></tr>";
+        echo "<tr style='background-color: #f8f9fa'><th colspan='9' class='text-center text-secondary'><small>No se encontró información para mostrar </small></th></tr>";
 	}
 
 	?>
 	</tbody> 
 	</table>
+    </div>
 
 </div>
