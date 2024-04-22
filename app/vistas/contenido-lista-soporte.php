@@ -1,11 +1,7 @@
-<?php  
+<?php   
 include_once "../../app/help.php";
 $con = $ClassConexionBD->conectarBD();
-
-$pagina = $_GET['page'];
-$registro_por_pagina = 50;
-$start_pagina = ($pagina-1)*$registro_por_pagina;
-
+ 
         $sql = "SELECT
         ds_soporte.id_ticket, 
         ds_soporte.id_personal,
@@ -29,25 +25,28 @@ $start_pagina = ($pagina-1)*$registro_por_pagina;
         ON tb_usuarios.id_gas = tb_estaciones.id
         INNER JOIN tb_puestos
         ON tb_usuarios.id_puesto = tb_puestos.id
-        WHERE ds_soporte.id_personal = '".$Session_IDUsuarioBD."' ORDER BY ds_soporte.fecha_termino_real ASC LIMIT $start_pagina , $registro_por_pagina ";
+        WHERE ds_soporte.id_personal = '".$Session_IDUsuarioBD."' ORDER BY ds_soporte.fecha_termino_real ASC";
         $result = mysqli_query($con, $sql);
         $numero = mysqli_num_rows($result);
 ?>
-<div class="bg-white mt-3">
-<table class="table table-sm table-bordered" style="font-size: .9em;">
-	<thead class="table-light">
-		<tr>
-            <th class="align-middle"># Ticket</th>
-			<th class="align-middle">Descripción</th>
-            <th class="align-middle">Prioridad</th>
 
-            <th class="align-middle">Fecha inicio</th>
-            <th class="align-middle">Fecha termino programado</th>
 
-            <th class="align-middle">Estado</th>    
-            <th class="align-middle">Porcentaje</th> 
-            <th class="align-middle">Responsable</th>         
-            <th class="align-middle">Fecha termino real</th>
+<div class="table-responsive">
+<table id="tabla_sistemas" class="custom-table mt-2" style="font-size: 14px;" width="100%">
+
+	<thead class="navbar-bg">		 
+    <tr>
+            <th class="align-middle text-center"># Ticket</th>
+			<th class="align-middle text-center">Descripción</th>
+            <th class="align-middle text-center">Prioridad</th>
+
+            <th class="align-middle text-center">Fecha inicio</th>
+            <th class="align-middle text-center">Fecha termino programado</th>
+
+            <th class="align-middle text-center">Estado</th>    
+            <th class="align-middle text-center">Porcentaje</th> 
+            <th class="align-middle text-center">Responsable</th>         
+            <th class="align-middle text-center">Fecha termino real</th>
 
             <th class="align-middle text-center" width="24px"><img src="<?=RUTA_IMG_ICONOS;?>detalle.png"></th>
             <th class="align-middle text-center" width="24px"><img src="<?=RUTA_IMG_ICONOS;?>comentarios.png"></th>
@@ -88,35 +87,35 @@ $start_pagina = ($pagina-1)*$registro_por_pagina;
 
         if($row['estado'] == 0){
 
-            $trColor = 'table-warning';
+            $trColor = 'style="background-color: #fcfcda"';
             $estado = 'Creando';
             $Editar = '<a onclick="EditarTicket('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'editar.png" ></a>';
             $Eliminar = '<img src="'.RUTA_IMG_ICONOS.'eliminar.png" onclick="EliminarTicket('.$id_ticket.')">';
 
         }else if($row['estado'] == 1){
 
-            $trColor = 'table-secondary';
+            $trColor = 'style="background-color: #ffffff"';
             $estado = 'Pendiente';
             $Editar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'editar.png" >';
             $Eliminar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'eliminar.png">';
 
         }else if($row['estado'] == 2){
-
-            $trColor = 'table-info';
+            
+            $trColor = 'style="background-color: #cfe2ff"';
             $estado = 'En proceso';
             $Editar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'editar.png" >';
             $Eliminar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'eliminar.png">';
 
         }else if($row['estado'] == 3){
 
-            $trColor = 'table-success';
+            $trColor = 'style="background-color: #b0f2c2"';
             $estado = 'Finalizado';
             $Editar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'editar.png" >';
             $Eliminar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'eliminar.png">';
 
         }else if($row['estado'] == 4){
 
-            $trColor = 'table-danger';
+            $trColor = 'style="background-color: #ffb6af"';
             $estado = 'Cancelado';
             $Editar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'editar.png" >';
             $Eliminar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'eliminar.png">';
@@ -151,90 +150,90 @@ $start_pagina = ($pagina-1)*$registro_por_pagina;
             $FechaCierreTicket = date("Y-m-d",strtotime($explode3[0]."+ 3 days"));
         }
 
-        if($row['estado'] == 0){
+        if($row['estado'] == 0){ 
 
-            echo '<tr class="'.$trColor.'">';
-            echo '<td class="align-middle"><b>0'.$id_ticket.'</b></td>';
-            echo '<td class="align-middle">'.$descripcion.'</td>';
-            echo '<td class="align-middle '.$colorPrioridad.'"><small><b>'.$prioridad.'</b></small></td>';
+            echo '<tr '.$trColor.'>';
+            echo '<th class="align-middle text-center"><b>0'.$id_ticket.'</b></th>';
+            echo '<td class="align-middle text-center">'.$descripcion.'</td>';
+            echo '<td class="align-middle text-center '.$colorPrioridad.'"><small><b>'.$prioridad.'</b></small></td>';
     
-            echo '<td class="align-middle"><small>'.$fechaInicio.'</small></td>';
-            echo '<td class="align-middle"><small>'.$fechaTermino.'</small></td>';
+            echo '<td class="align-middle text-center"><small class="text-dark"><b>'.$fechaInicio.'</b></small></td>';
+            echo '<td class="align-middle text-center"><small class="text-dark"><b>'.$fechaTermino.'</b></small></td>';
     
-            echo '<td class="align-middle">'.$estado.'</td>';
-            echo '<td class="align-middle">'.$porcentaje.' %</td>';
-            echo '<td class="align-middle">'.$PersonalSoporte.'</td>';
-            echo '<td class="align-middle"><b>'.$fechaterminoreal.'</b></td>';  
+            echo '<td class="align-middle text-center">'.$estado.'</td>';
+            echo '<td class="align-middle text-center">'.$porcentaje.' %</td>';
+            echo '<td class="align-middle text-center">'.$PersonalSoporte.'</td>';
+            echo '<td class="align-middle text-center"><b>'.$fechaterminoreal.'</b></td>';  
     
-            echo '<td class="align-middle"><a onclick="ModalDetalle('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'detalle.png" ></a></td>';
-            echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
-            echo '<td class="align-middle">'.$Editar.'</td>';
-            echo '<td class="align-middle">'.$Eliminar.'</td>';
+            echo '<td class="align-middle text-center"><a onclick="ModalDetalle('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'detalle.png" ></a></td>';
+            echo '<td class="align-middle text-center"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
+            echo '<td class="align-middle text-center">'.$Editar.'</td>';
+            echo '<td class="align-middle text-center">'.$Eliminar.'</td>';
             echo '</tr>';
 
         }else if($row['estado'] == 1){
 
-            echo '<tr class="'.$trColor.'">';
-            echo '<td class="align-middle"><b>0'.$id_ticket.'</b></td>';
-            echo '<td class="align-middle">'.$descripcion.'</td>';
-            echo '<td class="align-middle '.$colorPrioridad.'"><small><b>'.$prioridad.'</b></small></td>';
+            echo '<tr '.$trColor.'>';
+            echo '<th class="align-middle text-center"><b>0'.$id_ticket.'</b></th>';
+            echo '<td class="align-middle text-center">'.$descripcion.'</td>';
+            echo '<td class="align-middle text-center '.$colorPrioridad.'"><small><b>'.$prioridad.'</b></small></td>';
     
-            echo '<td class="align-middle"><small>'.$fechaInicio.'</small></td>';
-            echo '<td class="align-middle"><small>'.$fechaTermino.'</small></td>';
+            echo '<td class="align-middle text-center"><small class="text-dark"><b>'.$fechaInicio.'</b></small></td>';
+            echo '<td class="align-middle text-center"><small class="text-dark"><b>'.$fechaTermino.'</b></small></td>';
     
-            echo '<td class="align-middle">'.$estado.'</td>';
-            echo '<td class="align-middle">'.$porcentaje.' %</td>';
-            echo '<td class="align-middle">'.$PersonalSoporte.'</td>';
-            echo '<td class="align-middle"><b>'.$fechaterminoreal.'</b></td>';  
+            echo '<td class="align-middle text-center">'.$estado.'</td>';
+            echo '<td class="align-middle text-center">'.$porcentaje.' %</td>';
+            echo '<td class="align-middle text-center">'.$PersonalSoporte.'</td>';
+            echo '<td class="align-middle text-center"><b>'.$fechaterminoreal.'</b></td>';  
     
-            echo '<td class="align-middle"><a onclick="ModalDetalle('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'detalle.png" ></a></td>';
-            echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
-            echo '<td class="align-middle">'.$Editar.'</td>';
-            echo '<td class="align-middle">'.$Eliminar.'</td>';
+            echo '<td class="align-middle text-center"><a onclick="ModalDetalle('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'detalle.png" ></a></td>';
+            echo '<td class="align-middle text-center"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
+            echo '<td class="align-middle text-center">'.$Editar.'</td>';
+            echo '<td class="align-middle text-center">'.$Eliminar.'</td>';
             echo '</tr>';
 
         }else if($row['estado'] == 2){
 
-            echo '<tr class="'.$trColor.'">';
-            echo '<td class="align-middle"><b>0'.$id_ticket.'</b></td>';
-            echo '<td class="align-middle">'.$descripcion.'</td>';
-            echo '<td class="align-middle '.$colorPrioridad.'"><small><b>'.$prioridad.'</b></small></td>';
+            echo '<tr '.$trColor.'>';
+            echo '<th class="align-middle text-center"><b>0'.$id_ticket.'</b></th>';
+            echo '<td class="align-middle text-center">'.$descripcion.'</td>';
+            echo '<td class="align-middle text-center '.$colorPrioridad.'"><small><b>'.$prioridad.'</b></small></td>';
     
-            echo '<td class="align-middle"><small>'.$fechaInicio.'</small></td>';
-            echo '<td class="align-middle"><small>'.$fechaTermino.'</small></td>';
+            echo '<td class="align-middle text-center"><small class="text-dark"><b>'.$fechaInicio.'</b></small></td>';
+            echo '<td class="align-middle text-center"><small class="text-dark"><b>'.$fechaTermino.'</b></small></td>';
     
-            echo '<td class="align-middle">'.$estado.'</td>';
-            echo '<td class="align-middle">'.$porcentaje.' %</td>';
-            echo '<td class="align-middle">'.$PersonalSoporte.'</td>';
-            echo '<td class="align-middle"><b>'.$fechaterminoreal.'</b></td>';  
+            echo '<td class="align-middle text-center">'.$estado.'</td>';
+            echo '<td class="align-middle text-center">'.$porcentaje.' %</td>';
+            echo '<td class="align-middle text-center">'.$PersonalSoporte.'</td>';
+            echo '<td class="align-middle text-center"><b>'.$fechaterminoreal.'</b></td>';  
     
-            echo '<td class="align-middle"><a onclick="ModalDetalle('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'detalle.png" ></a></td>';
-            echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
-            echo '<td class="align-middle">'.$Editar.'</td>';
-            echo '<td class="align-middle">'.$Eliminar.'</td>';
+            echo '<td class="align-middle text-center"><a onclick="ModalDetalle('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'detalle.png" ></a></td>';
+            echo '<td class="align-middle text-center"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
+            echo '<td class="align-middle text-center">'.$Editar.'</td>';
+            echo '<td class="align-middle text-center">'.$Eliminar.'</td>';
             echo '</tr>';
 
         }else if($row['estado'] == 3){
 
             if($FechaCierreTicket >= $fecha_del_dia){
 
-                echo '<tr class="'.$trColor.'">';
-                echo '<td class="align-middle"><b>0'.$id_ticket.'</b></td>';
-                echo '<td class="align-middle">'.$descripcion.'</td>';
-                echo '<td class="align-middle '.$colorPrioridad.'"><small><b>'.$prioridad.'</b></small></td>';
+                echo '<tr '.$trColor.'>';
+                echo '<th class="align-middle text-center"><b>0'.$id_ticket.'</b></th>';
+                echo '<td class="align-middle text-center">'.$descripcion.'</td>';
+                echo '<td class="align-middle text-center '.$colorPrioridad.'"><small><b>'.$prioridad.'</b></small></td>';
+    
+                echo '<td class="align-middle text-center"><small class="text-dark"><b>'.$fechaInicio.'</b></small></td>';
+                echo '<td class="align-middle text-center"><small class="text-dark"><b>'.$fechaTermino.'</b></small></td>';
         
-                echo '<td class="align-middle"><small>'.$fechaInicio.'</small></td>';
-                echo '<td class="align-middle"><small>'.$fechaTermino.'</small></td>';
+                echo '<td class="align-middle text-center">'.$estado.'</td>';
+                echo '<td class="align-middle text-center">'.$porcentaje.' %</td>';
+                echo '<td class="align-middle text-center">'.$PersonalSoporte.'</td>';
+                echo '<td class="align-middle text-center"><b>'.$fechaterminoreal.'</b></td>';  
         
-                echo '<td class="align-middle">'.$estado.'</td>';
-                echo '<td class="align-middle">'.$porcentaje.' %</td>';
-                echo '<td class="align-middle">'.$PersonalSoporte.'</td>';
-                echo '<td class="align-middle"><b>'.$fechaterminoreal.'</b></td>';  
-        
-                echo '<td class="align-middle"><a onclick="ModalDetalle('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'detalle.png" ></a></td>';
-                echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
-                echo '<td class="align-middle">'.$Editar.'</td>';
-                echo '<td class="align-middle">'.$Eliminar.'</td>';
+                echo '<td class="align-middle text-center"><a onclick="ModalDetalle('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'detalle.png" ></a></td>';
+                echo '<td class="align-middle text-center"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
+                echo '<td class="align-middle text-center">'.$Editar.'</td>';
+                echo '<td class="align-middle text-center">'.$Eliminar.'</td>';
                 echo '</tr>';
             
             }
@@ -244,73 +243,11 @@ $start_pagina = ($pagina-1)*$registro_por_pagina;
 		}
 
 	}else{
-	echo "<tr><td colspan='13' class='text-center'><small>No se encontró información para mostrar</small></td></tr>";
-	}
+
+    }
 
 	?>
 	</tbody> 
 	</table>
     </div>
-<?php
-$TotalConte = $ClassContenido->TotalConte($Session_IDUsuarioBD);
-$TotalPaginas = ceil($TotalConte/$registro_por_pagina);
-$adjacents  = 1;
-
-echo paginate($pagina, $TotalPaginas, $adjacents);
-
-function paginate($page, $tpages, $adjacents) {
-	$prevlabel = "Anterior";
-	$nextlabel = "Siguiente";
-	$out = '<ul class="pagination justify-content-end pagination-sm rounded-0">';
-
-	// previous label
-
-	if($page==1) {
-	$out.= "<li class='page-item disabled rounded-0'><a class='page-link rounded-0'>$prevlabel</a></li>";
-	} else if($page==2) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSoporte(1)'>$prevlabel</a></li>";
-	}else {
-	$out.= "<li><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSoporte(".($page-1).")'>$prevlabel</a></li>";
-	}
-
-	// first label
-	if($page>($adjacents+1)) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSoporte(1)'>1</a></li>";
-	}
-	// interval
-	if($page>($adjacents+2)) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0'>...</a></li>";
-	}
-
-	// pages
-
-	$pmin = ($page>$adjacents) ? ($page-$adjacents) : 1;
-	$pmax = ($page<($tpages-$adjacents)) ? ($page+$adjacents) : $tpages;
-	for($i=$pmin; $i<=$pmax; $i++) {
-	if($i==$page) {
-	$out.= "<li class='page-item rounded-0 active'><a class='page-link rounded-0'>$i</a></li>";
-	}else if($i==1) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSoporte(1)'>$i</a></li>";
-	}else {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSoporte(".$i.")'>$i</a></li>";
-	}
-	}
-	// interval
-	if($page<($tpages-$adjacents-1)) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0'>...</a></li>";
-	}
-	// last
-	if($page<($tpages-$adjacents)) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSoporte($tpages)'>$tpages</a></li>";
-	}
-	// next
-	if($page<$tpages) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSoporte(".($page+1).")'>$nextlabel</a></li>";
-	}else {
-	$out.= "<li class='page-item rounded-0 disabled'><a class='page-link rounded-0'>$nextlabel</a></li>";
-	}
-
-	$out.= "</ul>";
-	return $out;
-}
 

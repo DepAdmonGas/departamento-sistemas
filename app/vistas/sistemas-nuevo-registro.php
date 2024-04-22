@@ -7,7 +7,7 @@ header("location:../soporte");
 }
 
 ?>
-  
+   
 <!DOCTYPE html>
 <html lang="es">
   
@@ -37,7 +37,7 @@ header("location:../soporte");
     ContenidoEvidencia(<?=$GET_IdRegistro;?>);
 
   });
-
+ 
   function ContenidoActividad(idRegistro){
     $('#ContenidoActividad').load('../app/vistas/contenido-lista-actividades.php?idRegistro=' + idRegistro);
   }
@@ -118,7 +118,7 @@ header("location:../soporte");
     data.append('idRegistro', idRegistro);
     data.append('ActividadDescripcion', ActividadDescripcion);
     data.append('Archivo_file', Archivo_file);
-
+ 
     $(".LoaderPage").show();
    
         let url = '../app/modelo/controlador-sistemas.php';
@@ -152,25 +152,25 @@ header("location:../soporte");
 
   function EvidenciaAgregar(idRegistro){
 
-var data = new FormData();
-let EvidenciaDescripcion = $('#EvidenciaDescripcion').val();
-Archivo = document.getElementById("EvidenciaArchivo");
-Archivo_file = Archivo.files[0];
-Archivo_filePath = Archivo.value;
+  var data = new FormData();
+  let EvidenciaDescripcion = $('#EvidenciaDescripcion').val();
+  Archivo = document.getElementById("EvidenciaArchivo");
+  Archivo_file = Archivo.files[0];
+  Archivo_filePath = Archivo.value;
 
-if(Archivo_filePath != ""){
-$('#EvidenciaArchivo').css('border',''); 
-data.append('Accion', 'agregar-evidencia');
-data.append('idRegistro', idRegistro);
-data.append('EvidenciaDescripcion', EvidenciaDescripcion);
-data.append('Archivo_file', Archivo_file);
+  if(Archivo_filePath != ""){
+  $('#EvidenciaArchivo').css('border',''); 
+  data.append('Accion', 'agregar-evidencia');
+  data.append('idRegistro', idRegistro);
+  data.append('EvidenciaDescripcion', EvidenciaDescripcion);
+  data.append('Archivo_file', Archivo_file);
 
 $(".LoaderPage").show();
 
     let url = '../app/modelo/controlador-sistemas.php';
     $.ajax({
     url: url,
-    type: 'POST',
+    type: 'POST', 
     contentType: false,
     data: data,
     processData: false,
@@ -305,43 +305,64 @@ function Finalizar(idRegistro){
   <div class="contendAG">
   <div class="container bg-white p-3">
 
-    <h3 class="text-primary">Crear Registro</h3>
-    <h5 class="text-secondary"># 0<?=$GET_IdRegistro;?></h5>
-
-    Crea tu solicitud de pendientes para el área de Sistemas, es impórtate que detalles la descripción o las actividades a realizar.
+    <h4 class="text-primary">Crear Registro</h4>
+    <h5 class="text-secondary"># Ticket: 0<?=$GET_IdRegistro;?></h5>
+    <span> Crea tu solicitud de pendientes para el área de Sistemas, es impórtate que detalles la descripción o las actividades a realizar. </span>
 
     <h6 class="mt-2 text-secondary">Descripción:</h6>
     <textarea class="form-control rounded-0" id="Descripcion" onkeyup="EditarDescripcion(this,<?=$GET_IdRegistro;?>)"><?=$InformacionTicket['descripcion'];?></textarea>
 
     <h6 class="mt-2 text-secondary">Prioridad:</h6>
-    <select class="form-control rounded-0" id="Prioridad" onchange="EditarPrioridad(<?=$GET_IdRegistro;?>)">
-        <option value="<?=$InformacionTicket['prioridad'];?>"><?=$InformacionTicket['prioridad'];?></option>
-        <option value="Baja">Baja</option>
-        <option value="Media">Media</option>
-        <option value="Alta">Alta</option>
+    <select class="form-select rounded-0" id="Prioridad" onchange="EditarPrioridad(<?=$GET_IdRegistro;?>)">
+    <option value="<?=$InformacionTicket['prioridad'];?>"><?=$InformacionTicket['prioridad'];?></option>
+    <option value="Baja">Baja</option>
+    <option value="Media">Media</option>
+    <option value="Alta">Alta</option>
     </select>
 
     <hr>
 
-    Agrega las actividades o evidencias, el formato puede ser en PDF, EXCEL, WORD, JPG y PNG
-
+    Agrega las actividades o evidencias en el formato de tu elección, el cual puede ser: PDF, Excel, Word, JPG o PNG.
+    <div class="row">
+    <div class="col-6">
     <h6 class="mt-2 text-secondary">Actividad:</h6>
-    <div class="text-end">
-    <img src="<?=RUTA_IMG_ICONOS?>agregar.png" onclick="ModalActividad(<?=$GET_IdRegistro;?>)">
+    </div>
+
+    <div class="col-6">
+    <button type="button" class="btn btn-labeled2 btn-primary float-end mb-3" onclick="ModalActividad(<?=$GET_IdRegistro;?>)">
+    <span class="btn-label2"><i class="fa-solid fa-plus"></i></span>Agregar</button>
+    </div>
     </div>
 
     <div class="mt-2" id="ContenidoActividad"></div>
-    <hr>
 
-    
-    <h6 class="text-secondary">Evidencia:</h6>
-    <div class="text-end">
-    <img src="<?=RUTA_IMG_ICONOS?>agregar.png" onclick="ModalEvidencia(<?=$GET_IdRegistro;?>)">
+    <hr>
+ 
+    <!----- APARTADO DE EVIDENCIA ----->
+    <div class="row">
+    <div class="col-6">
+    <h6 class="mt-2 text-secondary">Evidencia:</h6>
     </div>
+
+    <div class="col-6">
+    <button type="button" class="btn btn-labeled2 btn-primary float-end mb-3" onclick="ModalEvidencia(<?=$GET_IdRegistro;?>)">
+    <span class="btn-label2"><i class="fa-solid fa-plus"></i></span>Agregar</button>
+    </div>
+    </div>
+
     <div class="mt-2" id="ContenidoEvidencia"></div>
     <hr>
 
-    <div class="text-end"><button type="button" class="btn btn-primary rounded-0" onclick="Finalizar(<?=$GET_IdRegistro;?>)">Finalizar registro</button></div>
+
+    <!----- BOTON DE FINALIZAR ----->
+    <div class="row">
+    <div class="col-12">
+    <button type="button" class="btn btn-labeled2 btn-success float-end" onclick="Finalizar(<?=$GET_IdRegistro;?>)">
+    <span class="btn-label2"><i class="fa-solid fa-check"></i></span>Finalizar registro</button>
+    </div>
+
+    </div>
+
 
   </div>
 
@@ -352,7 +373,7 @@ function Finalizar(idRegistro){
 
 
     <div class="modal fade bd-example-modal-lg" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">  
-    <div class="modal-dialog modal-lg" role="document" style="margin-top: 83px;">
+    <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
     <div id="ModalContenido"></div>
     </div>
