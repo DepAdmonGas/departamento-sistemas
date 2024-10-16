@@ -1,11 +1,7 @@
 <?php
 include_once "../../app/help.php";
 $con = $ClassConexionBD->conectarBD();
-
-$pagina = $_GET['page'];
 $estadoBuscar = $_GET['estado'];
-$registro_por_pagina = 50;
-$start_pagina = ($pagina - 1) * $registro_por_pagina;
 
 if ($estadoBuscar == 0) {
     $TextBuscar = 'Registros en proceso de creación';
@@ -50,7 +46,7 @@ $sql = "SELECT
         ON tb_usuarios.id_gas = tb_estaciones.id
         INNER JOIN tb_puestos
         ON tb_usuarios.id_puesto = tb_puestos.id
-        WHERE $Buscar ORDER BY ds_soporte.id_ticket DESC LIMIT $start_pagina , $registro_por_pagina ";
+        WHERE $Buscar ORDER BY ds_soporte.id_ticket DESC";
 $result = mysqli_query($con, $sql);
 $numero = mysqli_num_rows($result);
 ?>

@@ -34,12 +34,12 @@ if ($Session_IDPuestoBD != 2) {
   <script type="text/javascript">
     $(document).ready(function($) {
       $(".LoaderPage").fadeOut("slow");
-      ContenidoSistemas(1);
+      ContenidoSistemas();
     });
 
  
-    function ContenidoSistemas(page) {
-      $('#ContenidoSistemas').load('app/vistas/contenido-lista-sistemas.php?page=' + page, function() {
+    function ContenidoSistemas() {
+      $('#ContenidoSistemas').load('app/vistas/contenido-lista-sistemas.php', function() {
         // Una vez que se carguen los datos en la tabla, inicializa DataTables
         $('#tabla-sistemas').DataTable({
           "language": {
@@ -166,7 +166,7 @@ if ($Session_IDPuestoBD != 2) {
       if (EstadoSoporte != "") {
         $('#EstadoSoporte').css('border', '');
 
-        ContenidoBuscarSoporte(1, EstadoSoporte);
+        ContenidoBuscarSoporte(EstadoSoporte);
 
       } else {
         $('#EstadoSoporte').css('border', '2px solid #A52525');
@@ -175,8 +175,8 @@ if ($Session_IDPuestoBD != 2) {
     }
 
 
-    function ContenidoBuscarSoporte(page,estado) {
-      $('#ContenidoSistemas').load('app/vistas/contenido-lista-buscar.php?page=' + page + '&estado=' + estado, function() {
+    function ContenidoBuscarSoporte(estado) {
+      $('#ContenidoSistemas').load('app/vistas/contenido-lista-buscar.php?estado=' + estado, function() {
         // Una vez que se carguen los datos en la tabla, inicializa DataTables
         $('#tabla-sistemas').DataTable({
           "language": {
