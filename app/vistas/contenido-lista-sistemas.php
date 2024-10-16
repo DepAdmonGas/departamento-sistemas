@@ -2,10 +2,6 @@
 include_once "../../app/help.php";
 $con = $ClassConexionBD->conectarBD();
 
-$pagina = $_GET['page'];
-$registro_por_pagina = 50;
-$start_pagina = ($pagina-1)*$registro_por_pagina;
-
         $sql = "SELECT
         ds_soporte.id_ticket, 
         ds_soporte.id_personal,
@@ -29,7 +25,7 @@ $start_pagina = ($pagina-1)*$registro_por_pagina;
         ON tb_usuarios.id_gas = tb_estaciones.id
         INNER JOIN tb_puestos
         ON tb_usuarios.id_puesto = tb_puestos.id WHERE (ds_soporte.estado <> 0 AND ds_soporte.estado <> 4) 
-        ORDER BY ds_soporte.id_ticket ASC, ds_soporte.fecha_inicio ASC LIMIT $start_pagina , $registro_por_pagina  ";
+        ORDER BY ds_soporte.id_ticket ASC, ds_soporte.fecha_inicio ASC ";
         $result = mysqli_query($con, $sql);
         $numero = mysqli_num_rows($result);
 ?>
@@ -90,35 +86,40 @@ $start_pagina = ($pagina-1)*$registro_por_pagina;
 
         if($row['estado'] == 0){
 
-            $trColor = 'table-warning';
+            //$trColor = 'table-warning';
+            $trColor = 'background-color: #fcfcda';
             $estado = 'Creando';
             $Editar = '<a onclick="EditarTicket('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'editar.png" ></a>';
             $Eliminar = '<img src="'.RUTA_IMG_ICONOS.'eliminar.png" onclick="EliminarTicket('.$id_ticket.')">';
 
         }else if($row['estado'] == 1){
 
-            $trColor = 'table-secondary';
+            //$trColor = 'table-secondary';
+            $trColor = 'background-color: #f0f0f0';
             $estado = 'Pendiente';
             $Editar = '<a onclick="EditarTicket('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'editar.png" ></a>';
             $Eliminar = '<img src="'.RUTA_IMG_ICONOS.'eliminar.png" onclick="EliminarTicket('.$id_ticket.')">';
 
         }else if($row['estado'] == 2){
 
-            $trColor = 'table-info';
+            //$trColor = 'table-info';
+            $trColor = 'background-color: #cfe2ff';
             $estado = 'En proceso';
             $Editar = '<a onclick="EditarTicket('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'editar.png" ></a>';
             $Eliminar = '<img src="'.RUTA_IMG_ICONOS.'eliminar.png" onclick="EliminarTicket('.$id_ticket.')">';
 
         }else if($row['estado'] == 3){
 
-            $trColor = 'table-success';
+            //$trColor = 'table-success';
+            $trColor = 'background-color: #b0f2c2';
             $estado = 'Finalizado';
             $Editar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'editar.png" >';
             $Eliminar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'eliminar.png">';
 
         }else if($row['estado'] == 4){
 
-            $trColor = 'table-danger';
+            //$trColor = 'table-danger';
+            $trColor = 'background-color: #ffb6af';
             $estado = 'Cancelado';
             $Editar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'editar.png" >';
             $Eliminar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'eliminar.png">';
@@ -161,8 +162,8 @@ $start_pagina = ($pagina-1)*$registro_por_pagina;
 
         if($row['estado'] == 1){
 
-            echo '<tr class="'.$trColor.'">';
-            echo '<td class="align-middle"><b>0'.$id_ticket.'</b></td>';
+            echo '<tr style="'.$trColor.'">';
+            echo '<th class="align-middle"><b>0'.$id_ticket.'</b></th>';
             echo '<td class="align-middle"><small>'.$fechaCreacion.'</small></td>';
             echo '<td class="align-middle">'.$descripcion.'</td>';
             echo '<td class="align-middle"><b>'.$EstacionDepartamento.'</b></td>';
@@ -184,8 +185,8 @@ $start_pagina = ($pagina-1)*$registro_por_pagina;
 
         }else if($row['estado'] == 2){
 
-            echo '<tr class="'.$trColor.'">';
-            echo '<td class="align-middle"><b>0'.$id_ticket.'</b></td>';
+            echo '<tr style="'.$trColor.'">';
+            echo '<th class="align-middle"><b>0'.$id_ticket.'</b></th>';
             echo '<td class="align-middle"><small>'.$fechaCreacion.'</small></td>';
             echo '<td class="align-middle">'.$descripcion.'</td>';
             echo '<td class="align-middle"><b>'.$EstacionDepartamento.'</b></td>';
@@ -209,7 +210,7 @@ $start_pagina = ($pagina-1)*$registro_por_pagina;
 
             if($FechaCierreTicket >= $fecha_del_dia){
 
-            echo '<tr class="'.$trColor.'">';
+            echo '<tr style="'.$trColor.'">';
             echo '<td class="align-middle"><b>0'.$id_ticket.'</b></td>';
             echo '<td class="align-middle"><small>'.$fechaCreacion.'</small></td>';
             echo '<td class="align-middle">'.$descripcion.'</td>';
