@@ -104,7 +104,7 @@ if($estadoBuscar == 0){
         }else{
             $fechaCreacion = FormatoFecha($explode[0]).', '.date("g:i a",strtotime($explode[1]));
         }
-
+        $colorPrioridad = '';
         if($prioridad == 'Baja'){
             $colorPrioridad = 'text-primary';
         }else if($prioridad == 'Media'){
@@ -291,8 +291,6 @@ if($estadoBuscar == 0){
 
 		}
 
-	}else{
-        
 	}
 
 	?>

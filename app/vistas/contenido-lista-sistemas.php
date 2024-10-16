@@ -33,9 +33,9 @@ $start_pagina = ($pagina-1)*$registro_por_pagina;
         $result = mysqli_query($con, $sql);
         $numero = mysqli_num_rows($result);
 ?>
-<div class="bg-white mt-3">
-<table class="table table-sm table-bordered" style="font-size: .9em;">
-	<thead class="table-light">
+<div class="table-responsive">
+<table id="tabla-sistemas" class="custom-table mt-2" style="font-size: 14px;" width="100%">
+	<thead class="navbar-bg">
 		<tr>
             <th class="align-middle"># Ticket</th>
             <th class="align-middle">Fecha creación</th>
@@ -57,7 +57,7 @@ $start_pagina = ($pagina-1)*$registro_por_pagina;
 			<th class="align-middle text-center" width="24px"><img src="<?=RUTA_IMG_ICONOS;?>eliminar.png"></th>
 		</tr>
 	</thead>
-	<tbody>
+	<tbody class="bg-white">
 	<?php
 
 	if ($numero > 0) {
@@ -236,74 +236,9 @@ $start_pagina = ($pagina-1)*$registro_por_pagina;
 
 		}
 
-	}else{
-	echo "<tr><td colspan='15' class='text-center'><small>No se encontró información para mostrar</small></td></tr>";
 	}
 
 	?>
 	</tbody> 
 	</table>
     </div>
-<?php
-$TotalConte = $ClassContenido->TotalConteSistemas($Session_IDUsuarioBD);
-$TotalPaginas = ceil($TotalConte/$registro_por_pagina);
-$adjacents  = 1;
-
-echo paginate($pagina, $TotalPaginas, $adjacents);
-
-function paginate($page, $tpages, $adjacents) {
-	$prevlabel = "Anterior";
-	$nextlabel = "Siguiente";
-	$out = '<ul class="pagination justify-content-end pagination-sm rounded-0">';
-
-	// previous label
-
-	if($page==1) {
-	$out.= "<li class='page-item disabled rounded-0'><a class='page-link rounded-0'>$prevlabel</a></li>";
-	} else if($page==2) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSoporte(1)'>$prevlabel</a></li>";
-	}else {
-	$out.= "<li><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSoporte(".($page-1).")'>$prevlabel</a></li>";
-	}
-
-	// first label
-	if($page>($adjacents+1)) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSoporte(1)'>1</a></li>";
-	}
-	// interval
-	if($page>($adjacents+2)) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0'>...</a></li>";
-	}
-
-	// pages
-
-	$pmin = ($page>$adjacents) ? ($page-$adjacents) : 1;
-	$pmax = ($page<($tpages-$adjacents)) ? ($page+$adjacents) : $tpages;
-	for($i=$pmin; $i<=$pmax; $i++) {
-	if($i==$page) {
-	$out.= "<li class='page-item rounded-0 active'><a class='page-link rounded-0'>$i</a></li>";
-	}else if($i==1) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSoporte(1)'>$i</a></li>";
-	}else {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSoporte(".$i.")'>$i</a></li>";
-	}
-	}
-	// interval
-	if($page<($tpages-$adjacents-1)) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0'>...</a></li>";
-	}
-	// last
-	if($page<($tpages-$adjacents)) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSoporte($tpages)'>$tpages</a></li>";
-	}
-	// next
-	if($page<$tpages) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSoporte(".($page+1).")'>$nextlabel</a></li>";
-	}else {
-	$out.= "<li class='page-item rounded-0 disabled'><a class='page-link rounded-0'>$nextlabel</a></li>";
-	}
-
-	$out.= "</ul>";
-	return $out;
-}
-

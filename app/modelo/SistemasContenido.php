@@ -1,5 +1,4 @@
 <?php
-include_once "app/bd/ConexionBD.php";
 
 class SistemasContenido{
 
@@ -7,8 +6,8 @@ class SistemasContenido{
     private $con;
 
     public function __construct(){
-        $this->$ClassConexionBD = new ConexionBD();
-        $this->$con = $this->$ClassConexionBD->conectarBD();
+        $this->ClassConexionBD = new ConexionBD();
+        $this->con = $this->ClassConexionBD->conectarBD();
         }
 
     public function soporteContenido($idRegistro){
@@ -36,8 +35,7 @@ class SistemasContenido{
         INNER JOIN tb_puestos
         ON tb_usuarios.id_puesto = tb_puestos.id
         WHERE id_ticket = '".$idRegistro."' LIMIT 1 ";
-        $result = mysqli_query($this->$con, $sql);
-        $numero = mysqli_num_rows($result);
+        $result = mysqli_query($this->con, $sql);
         while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
             $descripcion = $row['descripcion'];
             $prioridad = $row['prioridad'];
@@ -62,16 +60,16 @@ class SistemasContenido{
 
     public function ToComentarios($idticket){
         $sql = "SELECT id FROM ds_soporte_comentarios WHERE id_ticket = '".$idticket."' ";
-        $result = mysqli_query($this->$con, $sql);
+        $result = mysqli_query($this->con, $sql);
         return $numero = mysqli_num_rows($result);
         }
 
     //-------------------- RESPONSABLE ------------//
 
     public function Responsable($id){
-
+        $Usuario = "Sistemas";
         $sql_resp = "SELECT nombre FROM tb_usuarios WHERE id = '".$id."'  ";
-                 $result_resp = mysqli_query($this->$con, $sql_resp);
+                 $result_resp = mysqli_query($this->con, $sql_resp);
                  $numero_resp = mysqli_num_rows($result_resp);
                  while($row_resp = mysqli_fetch_array($result_resp, MYSQLI_ASSOC)){
                   $Usuario = $row_resp['nombre'];
@@ -83,7 +81,7 @@ class SistemasContenido{
 
         public function TotalConte($idPersonal){
             $sql_rs = "SELECT id_ticket FROM ds_soporte WHERE id_personal = '".$idPersonal."' ";
-            $result_rs = mysqli_query($this->$con, $sql_rs);
+            $result_rs = mysqli_query($this->con, $sql_rs);
             $numero_rs = mysqli_num_rows($result_rs);
             
             return $numero_rs;
@@ -91,7 +89,7 @@ class SistemasContenido{
 
             public function TotalConteSistemas($idPersonal){
                 $sql_rs = "SELECT id_ticket FROM ds_soporte WHERE estado <> 4 ";
-                $result_rs = mysqli_query($this->$con, $sql_rs);
+                $result_rs = mysqli_query($this->con, $sql_rs);
                 $numero_rs = mysqli_num_rows($result_rs);
                 
                 return $numero_rs;
@@ -125,8 +123,11 @@ class SistemasContenido{
                     ON tb_usuarios.id_puesto = tb_puestos.id
                     WHERE ds_soporte.fecha_termino <> '0000-00-00 00:00:00' AND (ds_soporte.estado = 1 OR ds_soporte.estado = 2)
                     ORDER BY id_ticket DESC LIMIT 1 ";
-                    $result = mysqli_query($this->$con, $sql);
-                    $numero = mysqli_num_rows($result);
+                    $result = mysqli_query($this->con, $sql);
+                    $idticket = 0;
+                        $fechatermino = '';
+                        $nomestacion = '';
+                        $tipopuesto = '';
                     while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
                         $idticket = $row['id_ticket'];
                         $fechatermino = $row['fecha_termino'];
