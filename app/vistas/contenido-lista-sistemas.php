@@ -25,7 +25,7 @@ $con = $ClassConexionBD->conectarBD();
         ON tb_usuarios.id_gas = tb_estaciones.id
         INNER JOIN tb_puestos
         ON tb_usuarios.id_puesto = tb_puestos.id WHERE (ds_soporte.estado <> 0 AND ds_soporte.estado <> 4) 
-        ORDER BY ds_soporte.id_ticket ASC, ds_soporte.fecha_inicio ASC ";
+        ORDER BY ds_soporte.estado ASC, ds_soporte.fecha_inicio ASC ";
         $result = mysqli_query($con, $sql);
         $numero = mysqli_num_rows($result);
 ?>
