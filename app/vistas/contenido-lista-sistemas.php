@@ -2,6 +2,9 @@
 include_once "../../app/help.php";
 $con = $ClassConexionBD->conectarBD();
 
+date_default_timezone_set('America/Mexico_City');
+$fecha_del_dia = date("Y-m-d");
+
         $sql = "SELECT
         ds_soporte.id_ticket, 
         ds_soporte.id_personal,
@@ -157,7 +160,6 @@ $con = $ClassConexionBD->conectarBD();
             $fechaterminoreal = 'S/I';
         }else{
             $fechaterminoreal = '<div class="text-success">'.FormatoFecha($explode3[0]).', '.date("g:i a",strtotime($explode3[1])).'</div>';
-            $FechaCierreTicket = date("Y-m-d",strtotime($explode3[0]."+ 3 days"));
         }
 
         if($row['estado'] == 1){
@@ -208,8 +210,6 @@ $con = $ClassConexionBD->conectarBD();
 
         }else if($row['estado'] == 3){
 
-            if($FechaCierreTicket >= $fecha_del_dia){
-
             echo '<tr style="'.$trColor.'">';
             echo '<td class="align-middle"><b>0'.$id_ticket.'</b></td>';
             echo '<td class="align-middle"><small>'.$fechaCreacion.'</small></td>';
@@ -230,8 +230,7 @@ $con = $ClassConexionBD->conectarBD();
             echo '<td class="align-middle">'.$Editar.'</td>';
             echo '<td class="align-middle">'.$Eliminar.'</td>';
             echo '</tr>';
-            
-        }
+
         
        }
 
