@@ -6,8 +6,8 @@ class Sistemas{
     private $con;
 
     public function __construct(){
-    $this->$ClassConexionBD = new ConexionBD();
-    $this->$con = $this->$ClassConexionBD->conectarBD();
+    $this->ClassConexionBD = new ConexionBD();
+    $this->con = $this->ClassConexionBD->conectarBD();
     }
 
     public function NuevoTicket($idUsuario){
@@ -43,7 +43,7 @@ class Sistemas{
             0
             )";
         
-        if(mysqli_query($this->$con, $sql_insert)){
+        if(mysqli_query($this->con, $sql_insert)){
             $Resultado = $IdTicket;
         }else{
             $Resultado = 0;
@@ -55,7 +55,7 @@ class Sistemas{
     public function IdTicket(){
 
         $sql = "SELECT id_ticket FROM ds_soporte ORDER BY id_ticket DESC LIMIT 1";
-        $result = mysqli_query($this->$con, $sql);
+        $result = mysqli_query($this->con, $sql);
         $numero = mysqli_num_rows($result);
         if($numero > 0){
             while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
@@ -75,7 +75,7 @@ class Sistemas{
         descripcion = '".$Dato."'
         WHERE id_ticket='".$idRegistro."' ";
 
-        if (mysqli_query($this->$con, $sql)) {
+        if (mysqli_query($this->con, $sql)) {
         $Resultado = 1;
         }else{
         $Resultado = 0;
@@ -92,7 +92,7 @@ class Sistemas{
         prioridad = '".$Dato."'
         WHERE id_ticket='".$idRegistro."' ";
 
-        if (mysqli_query($this->$con, $sql)) {
+        if (mysqli_query($this->con, $sql)) {
         $Resultado = 1;
         }else{
         $Resultado = 0;
@@ -131,7 +131,7 @@ class Sistemas{
                 0
                 )";
             
-            if(mysqli_query($this->$con, $sqlInsert1)){
+            if(mysqli_query($this->con, $sqlInsert1)){
                 $Resultado = 1;
             }else{
                 $Resultado = 0;
@@ -161,7 +161,7 @@ class Sistemas{
                 '".$Archivo."'
                 )";
             
-            if(mysqli_query($this->$con, $sqlInsert1)){
+            if(mysqli_query($this->con, $sqlInsert1)){
                 $Resultado = 1;
             }else{
                 $Resultado = 0;
@@ -175,7 +175,7 @@ class Sistemas{
         
         $sql = "DELETE FROM ds_soporte_actividades WHERE id = '".$idActividad."' ";
 
-        if (mysqli_query($this->$con, $sql)) {
+        if (mysqli_query($this->con, $sql)) {
         $Resultado = 1;
         }else{
         $Resultado = 0;
@@ -190,7 +190,7 @@ class Sistemas{
         
         $sql = "DELETE FROM ds_soporte_evidencia WHERE id = '".$idActividad."' ";
 
-        if (mysqli_query($this->$con, $sql)) {
+        if (mysqli_query($this->con, $sql)) {
         $Resultado = 1;
         }else{
         $Resultado = 0;
@@ -211,7 +211,7 @@ class Sistemas{
         estado = 1
         WHERE id_ticket='".$idRegistro."' ";
 
-        if (mysqli_query($this->$con, $sql)) {
+        if (mysqli_query($this->con, $sql)) {
         $this->PersonalSistemas($idRegistro,1);
         $Resultado = 1;
         }else{
@@ -227,7 +227,7 @@ class Sistemas{
         if($opcion == 1){
             $detalle = 'Tienes un nuevo ticket pendiente por atender #0'.$idRegistro;
         }else if($opcion == 2){
-            $detalle = 'Tienes un nuevo comentario en Soporte de Sistemas en el Ticket #0'.$idticket;
+            $detalle = 'Tienes un nuevo comentario en Soporte de Sistemas en el Ticket #0'.$idRegistro;
         }
 
         $sql = "SELECT 
@@ -237,7 +237,7 @@ class Sistemas{
         FROM tb_usuarios
         INNER JOIN tb_usuarios_token 
         ON tb_usuarios.id = tb_usuarios_token.id_usuario WHERE tb_usuarios.id_puesto = 2 AND tb_usuarios_token.herramienta = 'token-web' ";
-        $result = mysqli_query($this->$con, $sql);
+        $result = mysqli_query($this->con, $sql);
         $numero = mysqli_num_rows($result);
             while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
                 $token = $row['token'];
@@ -290,7 +290,7 @@ class Sistemas{
         estado = 4
         WHERE id_ticket='".$idticket."' ";
 
-        if (mysqli_query($this->$con, $sql)) {
+        if (mysqli_query($this->con, $sql)) {
         $Resultado = 1;
         }else{
         $Resultado = 0;
@@ -315,7 +315,7 @@ class Sistemas{
                 '".$comentario."'
                 )";
             
-            if(mysqli_query($this->$con, $sql)){
+            if(mysqli_query($this->con, $sql)){
 
                 if($opcion == 1){
 
@@ -352,7 +352,7 @@ class Sistemas{
         ON tb_usuarios.id = tb_usuarios_token.id_usuario 
         WHERE tb_usuarios.id = '".$idSolicitante."' AND tb_usuarios_token.herramienta = 'token-web' 
         ORDER BY tb_usuarios_token.id DESC LIMIT 1 ";
-        $result = mysqli_query($this->$con, $sql);
+        $result = mysqli_query($this->con, $sql);
         $numero = mysqli_num_rows($result);
         while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
         $token = $row['token'];
@@ -392,7 +392,7 @@ class Sistemas{
         $Query 
         WHERE id_ticket = '".$idticket."' ";
 
-        if (mysqli_query($this->$con, $sql)) {
+        if (mysqli_query($this->con, $sql)) {
         $Resultado = 1;
         }else{
         $Resultado = 0;
@@ -417,7 +417,7 @@ class Sistemas{
         $Query
         WHERE id = '".$idActividad."' ";
 
-        if (mysqli_query($this->$con, $sql)) {
+        if (mysqli_query($this->con, $sql)) {
         $Resultado = 1;
         }else{
         $Resultado = 0;
@@ -452,8 +452,8 @@ class Sistemas{
                 estado = 2              
                 WHERE id_ticket = '".$idticket."' ";
 
-                if (mysqli_query($this->$con, $sql)) {
-                    mysqli_query($this->$con, $sql2);
+                if (mysqli_query($this->con, $sql)) {
+                    mysqli_query($this->con, $sql2);
                 $ResultComentario = $this->GuardarComentario($idticket,$comentario,$idPersonal,2);
                 $Resultado = 1;
                 }else{
@@ -473,8 +473,8 @@ class Sistemas{
                 estado = 2              
                 WHERE id_ticket = '".$idticket."' ";
 
-                if (mysqli_query($this->$con, $sql)) {
-                    mysqli_query($this->$con, $sql2);
+                if (mysqli_query($this->con, $sql)) {
+                    mysqli_query($this->con, $sql2);
                 $ResultComentario = $this->GuardarComentario($idticket,$comentario,$idPersonal,2);
                 $Resultado = 1;
                 }else{
@@ -488,4 +488,3 @@ class Sistemas{
         }
 
     }
-?>

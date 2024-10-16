@@ -176,7 +176,7 @@ $(".LoaderPage").show();
     processData: false,
     cache: false
     }).done(function(data){
-
+console.log(data)
     if(data == 1){
         
         $(".LoaderPage").hide();

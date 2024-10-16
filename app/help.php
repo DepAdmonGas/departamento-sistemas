@@ -1,21 +1,44 @@
 <?php
-error_reporting(0);
 include_once "config/configuracion.php";
 include_once "bd/ConexionBD.php";
 include_once "modelo/Sistemas.php";
 include_once "modelo/SistemasContenido.php";
+include_once 'lib/jwt/vendor/autoload.php';
+include_once "config/ConfiguracionSesiones.php";
 
-session_start();
-$Session_IDUsuarioBD = $_SESSION["id_usuario"];
-$Session_UsuarioNombre = $_SESSION["nombre_usuario"];
-$Session_IDEstacion = $_SESSION["id_gas_usuario"];
-$Session_IDPuestoBD = $_SESSION["id_puesto_usuario"];
-$Session_NombreEstacion = $_SESSION["nombre_gas_usuario"];
-$Session_TipoPuestoBD = $_SESSION["tipo_puesto_usuario"];
+
 
 $ClassConexionBD = new ConexionBD();
 $ClassSistemas = new Sistemas();
 $ClassContenido = new SistemasContenido();
+
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+// Valida si esta activa la sesion por medio de la cookie
+if (isset($_COOKIE['COOKIEADMONGAS']) && !empty($_COOKIE['COOKIEADMONGAS'])) :
+    // Instancia la clase configuracion-sesiones
+    $configuracionSesiones = new ConfiguracionSesiones();
+    // Obtiene keyJWT
+    $keyJWT = $configuracionSesiones->obtenerKey();
+    $token = $_COOKIE['COOKIEADMONGAS']; 
+    try {
+        $decoded = JWT::decode($token, new Key($keyJWT, 'HS256'));
+        $Session_IDUsuarioBD = $decoded->id_usuario;
+        $Session_UsuarioNombre = $decoded->nombre_usuario;
+        $Session_IDEstacion = $decoded->id_gas_usuario;
+        $Session_IDPuestoBD = $decoded->id_puesto_usuario;
+        $Session_NombreEstacion = $decoded->nombre_gas_usuario;
+        $Session_TipoPuestoBD = $decoded->tipo_puesto_usuario;
+    } catch (Exception $e) {
+        echo 'Error: ', $e->getMessage();
+    }
+else :
+    header("Location:" . PORTAL . "");
+    die();
+endif;
+
+
+
 
 function nombremes($mes){
 
@@ -38,13 +61,13 @@ function nombremes($mes){
     function get_nombre_dia($fecha){
         $fechats = strtotime($fecha);
      switch (date('w', $fechats)){
-         case 0: return "Domingo"; break;
-         case 1: return "Lunes"; break;
-         case 2: return "Martes"; break;
-         case 3: return "Miercoles"; break;
-         case 4: return "Jueves"; break;
-         case 5: return "Viernes"; break;
-         case 6: return "Sabado"; break;
+         case 0: return "Domingo";
+         case 1: return "Lunes";
+         case 2: return "Martes";
+         case 3: return "Miercoles";
+         case 4: return "Jueves";
+         case 5: return "Viernes";
+         case 6: return "Sabado";
      }
      }
     
@@ -56,4 +79,3 @@ function FormatoFecha($fechaFormato){
 
   date_default_timezone_set('America/Mexico_City');
   $fecha_del_dia = date("Y-m-d");
-?>
