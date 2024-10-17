@@ -32,9 +32,9 @@ $con = $ClassConexionBD->conectarBD();
 
 
 <div class="table-responsive">
-<table id="tabla_sistemas" class="table table-sm table-bordered mt-2" style="font-size: 14px;" width="100%">
+<table id="tabla_sistemas" class="custom-table mt-2" style="font-size: 14px;" width="100%">
 
-	<thead class="navbar-bg">		 
+<thead class="navbar-bg">
     <tr>
             <th class="align-middle text-center"># Ticket</th>
 			<th class="align-middle text-center">Descripción</th>
