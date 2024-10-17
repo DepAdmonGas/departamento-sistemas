@@ -4,12 +4,8 @@ $con = $ClassConexionBD->conectarBD();
 
 date_default_timezone_set('America/Mexico_City');
 $fecha_del_dia = date("Y-m-d");
-$pagina = $_GET['page'];
-$registro_por_pagina = 50;
-$start_pagina = ($pagina-1)*$registro_por_pagina;
 
-
-        $sql = "SELECT
+$sql = "SELECT
         ds_soporte.id_ticket, 
         ds_soporte.id_personal,
         ds_soporte.descripcion,
@@ -32,12 +28,12 @@ $start_pagina = ($pagina-1)*$registro_por_pagina;
         ON tb_usuarios.id_gas = tb_estaciones.id
         INNER JOIN tb_puestos
         ON tb_usuarios.id_puesto = tb_puestos.id WHERE (ds_soporte.estado <> 0 AND ds_soporte.estado <> 4) 
-        ORDER BY ds_soporte.estado ASC, ds_soporte.fecha_creacion DESC LIMIT $start_pagina , $registro_por_pagina";
+        ORDER BY ds_soporte.estado ASC, ds_soporte.fecha_creacion DESC";
         $result = mysqli_query($con, $sql);
         $numero = mysqli_num_rows($result);
 ?>
 <div class="table-responsive">
-<table id="tabla-sistemas" class="custom-table mt-2" style="font-size: 14px;" width="100%">
+<table id="tabla-sistemas" class="table table-sm table-bordered mt-2" style="font-size: 14px;">
 	<thead class="navbar-bg">
 		<tr>
             <th class="align-middle"># Ticket</th>
@@ -245,65 +241,3 @@ $start_pagina = ($pagina-1)*$registro_por_pagina;
 	</tbody> 
 	</table>
     </div>
-<?php
-$TotalConte = $ClassContenido->TotalConteSistemas($Session_IDUsuarioBD);
-$TotalPaginas = ceil($TotalConte/$registro_por_pagina);
-$adjacents  = 1;
-
-echo paginate($pagina, $TotalPaginas, $adjacents);
-
-function paginate($page, $tpages, $adjacents) {
-	$prevlabel = "Anterior";
-	$nextlabel = "Siguiente";
-	$out = '<ul class="pagination justify-content-end pagination-sm rounded-0">';
-
-	// previous label
-
-	if($page==1) {
-	$out.= "<li class='page-item disabled rounded-0'><a class='page-link rounded-0'>$prevlabel</a></li>";
-	} else if($page==2) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSistemas(1)'>$prevlabel</a></li>";
-	}else {
-	$out.= "<li><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSistemas(".($page-1).")'>$prevlabel</a></li>";
-	}
-
-	// first label
-	if($page>($adjacents+1)) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSistemas(1)'>1</a></li>";
-	}
-	// interval
-	if($page>($adjacents+2)) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0'>...</a></li>";
-	}
-
-	// pages
-
-	$pmin = ($page>$adjacents) ? ($page-$adjacents) : 1;
-	$pmax = ($page<($tpages-$adjacents)) ? ($page+$adjacents) : $tpages;
-	for($i=$pmin; $i<=$pmax; $i++) {
-	if($i==$page) {
-	$out.= "<li class='page-item rounded-0 active'><a class='page-link rounded-0'>$i</a></li>";
-	}else if($i==1) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSistemas(1)'>$i</a></li>";
-	}else {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSistemas(".$i.")'>$i</a></li>";
-	}
-	}
-	// interval
-	if($page<($tpages-$adjacents-1)) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0'>...</a></li>";
-	}
-	// last
-	if($page<($tpages-$adjacents)) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSistemas($tpages)'>$tpages</a></li>";
-	}
-	// next
-	if($page<$tpages) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSistemas(".($page+1).")'>$nextlabel</a></li>";
-	}else {
-	$out.= "<li class='page-item rounded-0 disabled'><a class='page-link rounded-0'>$nextlabel</a></li>";
-	}
-
-	$out.= "</ul>";
-	return $out;
-}

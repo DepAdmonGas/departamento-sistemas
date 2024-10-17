@@ -51,11 +51,11 @@ if ($Session_IDPuestoBD != 2) {
           "lengthMenu": [25, 50, 75, 100], // Número de registros que se mostrarán
           "columnDefs": [{
               "orderable": false,
-              "targets": [9, 10, 11, 12]
+              "targets": [11, 12,13,14]
             }, // Deshabilitar ordenación en las columnas 1, 2 y 3 (comenzando desde 0)
             {
               "searchable": false,
-              "targets": [9, 10, 11, 12]
+              "targets": [11, 12,13,14]
             } // Deshabilitar filtrado en las columnas 1, 2 y 3 (comenzando desde 0)
           ]
         });
