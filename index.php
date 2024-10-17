@@ -22,7 +22,7 @@ if ($partes_ruta[0] == 'departamento-sistemas')
         $ruta_elegida = 'app/vistas/soporte/sistemas-soporte.php';
         break;
         //-------------------//
-        case 'gestion':
+        case 'home':
         $ruta_elegida = 'app/vistas/home/home-index.php';
         break;
 
