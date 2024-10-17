@@ -2,6 +2,9 @@
 include_once "../../app/help.php";
 $con = $ClassConexionBD->conectarBD();
 
+date_default_timezone_set('America/Mexico_City');
+$fecha_del_dia = date("Y-m-d");
+
 $pagina = $_GET['page'];
 $registro_por_pagina = 50;
 $start_pagina = ($pagina-1)*$registro_por_pagina;
@@ -29,7 +32,7 @@ $start_pagina = ($pagina-1)*$registro_por_pagina;
         ON tb_usuarios.id_gas = tb_estaciones.id
         INNER JOIN tb_puestos
         ON tb_usuarios.id_puesto = tb_puestos.id WHERE (ds_soporte.estado <> 0 AND ds_soporte.estado <> 4) 
-        ORDER BY ds_soporte.id_ticket ASC, ds_soporte.fecha_inicio ASC LIMIT $start_pagina , $registro_por_pagina  ";
+        ORDER BY ds_soporte.estado ASC, ds_soporte.fecha_creacion DESC LIMIT $start_pagina , $registro_por_pagina";
         $result = mysqli_query($con, $sql);
         $numero = mysqli_num_rows($result);
 ?>
@@ -207,7 +210,7 @@ $start_pagina = ($pagina-1)*$registro_por_pagina;
 
         }else if($row['estado'] == 3){
 
-            if($FechaCierreTicket >= $fecha_del_dia){
+           
 
             echo '<tr class="'.$trColor.'">';
             echo '<td class="align-middle"><b>0'.$id_ticket.'</b></td>';
@@ -230,7 +233,7 @@ $start_pagina = ($pagina-1)*$registro_por_pagina;
             echo '<td class="align-middle">'.$Eliminar.'</td>';
             echo '</tr>';
             
-        }
+        
         
        }
 
@@ -261,14 +264,14 @@ function paginate($page, $tpages, $adjacents) {
 	if($page==1) {
 	$out.= "<li class='page-item disabled rounded-0'><a class='page-link rounded-0'>$prevlabel</a></li>";
 	} else if($page==2) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSoporte(1)'>$prevlabel</a></li>";
+	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSistemas(1)'>$prevlabel</a></li>";
 	}else {
-	$out.= "<li><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSoporte(".($page-1).")'>$prevlabel</a></li>";
+	$out.= "<li><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSistemas(".($page-1).")'>$prevlabel</a></li>";
 	}
 
 	// first label
 	if($page>($adjacents+1)) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSoporte(1)'>1</a></li>";
+	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSistemas(1)'>1</a></li>";
 	}
 	// interval
 	if($page>($adjacents+2)) {
@@ -283,9 +286,9 @@ function paginate($page, $tpages, $adjacents) {
 	if($i==$page) {
 	$out.= "<li class='page-item rounded-0 active'><a class='page-link rounded-0'>$i</a></li>";
 	}else if($i==1) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSoporte(1)'>$i</a></li>";
+	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSistemas(1)'>$i</a></li>";
 	}else {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSoporte(".$i.")'>$i</a></li>";
+	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSistemas(".$i.")'>$i</a></li>";
 	}
 	}
 	// interval
@@ -294,11 +297,11 @@ function paginate($page, $tpages, $adjacents) {
 	}
 	// last
 	if($page<($tpages-$adjacents)) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSoporte($tpages)'>$tpages</a></li>";
+	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSistemas($tpages)'>$tpages</a></li>";
 	}
 	// next
 	if($page<$tpages) {
-	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSoporte(".($page+1).")'>$nextlabel</a></li>";
+	$out.= "<li class='page-item rounded-0'><a class='page-link rounded-0' href='javascript:void(0);' onclick='ContenidoSistemas(".($page+1).")'>$nextlabel</a></li>";
 	}else {
 	$out.= "<li class='page-item rounded-0 disabled'><a class='page-link rounded-0'>$nextlabel</a></li>";
 	}
