@@ -293,30 +293,6 @@ $('#Comentario').css('border','2px solid #A52525');
 
     <hr>
 
-    <?php 
-
-     $UltimoRegistro = $ClassContenido->UltimoRegistro();
-
-     if($UltimoRegistro['nomestacion'] == 'Comodines'){
-        $EstacionDepartamentoUltimoRegistro = $UltimoRegistro['tipopuesto'];
-      }else{
-        $EstacionDepartamentoUltimoRegistro = $UltimoRegistro['nomestacion'];
-      }
-
-        $explode3 = explode(' ',$UltimoRegistro['fechatermino']);
-        if($explode3[0] == '0000-00-00'){
-            $FechaUltimoRegistro = FormatoFecha($fecha_del_dia);
-        }else{
-            $FechaUltimoRegistro = FormatoFecha($explode3[0]);
-        }
-
-     echo '<div class="alert alert-warning" role="alert">
-     Información del ultimo registro agregado en la base de datos.</br>
-     # Ticket <b>0'.$UltimoRegistro['idticket'].'</b>, Fecha termino: <b>'.$FechaUltimoRegistro.'</b>, Estación o Departamento:  <b>'.$EstacionDepartamentoUltimoRegistro.'</b> 
-     </div>';
-      
-    ?>
-
     <h6 class="mt-2 text-secondary">Actividad:</h6>
     <table class="table table-sm table-bordered mt-1 mb-1 pb-1" style="font-size: .8em;">
         <thead class="table-light">
@@ -382,7 +358,7 @@ $('#Comentario').css('border','2px solid #A52525');
             echo '<td class="align-middle">'.$Archivo.'</td>';
             echo '</tr>';
 
-            $num++;
+            $numActividad++;
             }
 
         }else{
@@ -418,7 +394,7 @@ $('#Comentario').css('border','2px solid #A52525');
                 echo '<td class="align-middle"><a href="'.RUTA_ARCHIVOS.$rowEvidencia['evidencia'].'" download><img src="'.RUTA_IMG_ICONOS.'descargar.png" ></a></td>';
                 echo '</tr>';
 
-                $num++;
+                $numEvidencia++;
                 }
 
             }else{

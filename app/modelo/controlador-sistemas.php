@@ -26,7 +26,7 @@ else if($_POST['Accion'] == 'agregar-evidencia'){
     $Name = $_FILES['Archivo_file']['name'];
     $Temporal = $_FILES['Archivo_file']['tmp_name'];
 
-    $Resultado = $ClassSistemas->AgregarEvidencia($_POST['idRegistro'],$_POST['ActividadEvidencia'],$Name, $Temporal);
+    $Resultado = $ClassSistemas->AgregarEvidencia($_POST['idRegistro'],$_POST['EvidenciaDescripcion'],$Name, $Temporal);
     echo $Resultado;
 }
 else if($_POST['Accion'] == 'eliminar-actividad'){

@@ -4,7 +4,6 @@ session_start();
 
 //Requerimos los datos de la conexión a la BBDD
 include_once "app/config/configuracion.php";
-include_once "app/bd/ConexionBD.php";
 
 //Des-establecemos todas las sesiones
 unset($_SESSION);
@@ -12,10 +11,8 @@ unset($_SESSION);
 //Destruimos las sesiones
 session_destroy();
 
-//Cerramos la conexión con la base de datos
-mysqli_close($con);
+setcookie('COOKIEADMONGAS', '', time() - 1, '/');
 
 //Redireccionamos a el index
 header("Location:".PORTAL);
 die();
-?> 
