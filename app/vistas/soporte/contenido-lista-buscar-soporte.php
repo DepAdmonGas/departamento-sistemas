@@ -1,40 +1,67 @@
-<?php   
-include_once "../../app/help.php";
+<?php  
+include_once "../../help.php";
 $con = $ClassConexionBD->conectarBD();
+$estadoBuscar = $_GET['estado'];
+
+if($estadoBuscar == 0){
+    $TextBuscar = 'Registros en proceso de creación';
+    $Buscar = "ds_soporte.id_personal = '".$Session_IDUsuarioBD."' AND ds_soporte.estado = 0" ;
+
+}else if($estadoBuscar == 1){
+    $TextBuscar = 'Registros pendientes';
+    $Buscar = "ds_soporte.id_personal = '".$Session_IDUsuarioBD."' AND ds_soporte.estado = 1" ;
+
+}else if($estadoBuscar == 2){
+    $TextBuscar = 'Registros en proceso';
+    $Buscar = "ds_soporte.id_personal = '".$Session_IDUsuarioBD."' AND ds_soporte.estado = 2" ;
+
+}else if($estadoBuscar == 3){
+    $TextBuscar = 'Registros finalizados';
+    $Buscar = "ds_soporte.id_personal = '".$Session_IDUsuarioBD."' AND ds_soporte.estado = 3" ;
+
+}else if($estadoBuscar == 4){
+    $TextBuscar = 'Registros cancelados';
+    $Buscar = "ds_soporte.id_personal = '".$Session_IDUsuarioBD."' AND ds_soporte.estado = 4" ;
+
+}else if($estadoBuscar == 5){
+    $TextBuscar = 'Todos los registros';
+    $Buscar = "ds_soporte.id_personal = '".$Session_IDUsuarioBD."' " ;   
+}
  
-        $sql = "SELECT
-        ds_soporte.id_ticket, 
-        ds_soporte.id_personal,
-        ds_soporte.descripcion,
-        ds_soporte.prioridad,
-        ds_soporte.fecha_creacion,
-        ds_soporte.fecha_inicio,        
-        ds_soporte.fecha_termino,
-        ds_soporte.tiempo_solucion,
-        ds_soporte.fecha_termino_real,
-        ds_soporte.porcentaje,
-        ds_soporte.id_personal_soporte,
-        ds_soporte.estado,
-        tb_usuarios.nombre,
-        tb_estaciones.nombre AS nomestacion,
-        tb_puestos.tipo_puesto
-        FROM ds_soporte 
-        INNER JOIN tb_usuarios 
-        ON ds_soporte.id_personal = tb_usuarios.id
-        INNER JOIN tb_estaciones
-        ON tb_usuarios.id_gas = tb_estaciones.id
-        INNER JOIN tb_puestos
-        ON tb_usuarios.id_puesto = tb_puestos.id
-        WHERE ds_soporte.id_personal = '".$Session_IDUsuarioBD."' ORDER BY ds_soporte.fecha_termino_real ASC";
-        $result = mysqli_query($con, $sql);
-        $numero = mysqli_num_rows($result);
+    $sql = "SELECT
+    ds_soporte.id_ticket, 
+    ds_soporte.id_personal,
+    ds_soporte.descripcion,
+    ds_soporte.prioridad,
+    ds_soporte.fecha_creacion,
+    ds_soporte.fecha_inicio,        
+    ds_soporte.fecha_termino,
+    ds_soporte.tiempo_solucion,
+    ds_soporte.fecha_termino_real,
+    ds_soporte.porcentaje,
+    ds_soporte.id_personal_soporte,
+    ds_soporte.estado,
+    tb_usuarios.nombre,
+    tb_estaciones.nombre AS nomestacion,
+    tb_puestos.tipo_puesto
+    FROM ds_soporte 
+    INNER JOIN tb_usuarios 
+    ON ds_soporte.id_personal = tb_usuarios.id
+    INNER JOIN tb_estaciones
+    ON tb_usuarios.id_gas = tb_estaciones.id
+    INNER JOIN tb_puestos
+    ON tb_usuarios.id_puesto = tb_puestos.id
+    WHERE $Buscar ORDER BY ds_soporte.id_ticket DESC";
+    $result = mysqli_query($con, $sql);
+    $numero = mysqli_num_rows($result);
 ?>
 
+<h6 class="mt-2"><?=$TextBuscar;?></h6>
 
 <div class="table-responsive">
-<table id="tabla_sistemas" class="table table-sm table-bordered mt-2" style="font-size: 14px;" width="100%">
+<table id="tabla_sistemas_busqueda" class="custom-table mt-2" style="font-size: 14px;" width="100%">
 
-	<thead class="navbar-bg">		 
+<thead class="navbar-bg">		 
     <tr>
             <th class="align-middle text-center"># Ticket</th>
 			<th class="align-middle text-center">Descripción</th>
@@ -54,6 +81,7 @@ $con = $ClassConexionBD->conectarBD();
 			<th class="align-middle text-center" width="24px"><img src="<?=RUTA_IMG_ICONOS;?>eliminar.png"></th>
 		</tr>
 	</thead>
+
 	<tbody>
 	<?php
 
@@ -76,7 +104,7 @@ $con = $ClassConexionBD->conectarBD();
         }else{
             $fechaCreacion = FormatoFecha($explode[0]).', '.date("g:i a",strtotime($explode[1]));
         }
-
+        $colorPrioridad = '';
         if($prioridad == 'Baja'){
             $colorPrioridad = 'text-primary';
         }else if($prioridad == 'Media'){
@@ -100,7 +128,7 @@ $con = $ClassConexionBD->conectarBD();
             $Eliminar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'eliminar.png">';
 
         }else if($row['estado'] == 2){
-            
+
             $trColor = 'style="background-color: #cfe2ff"';
             $estado = 'En proceso';
             $Editar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'editar.png" >';
@@ -150,7 +178,7 @@ $con = $ClassConexionBD->conectarBD();
             $FechaCierreTicket = date("Y-m-d",strtotime($explode3[0]."+ 3 days"));
         }
 
-        if($row['estado'] == 0){ 
+        if($row['estado'] == 0){
 
             echo '<tr '.$trColor.'>';
             echo '<th class="align-middle text-center"><b>0'.$id_ticket.'</b></th>';
@@ -198,7 +226,7 @@ $con = $ClassConexionBD->conectarBD();
             echo '<th class="align-middle text-center"><b>0'.$id_ticket.'</b></th>';
             echo '<td class="align-middle text-center">'.$descripcion.'</td>';
             echo '<td class="align-middle text-center '.$colorPrioridad.'"><small><b>'.$prioridad.'</b></small></td>';
-    
+
             echo '<td class="align-middle text-center"><small class="text-dark"><b>'.$fechaInicio.'</b></small></td>';
             echo '<td class="align-middle text-center"><small class="text-dark"><b>'.$fechaTermino.'</b></small></td>';
     
@@ -238,16 +266,34 @@ $con = $ClassConexionBD->conectarBD();
             
             }
 
+        }else if($row['estado'] == 4){
+
+            echo '<tr '.$trColor.'>';
+                echo '<th class="align-middle text-center"><b>0'.$id_ticket.'</b></th>';
+                echo '<td class="align-middle text-center">'.$descripcion.'</td>';
+                echo '<td class="align-middle text-center '.$colorPrioridad.'"><small><b>'.$prioridad.'</b></small></td>';
+        
+                echo '<td class="align-middle text-center"><small class="text-dark"><b>'.$fechaInicio.'</b></small></td>';
+                echo '<td class="align-middle text-center"><small class="text-dark"><b>'.$fechaTermino.'</b></small></td>';
+        
+                echo '<td class="align-middle text-center">'.$estado.'</td>';
+                echo '<td class="align-middle text-center">'.$porcentaje.' %</td>';
+                echo '<td class="align-middle text-center">'.$PersonalSoporte.'</td>';
+                echo '<td class="align-middle text-center"><b>'.$fechaterminoreal.'</b></td>';  
+        
+                echo '<td class="align-middle text-center"><a onclick="ModalDetalle('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'detalle.png" ></a></td>';
+                echo '<td class="align-middle text-center"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
+                echo '<td class="align-middle text-center">'.$Editar.'</td>';
+                echo '<td class="align-middle text-center">'.$Eliminar.'</td>';
+                echo '</tr>';
+            
         }
 
 		}
 
-	}else{
-
-    }
+	}
 
 	?>
 	</tbody> 
 	</table>
     </div>
-

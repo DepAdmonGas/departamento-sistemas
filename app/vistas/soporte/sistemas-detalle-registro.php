@@ -1,5 +1,5 @@
 <?php 
-include_once "app/help.php";
+include_once "../../help.php";
 $con = $ClassConexionBD->conectarBD();
 $idticket = $GET_IdRegistro;
 
@@ -62,16 +62,16 @@ while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
 
 		$explode1 = explode(' ',$row['fecha_inicio']);
         if($explode1[0] == '0000-00-00'){
-            $fechaInicio = '';
+            $fechaInicio = 'S/I';
         }else{
-            $fechaInicio = $explode1[0];
+            $fechaInicio = FormatoFecha($explode1[0]);
         }
 
         $explode2 = explode(' ',$row['fecha_termino']);
         if($explode2[0] == '0000-00-00'){
-            $fechaTermino = '';
+            $fechaTermino = 'S/I';
         }else{
-            $fechaTermino = $explode2[0];
+            $fechaTermino = FormatoFecha($explode2[0]);
         }
 
 		if($row['estado'] == 0){
@@ -138,12 +138,8 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
   ContenidoComentarios(<?=$idticket;?>);
   });
 
-  function regresarP(){
-  window.history.back();
-  }
-
   function ContenidoComentarios(idticket){
-    $('#ContenidoComentarios').load('../app/vistas/contenido-lista-comentarios.php?idticket=' + idticket);
+    $('#ContenidoComentarios').load('../app/vistas/soporte/contenido-lista-comentarios.php?idticket=' + idticket);
   }
 
   function GuardarComentario(idticket){
@@ -202,15 +198,47 @@ $('#Comentario').css('border','2px solid #A52525');
 
     },
     success:  function (response) {
-
     }
     });
 
     }
 
+    function FinalizarSoporte(idticket){
+
+    let parametros = {
+    "Accion" : "finalizar-soporte",
+    "idticket" : idticket
+    };
+
+    alertify.confirm('',
+	function(){
+
+    $.ajax({
+    data:  parametros,
+    url:   '../app/modelo/controlador-sistemas.php',
+    type:  'post',
+    beforeSend: function() {
+    },
+    complete: function(){
+
+    },
+    success:  function (response) {
+     
+        window.history.back();
+
+    }
+    });
+
+	},
+	function(){
+
+	}).setHeader('Mensaje').set({transition:'zoom',message: '¿Desea finalizar el soporte?',labels:{ok:'Aceptar', cancel: 'Cancelar'}}).show();
+
+    }
+
     function EditarActividad(val,idActividad,opcion){
     
-        let Detalle = val.value;
+    let Detalle = val.value;
 
     let parametros = {
     "Accion" : "editar-actividad",
@@ -233,23 +261,16 @@ $('#Comentario').css('border','2px solid #A52525');
     }
     });
     }
-
-    function FinalizarEdicion(idticket){
-    let Responsable = $('#Responsable').val();
-
-    if(Responsable != 0){
-        $('#Responsable').css('border','');
-        regresarP();
-    }else{
-        $('#Responsable').css('border','2px solid #A52525');   
-    }
-
-    }
-
   </script>
     <style>
     .grayscale {
     filter: opacity(50%); 
+  }
+    .bg-sistemas{
+    background : #D8EFDF;
+  }
+  .bg-personal{
+    background : #D8E3EF;
   }
   </style>
   </head>
@@ -319,13 +340,13 @@ $('#Comentario').css('border','2px solid #A52525');
             if($rowActividad['fecha_inicio'] == '0000-00-00'){
                 $AtividadFechaInicio = '';
             }else{
-                $AtividadFechaInicio = $rowActividad['fecha_inicio'];
+                $AtividadFechaInicio = FormatoFecha($rowActividad['fecha_inicio']);
             }
 
             if($rowActividad['fecha_termino'] == '0000-00-00'){
                 $AtividadFechaTermino = '';
             }else{
-                $AtividadFechaTermino = $rowActividad['fecha_termino'];
+                $AtividadFechaTermino = FormatoFecha($rowActividad['fecha_termino']);
             }
 
             if($rowActividad['estado'] == 0){
@@ -341,24 +362,24 @@ $('#Comentario').css('border','2px solid #A52525');
             }else{
                 $Archivo = '<a href="'.RUTA_ARCHIVOS.$rowActividad['archivo'].'" download><img src="'.RUTA_IMG_ICONOS.'descargar.png" ></a>';
             }
-           
+
             echo '<tr>';
             echo '<td class="align-middle">'.$numActividad.'</td>';
             echo '<td class="align-middle">'.$descripcionActividad.'</td>';
-            echo '<td class="p-0"><input type="date" class="border-0 form-control" value="'.$AtividadFechaInicio.'" onchange="EditarActividad(this,'.$idActividad.',1)"></td>';
-            echo '<td class="p-0"><input type="date" class="border-0 form-control" value="'.$AtividadFechaTermino.'" onchange="EditarActividad(this,'.$idActividad.',2)"></td>';
+            echo '<td class="align-middle">'.$AtividadFechaInicio.'</td>';
+            echo '<td class="align-middle">'.$AtividadFechaTermino.'</td>';
             echo '<td class="p-0">
-                <select class="form-control rounded-0 border-0" onchange="EditarActividad(this,'.$idActividad.',3)">
-                    <option value="'.$EstadoActividad.'">'.$EstadoDetalle.'</option>
-                    <option value="0">Pendiente</option>
-                    <option value="1">En proceso</option>
-                    <option value="2">Finalizada</option>
-                </select>
-            </div>';
+            <select class="form-control rounded-0 border-0" onchange="EditarActividad(this,'.$idActividad.',3)">
+                <option value="'.$EstadoActividad.'">'.$EstadoDetalle.'</option>
+                <option value="0">Pendiente</option>
+                <option value="1">En proceso</option>
+                <option value="2">Finalizada</option>
+            </select>
+        </div>';
             echo '<td class="align-middle">'.$Archivo.'</td>';
             echo '</tr>';
 
-            $numActividad++;
+            $num++;
             }
 
         }else{
@@ -394,7 +415,7 @@ $('#Comentario').css('border','2px solid #A52525');
                 echo '<td class="align-middle"><a href="'.RUTA_ARCHIVOS.$rowEvidencia['evidencia'].'" download><img src="'.RUTA_IMG_ICONOS.'descargar.png" ></a></td>';
                 echo '</tr>';
 
-                $numEvidencia++;
+                $num++;
                 }
 
             }else{
@@ -408,36 +429,74 @@ $('#Comentario').css('border','2px solid #A52525');
             <hr>
 
             <div class="row">
-                <div class="col-4 mt-3">
+            <div class="col-7">
+          
+            <div class="row">
+                <div class="col-6 mt-3">
                     <h6 class="text-secondary">Fecha inicio</h6>
-                    <input type="date" class="form-control rounded-0" value="<?=$fechaInicio;?>" onchange="EditarTicket(this,<?=$idticket;?>,2)">
+                    <?=$fechaInicio;?>
                 </div>
-                <div class="col-4 mt-3">
+                <div class="col-6 mt-3">
                     <h6 class="text-secondary">Fecha termino</h6>
-                    <input type="date" class="form-control rounded-0" value="<?=$fechaTermino;?>" onchange="EditarTicket(this,<?=$idticket;?>,3)">
+                    <?=$fechaTermino;?>
                 </div>
-                <div class="col-4 mt-3">
+                <div class="col-6 mt-3">
                 <h6 class="text-secondary">Responsable</h6>
-                <select class="form-control rounded-0" onchange="EditarTicket(this,<?=$idticket;?>,4)" id="Responsable">
-                    <option value="<?=$idPersonalSoporte;?>"><?=$PersonalSoporte;?></option>
-                    <?php 
-                    
-                    $sql_resp = "SELECT id, nombre FROM tb_usuarios WHERE id_puesto = 2 ";
-                    $result_resp = mysqli_query($con, $sql_resp);
-                    $numero_resp = mysqli_num_rows($result_resp);
-                    while($row_resp = mysqli_fetch_array($result_resp, MYSQLI_ASSOC)){
-                    
-                    echo '<option value="'.$row_resp['id'].'">'.$row_resp['nombre'].'</option>';
-                    
-                    }
-                            
-                    ?>
-                </select>
-                </div>
+                <?=$PersonalSoporte;?>
+                 </div>
                 </div>
 
-                <div class="text-end mt-3"><button type="button" class="btn btn-primary rounded-0" onclick="FinalizarEdicion(<?=$idticket;?>)">Finalizar edición</button></div>
-                       
+                <div class="row">
+                <div class="col-6 mt-3">
+                <h6 class="text-secondary">Porcentaje</h6>
+                <?php 
+              
+                    if($Valorestado == 3 || $Valorestado == 4){
+                        echo $porcentaje.' %';                    
+                    }else{                    
+                        echo '<select class="form-control rounded-0" onchange="EditarTicket(this,'.$idticket.',5)">';
+                        echo '<option value="'.$porcentaje.'">'.$porcentaje.' %</option>';
+                        for ($i = 1; $i <= 10; $i++) {
+                        echo '<option value="'.$i.'0">'.$i.'0 %</option>';
+                        }
+                        echo '</select>';              
+                    }
+                ?>
+                </div>
+                <div class="col-6 mt-3">
+                    <h6 class="text-secondary">Estado</h6>
+                    <?php
+                        if($Valorestado == 3 || $Valorestado == 4){
+                            echo $estado;
+                        }else{  
+                            echo '<select class="form-control rounded-0" onchange="EditarTicket(this,'.$idticket.',1)">';
+                            echo '<option value="'.$Valorestado.'">'.$estado.'</option>';
+                                if($estado != 'Pendiente'){
+                                echo '<option value="1">Pendiente</option>';
+                                }
+    
+                                if($estado != 'En proceso'){
+                                echo '<option value="2">En proceso</option>';
+                                }
+                            echo '</select>'; 
+                        }
+                    ?>
+                </div>
+            </div>
+            <?php  
+                if($Valorestado == 3 || $Valorestado == 4){
+
+                }else{
+                    echo '<div class="text-end mt-5"><button type="button" class="btn btn-primary rounded-0" onclick="FinalizarSoporte('.$idticket.')">Finalizar soporte</button></div>';
+                }
+            ?>
+            
+                </div>
+                <div class="col-5">
+                    <h6 class="text-secondary">Comentarios</h6>
+                    <div id="ContenidoComentarios"></div>
+                </div>
+            </div>
             </div>
 
   </div>  

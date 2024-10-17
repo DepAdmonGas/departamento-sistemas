@@ -1,7 +1,6 @@
 <?php  
-include_once "../../app/help.php";
+include_once "../../help.php";
 $con = $ClassConexionBD->conectarBD();
-
 date_default_timezone_set('America/Mexico_City');
 $fecha_del_dia = date("Y-m-d");
 

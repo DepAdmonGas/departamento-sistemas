@@ -10,7 +10,7 @@ if ($partes_ruta[0] == 'departamento-sistemas')
 {
     if (count($partes_ruta) == 1)
     {
-    $ruta_elegida = 'app/vistas/sistemas-index.php';
+    $ruta_elegida = 'app/vistas/soporte/sistemas-index.php';
     }
     else if(count($partes_ruta) == 2)
     {
@@ -19,7 +19,7 @@ if ($partes_ruta[0] == 'departamento-sistemas')
 
         //----- SOPORTE -----//
 	    case 'soporte':
-        $ruta_elegida = 'app/vistas/sistemas-soporte.php';
+        $ruta_elegida = 'app/vistas/soporte/sistemas-soporte.php';
         break;
         //-------------------//
 
@@ -35,17 +35,17 @@ if ($partes_ruta[0] == 'departamento-sistemas')
         //----- NUEVO REGISTRO -----//
         if ($partes_ruta[1] == 'nuevo-registro') {
         $GET_IdRegistro = $partes_ruta[2];
-        $ruta_elegida = 'app/vistas/sistemas-nuevo-registro.php';
+        $ruta_elegida = 'app/vistas/soporte/sistemas-nuevo-registro.php';
         }
         //----- DETALLE REGISTRO -----//
         else if ($partes_ruta[1] == 'detalle-registro') {
             $GET_IdRegistro = $partes_ruta[2];
-            $ruta_elegida = 'app/vistas/sistemas-detalle-registro.php';
+            $ruta_elegida = 'app/vistas/soporte/sistemas-detalle-registro.php';
             }
         //----- EDITAR REGISTRO -----//
         else if ($partes_ruta[1] == 'editar-registro') {
             $GET_IdRegistro = $partes_ruta[2];
-            $ruta_elegida = 'app/vistas/sistemas-editar-registro.php';
+            $ruta_elegida = 'app/vistas/soporte/sistemas-editar-registro.php';
             }
     }
 }

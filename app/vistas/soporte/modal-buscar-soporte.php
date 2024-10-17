@@ -1,5 +1,5 @@
 <?php 
-include_once "../../app/help.php";
+include_once "../../help.php";
 ?>
 
 <div class="modal-header">

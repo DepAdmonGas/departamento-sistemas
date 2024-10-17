@@ -1,5 +1,6 @@
 <?php 
 include_once "app/help.php";
+
 $InformacionTicket = $ClassContenido->soporteContenido($GET_IdRegistro);
 
 if($InformacionTicket['estado'] != 0){
@@ -39,10 +40,10 @@ header("location:../soporte");
   });
  
   function ContenidoActividad(idRegistro){
-    $('#ContenidoActividad').load('../app/vistas/contenido-lista-actividades.php?idRegistro=' + idRegistro);
+    $('#ContenidoActividad').load('../app/vistas/soporte/contenido-lista-actividades.php?idRegistro=' + idRegistro);
   }
   function ContenidoEvidencia(idRegistro){
-    $('#ContenidoEvidencia').load('../app/vistas/contenido-lista-evidencia.php?idRegistro=' + idRegistro);
+    $('#ContenidoEvidencia').load('../app/vistas/soporte/contenido-lista-evidencia.php?idRegistro=' + idRegistro);
   }
 
   function EditarDescripcion(val,idRegistro){
@@ -97,11 +98,11 @@ header("location:../soporte");
 
   function ModalActividad(idRegistro){
     $('#Modal').modal('show');
-    $('#ModalContenido').load('../app/vistas/modal-formulario-actividades.php?idRegistro=' + idRegistro);
+    $('#ModalContenido').load('../app/vistas/soporte/modal-formulario-actividades.php?idRegistro=' + idRegistro);
   }
   function ModalEvidencia(idRegistro){
     $('#Modal').modal('show');
-    $('#ModalContenido').load('../app/vistas/modal-formulario-evidencias.php?idRegistro=' + idRegistro);
+    $('#ModalContenido').load('../app/vistas/soporte/modal-formulario-evidencias.php?idRegistro=' + idRegistro);
   }
 
   function ActividadAgregar(idRegistro){
