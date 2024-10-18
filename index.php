@@ -17,16 +17,19 @@ if ($partes_ruta[0] == 'departamento-sistemas')
 
     switch ($partes_ruta[1]) {
 
+        case 'home':
+        $ruta_elegida = 'app/vistas/home/home-index.php';
+        break;
         //----- SOPORTE -----//
 	    case 'soporte':
         $ruta_elegida = 'app/vistas/soporte/sistemas-soporte.php';
         break;
         //-------------------//
-        case 'home':
-        $ruta_elegida = 'app/vistas/home/home-index.php';
+        //----- ACTIVIDADES -----//
+	    case 'actividades':
+        $ruta_elegida = 'app/vistas/actividades/index.php';
         break;
-
-
+        //-------------------//
         //----- CERRAR SESION DEL USUARIO -----//
 	    case 'salir':
         $ruta_elegida = 'app/modelo/logout-usuarios.php';

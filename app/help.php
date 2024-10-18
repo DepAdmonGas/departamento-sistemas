@@ -6,8 +6,6 @@ include_once "modelo/SistemasContenido.php";
 include_once 'lib/jwt/vendor/autoload.php';
 include_once "config/ConfiguracionSesiones.php";
 
-
-
 $ClassConexionBD = new ConexionBD();
 $ClassSistemas = new Sistemas();
 $ClassContenido = new SistemasContenido();
