@@ -28,6 +28,7 @@ header("location:../soporte");
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   <script type="text/javascript" src="<?=RUTA_JS?>alertify.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
   
   <script type="text/javascript">
   
@@ -177,7 +178,6 @@ $(".LoaderPage").show();
     processData: false,
     cache: false
     }).done(function(data){
-console.log(data)
     if(data == 1){
         
         $(".LoaderPage").hide();
@@ -262,10 +262,9 @@ function EliminarEvidencia(idRegistro,idActividad){
 
 function Finalizar(idRegistro){
 
-
     let parametros = {
     "Accion" : "finalizar-registro",
-    "idRegistro" : idRegistro
+    "idRegistro" : idRegistro,
     };
 
     alertify.confirm('',
@@ -307,9 +306,10 @@ function Finalizar(idRegistro){
   <div class="container bg-white p-3">
 
     <h4 class="text-primary">Crear Registro</h4>
-    <h5 class="text-secondary"># Ticket: 0<?=$GET_IdRegistro;?></h5>
-    <span> Crea tu solicitud de pendientes para el área de Sistemas, es impórtate que detalles la descripción o las actividades a realizar. </span>
+    <h5 class="fw-bold"># Ticket: 0<?=$GET_IdRegistro;?></h5>
+    <div class="m-2">
 
+    </div>
     <h6 class="mt-2 text-secondary">Descripción:</h6>
     <textarea class="form-control rounded-0" id="Descripcion" onkeyup="EditarDescripcion(this,<?=$GET_IdRegistro;?>)"><?=$InformacionTicket['descripcion'];?></textarea>
 
@@ -321,15 +321,18 @@ function Finalizar(idRegistro){
     <option value="Alta">Alta</option>
     </select>
 
+
+    <h6 class="mt-2 text-secondary">Detalle de la Actividad:</h6>
+    <div style="height: 300px;font-size: 1em;" id="editor"></div>
     <hr>
 
-    Agrega las actividades o evidencias en el formato de tu elección, el cual puede ser: PDF, Excel, Word, JPG o PNG.
     <div class="row">
-    <div class="col-6">
-    <h6 class="mt-2 text-secondary">Actividad:</h6>
+    <div class="col-8">
+    <h6 class="fw-bold text-secondary">Agrege evidencias en el formato de tu elección, el cual puede ser: PDF, Excel, Word, JPG o PNG.</h6>
+
     </div>
 
-    <div class="col-6">
+    <div class="col-4">
     <button type="button" class="btn btn-labeled2 btn-primary float-end mb-3" onclick="ModalActividad(<?=$GET_IdRegistro;?>)">
     <span class="btn-label2"><i class="fa-solid fa-plus"></i></span>Agregar</button>
     </div>
@@ -338,23 +341,7 @@ function Finalizar(idRegistro){
     <div class="mt-2" id="ContenidoActividad"></div>
 
     <hr>
- 
-    <!----- APARTADO DE EVIDENCIA ----->
-    <div class="row">
-    <div class="col-6">
-    <h6 class="mt-2 text-secondary">Evidencia:</h6>
-    </div>
-
-    <div class="col-6">
-    <button type="button" class="btn btn-labeled2 btn-primary float-end mb-3" onclick="ModalEvidencia(<?=$GET_IdRegistro;?>)">
-    <span class="btn-label2"><i class="fa-solid fa-plus"></i></span>Agregar</button>
-    </div>
-    </div>
-
-    <div class="mt-2" id="ContenidoEvidencia"></div>
-    <hr>
-
-
+  
     <!----- BOTON DE FINALIZAR ----->
     <div class="row">
     <div class="col-12">
@@ -382,6 +369,12 @@ function Finalizar(idRegistro){
     </div>
 
   <script src="<?=RUTA_JS ?>bootstrap.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+  <script>
+  const quill = new Quill('#editor', {
+    modules: { toolbar: true },
+    theme: 'snow'
+  });
+ </script>
   </body>
   </html> 
