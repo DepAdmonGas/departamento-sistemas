@@ -29,7 +29,7 @@ require('app/help.php');
 
   <!---------- LIBRERIAS DEL DATATABLE ---------->
   <link href="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.0.3/b-3.0.1/b-colvis-3.0.1/b-html5-3.0.1/b-print-3.0.1/datatables.min.css" rel="stylesheet">
-
+  <script src="https://cdn.ckeditor.com/ckeditor5/35.0.1/classic/ckeditor.js"></script>
   <script type="text/javascript" src="<?= RUTA_JS ?>alertify.js"></script>
 
 
@@ -55,11 +55,11 @@ require('app/help.php');
           "lengthMenu": [25, 50, 75, 100], // Número de registros que se mostrarán
           "columnDefs": [{
               "orderable": false,
-              "targets": [9, 10, 11, 12]
+              "targets": [9, 10]
             }, // Deshabilitar ordenación en las columnas 1, 2 y 3 (comenzando desde 0)
             {
               "searchable": false,
-              "targets": [9, 10, 11, 12]
+              "targets": [9, 10]
             } // Deshabilitar filtrado en las columnas 1, 2 y 3 (comenzando desde 0)
           ]
         });
@@ -71,7 +71,8 @@ require('app/help.php');
     function NuevoRegistro() {
 
       var parametros = {
-        "Accion": "nuevo-folio"
+        "Accion": "nuevo-folio",
+        "categoria":"Actividad"
       };
 
       $.ajax({
@@ -94,8 +95,42 @@ require('app/help.php');
       });
     }
 
-    function EditarTicket(idticket) {
-      window.location.href = "nuevo-registro/" + idticket;
+    function tarea() {
+      var parametros = {
+        "Accion": "nuevo-folio",
+        "categoria":"Tarea"
+      };
+
+      $.ajax({
+        data: parametros,
+        url: 'app/modelo/controlador-sistemas.php',
+        type: 'post',
+        beforeSend: function() {},
+        complete: function() {
+
+        },
+        success: function(response) {
+
+          if (response != 0) {
+            ContenidoSoporte();
+            EditarPrioridad(response);
+            $('#ModalTarea').modal('show');
+            $('#DivContenidoTarea').load('app/vistas/soporte/modal-tarea.php?idticket=' + response);
+          } else {
+            alertify.error('Error al crear');
+          }
+
+        }
+      });
+    }
+
+    function EditarTicket(idticket,categoria) {
+      if(categoria == "Actividad"){
+        window.location.href = "nuevo-registro/" + idticket;
+      }else {
+        $('#ModalTarea').modal('show');
+        $('#DivContenidoTarea').load('app/vistas/soporte/modal-tarea.php?idticket=' + idticket);
+      }
     }
 
     function EliminarTicket(idticket) {
@@ -218,14 +253,122 @@ require('app/help.php');
           "lengthMenu": [25, 50, 75, 100], // Número de registros que se mostrarán
           "columnDefs": [{
               "orderable": false,
-              "targets": [9, 10, 11, 12]
+              "targets": [9, 10]
             }, // Deshabilitar ordenación en las columnas 1, 2 y 3 (comenzando desde 0)
             {
               "searchable": false,
-              "targets": [9, 10, 11, 12]
+              "targets": [9, 10]
             } // Deshabilitar filtrado en las columnas 1, 2 y 3 (comenzando desde 0)
           ]
         });
+      });
+    }
+
+    //tareas
+    function EditarDescripcion(descripcion, idRegistro) {
+      let parametros = {
+        "Accion": "editar-descripcion",
+        "idRegistro": idRegistro,
+        "Dato": descripcion.value
+      };
+
+      $.ajax({
+        data: parametros,
+        url: 'app/modelo/controlador-sistemas.php',
+        type: 'post',
+        beforeSend: function() {},
+        complete: function() {
+
+        },
+        success: function(response) {
+
+        }
+      });
+
+    }
+
+    function EditarPrioridad(idRegistro) {
+      let Prioridad = "Alta";
+
+      let parametros = {
+        "Accion": "editar-prioridad",
+        "idRegistro": idRegistro,
+        "Dato": Prioridad
+      };
+
+      $.ajax({
+        data: parametros,
+        url: 'app/modelo/controlador-sistemas.php',
+        type: 'post',
+        beforeSend: function() {},
+        complete: function() {
+
+        },
+        success: function(response) {
+
+        }
+      });
+
+    }
+
+    function finalizarTarea(idRegistro) {
+
+      var data = new FormData();
+      Archivo = document.getElementById("EvidenciaArchivo");
+      Archivo_file = Archivo.files[0];
+      Archivo_filePath = Archivo.value;
+
+      if (Archivo_filePath != "") {
+        data.append('Accion', 'agregar-evidencia');
+        data.append('idRegistro', idRegistro);
+        data.append('EvidenciaDescripcion', idRegistro);
+        data.append('Archivo_file', Archivo_file);
+
+        $(".LoaderPage").show();
+
+        let url = 'app/modelo/controlador-sistemas.php';
+        $.ajax({
+          url: url,
+          type: 'POST',
+          contentType: false,
+          data: data,
+          processData: false,
+          cache: false
+        }).done(function(data) {
+          if (data == 1) {
+
+            $(".LoaderPage").hide();
+            $('#Modal').modal('hide');
+            ContenidoSoporte(idRegistro);
+
+          } else {
+            $(".LoaderPage").hide();
+            alertify.error('Error al crear la evidencia');
+          }
+
+        });
+
+      }
+      Finalizar(idRegistro)
+
+    }
+
+    function Finalizar(idRegistro) {
+      let parametros = {
+        "Accion": "finalizar-registro",
+        "idRegistro": idRegistro,
+        "categoria": "Tarea"
+      };
+      $.ajax({
+        data: parametros,
+        url: 'app/modelo/controlador-sistemas.php',
+        type: 'post',
+        beforeSend: function() {},
+        complete: function() {},
+        success: function(response) {
+          $('#ModalTarea').modal('hide');
+          ContenidoSoporte(idRegistro);
+        }
       });
     }
   </script>
@@ -264,7 +407,8 @@ require('app/help.php');
               <div class="row">
 
                 <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 mt-3">
-                  Aquí podrás crear tus solicitudes de pendientes para el área de sistemas y tener el seguimiento de la solución a dichas alertas.
+                <span class="text-secondary"> * Tarea: Actividades especificas que se pueden realizar el mismo día <br> * Actividad: Conjunto de tareas que se requiere mayor tiempo para poder realizarlas.
+                </span>
                 </div>
 
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
@@ -277,7 +421,8 @@ require('app/help.php');
                       </button>
 
                       <ul class="dropdown-menu">
-                        <li onclick="NuevoRegistro()"><a class="dropdown-item pointer"> <i class="fa-solid fa-plus text-dark"></i> Crear Registro</a></li>
+                        <li onclick="tarea()"><a class="dropdown-item pointer"> <i class="fa-solid fa-pen-to-square"></i></i> Crear Tarea</a></li>
+                        <li onclick="NuevoRegistro()"><a class="dropdown-item pointer"> <i class="fa-solid fa-calendar-check"></i> Crear Actividad</a></li>
                         <li onclick="ModalBuscar()"><a class="dropdown-item pointer"> <i class="fa-solid fa-magnifying-glass text-dark"></i> Buscar Registro</a></li>
                       </ul>
 
@@ -309,6 +454,14 @@ require('app/help.php');
     <div class="modal-dialog">
       <div class="modal-content">
         <div id="DivContenidoComentario"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="ModalTarea">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div id="DivContenidoTarea"></div>
       </div>
     </div>
   </div>

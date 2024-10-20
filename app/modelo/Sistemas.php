@@ -1,16 +1,18 @@
 <?php
-
+include_once "tokenTelegram.php";
 class Sistemas{
 
     private $ClassConexionBD;
     private $con;
+    private $telegram;
 
     public function __construct(){
     $this->ClassConexionBD = new ConexionBD();
     $this->con = $this->ClassConexionBD->conectarBD();
+    $this->telegram = new Telegram($this->con);
     }
 
-    public function NuevoTicket($idUsuario){
+    public function NuevoTicket($idUsuario,$categoria){
     $IdTicket = $this->IdTicket();
 
     $sql_insert = "INSERT INTO ds_soporte (
@@ -25,7 +27,8 @@ class Sistemas{
         fecha_termino_real,
         porcentaje,
         id_personal_soporte,
-        estado
+        estado,
+        categoria
             )
             VALUES 
             (
@@ -40,7 +43,8 @@ class Sistemas{
             '',
             0,
             0,
-            0
+            0,
+            '".$categoria."'
             )";
         
         if(mysqli_query($this->con, $sql_insert)){
@@ -205,7 +209,7 @@ class Sistemas{
 
         date_default_timezone_set('America/Mexico_City');
         $hoy = date("Y-m-d H:i:s");
-
+        $mensaje = "Validacion Exitosa";
         $sql = "UPDATE ds_soporte SET 
         fecha_creacion = '".$hoy."',
         estado = 1
@@ -213,6 +217,7 @@ class Sistemas{
 
         if (mysqli_query($this->con, $sql)) {
         $this->PersonalSistemas($idRegistro,1);
+        $this->telegram->enviarToken(1,$mensaje);
         $Resultado = 1;
         }else{
         $Resultado = 0;
