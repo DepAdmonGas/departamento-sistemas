@@ -1,5 +1,5 @@
 <?php 
-include_once "../../help.php";
+include_once "app/help.php";
 $con = $ClassConexionBD->conectarBD();
 $idticket = $GET_IdRegistro;
 

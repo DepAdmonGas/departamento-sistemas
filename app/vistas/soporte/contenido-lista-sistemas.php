@@ -32,8 +32,8 @@ $sql = "SELECT
         $numero = mysqli_num_rows($result);
 ?>
 <div class="table-responsive">
-<table id="tabla-sistemas" class="table table-sm table-bordered mt-2" style="font-size: 14px;">
-	<thead class="navbar-bg">
+<table id="tabla_sistemas" class="custom-table mt-2" style="font-size: 14px;" width="100%">
+<thead class="navbar-bg">
 		<tr>
             <th class="align-middle"># Ticket</th>
             <th class="align-middle">Fecha creación</th>
@@ -49,10 +49,9 @@ $sql = "SELECT
             <th class="align-middle">Responsable</th> 
             <th class="align-middle">Fecha termino real</th>
 
-            <th class="align-middle text-center" width="24px"><img src="<?=RUTA_IMG_ICONOS;?>detalle.png"></th>
             <th class="align-middle text-center" width="24px"><img src="<?=RUTA_IMG_ICONOS;?>comentarios.png"></th>
-			<th class="align-middle text-center" width="24px"><img src="<?=RUTA_IMG_ICONOS;?>editar.png"></th>
-			<th class="align-middle text-center" width="24px"><img src="<?=RUTA_IMG_ICONOS;?>eliminar.png"></th>
+            <th class="align-middle text-center" width="20"><i class="fas fa-ellipsis-v"></i></th>
+
 		</tr>
 	</thead>
 	<tbody class="bg-white">
@@ -85,47 +84,42 @@ $sql = "SELECT
         }else if($prioridad == 'Alta'){
             $colorPrioridad = 'text-danger';
         }
-
+        $Editar = '<a onclick="EditarTicket('.$id_ticket.')" class="dropdown-item"><i class="fa-solid fa-pencil"></i> Editar</a>';
+        $Eliminar = '<a class="dropdown-item" onclick="EliminarTicket('.$id_ticket.')"><i class="fa-regular fa-trash-can"></i> Eliminar</a>';
+        $Detalle = '<a class="dropdown-item" onclick="ModalDetalle('.$id_ticket.')"><i class="fa-regular fa-eye"></i> Detalle</a>';
         if($row['estado'] == 0){
 
             //$trColor = 'table-warning';
             $trColor = 'background-color: #fcfcda';
             $estado = 'Creando';
-            $Editar = '<a onclick="EditarTicket('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'editar.png" ></a>';
-            $Eliminar = '<img src="'.RUTA_IMG_ICONOS.'eliminar.png" onclick="EliminarTicket('.$id_ticket.')">';
 
         }else if($row['estado'] == 1){
 
             //$trColor = 'table-secondary';
             $trColor = 'background-color: #f0f0f0';
             $estado = 'Pendiente';
-            $Editar = '<a onclick="EditarTicket('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'editar.png" ></a>';
-            $Eliminar = '<img src="'.RUTA_IMG_ICONOS.'eliminar.png" onclick="EliminarTicket('.$id_ticket.')">';
 
         }else if($row['estado'] == 2){
 
             //$trColor = 'table-info';
             $trColor = 'background-color: #cfe2ff';
             $estado = 'En proceso';
-            $Editar = '<a onclick="EditarTicket('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'editar.png" ></a>';
-            $Eliminar = '<img src="'.RUTA_IMG_ICONOS.'eliminar.png" onclick="EliminarTicket('.$id_ticket.')">';
 
         }else if($row['estado'] == 3){
 
             //$trColor = 'table-success';
             $trColor = 'background-color: #b0f2c2';
             $estado = 'Finalizado';
-            $Editar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'editar.png" >';
-            $Eliminar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'eliminar.png">';
+            $Editar = '<a class="dropdown-item grayscale"><i class="fa-solid fa-pencil"></i> Editar</a>';
+            $Eliminar = '<a class="dropdown-item grayscale" ><i class="fa-regular fa-trash-can"></i> Eliminar</a>';
 
         }else if($row['estado'] == 4){
 
             //$trColor = 'table-danger';
             $trColor = 'background-color: #ffb6af';
             $estado = 'Cancelado';
-            $Editar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'editar.png" >';
-            $Eliminar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'eliminar.png">';
-
+            $Editar = '<a class="dropdown-item grayscale"><i class="fa-solid fa-pencil"></i> Editar</a>';
+            $Eliminar = '<a class="dropdown-item grayscale" ><i class="fa-regular fa-trash-can"></i> Eliminar</a>';
         }
 
         $explode1 = explode(' ',$row['fecha_inicio']);
@@ -178,10 +172,19 @@ $sql = "SELECT
             echo '<td class="align-middle text-secondary">'.$PersonalSoporte.'</td>';
             echo '<td class="align-middle"><b>'.$fechaterminoreal.'</b></td>';
 
-            echo '<td class="align-middle"><a onclick="ModalDetalle('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'detalle.png" ></a></td>';
             echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
-            echo '<td class="align-middle">'.$Editar.'</td>';
-            echo '<td class="align-middle">'.$Eliminar.'</td>';
+            echo '<td class="align-middle text-center"> 
+            <div class="dropdown">
+            <a class="btn btn-sm btn-icon-only text-dropdown-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-ellipsis-v"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                ' . $Detalle . '
+                ' . $Editar . '
+                ' . $Eliminar . '
+            </div>
+            </div>
+            </td>';
             echo '</tr>';
 
         }else if($row['estado'] == 2){
@@ -201,10 +204,19 @@ $sql = "SELECT
             echo '<td class="align-middle text-secondary">'.$PersonalSoporte.'</td>';
             echo '<td class="align-middle"><b>'.$fechaterminoreal.'</b></td>';
 
-            echo '<td class="align-middle"><a onclick="ModalDetalle('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'detalle.png" ></a></td>';
             echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
-            echo '<td class="align-middle">'.$Editar.'</td>';
-            echo '<td class="align-middle">'.$Eliminar.'</td>';
+            echo '<td class="align-middle text-center"> 
+            <div class="dropdown">
+            <a class="btn btn-sm btn-icon-only text-dropdown-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-ellipsis-v"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                ' . $Detalle . '
+                ' . $Editar . '
+                ' . $Eliminar . '
+            </div>
+            </div>
+            </td>';
             echo '</tr>';
 
         }else if($row['estado'] == 3){
@@ -224,10 +236,19 @@ $sql = "SELECT
             echo '<td class="align-middle text-secondary">'.$PersonalSoporte.'</td>';
             echo '<td class="align-middle"><b>'.$fechaterminoreal.'</b></td>';
 
-            echo '<td class="align-middle"><a onclick="ModalDetalle('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'detalle.png" ></a></td>';
             echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
-            echo '<td class="align-middle">'.$Editar.'</td>';
-            echo '<td class="align-middle">'.$Eliminar.'</td>';
+            echo '<td class="align-middle text-center"> 
+            <div class="dropdown">
+            <a class="btn btn-sm btn-icon-only text-dropdown-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-ellipsis-v"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                ' . $Detalle . '
+                ' . $Editar . '
+                ' . $Eliminar . '
+            </div>
+            </div>
+            </td>';
             echo '</tr>';
   
        }

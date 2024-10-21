@@ -25,7 +25,7 @@ require('app/help.php');
   });
 
   function Soporte(){
-    window.location.href = "soporte";
+    window.location.href = "sistemas";
   }
 
   function Actividades(){
