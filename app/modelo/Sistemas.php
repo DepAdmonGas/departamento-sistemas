@@ -10,7 +10,7 @@ class Sistemas{
     $this->con = $this->ClassConexionBD->conectarBD();
     }
 
-    public function NuevoTicket($idUsuario){
+    public function NuevoTicket($idUsuario,$categoria){
     $IdTicket = $this->IdTicket();
 
     $sql_insert = "INSERT INTO ds_soporte (
@@ -24,6 +24,7 @@ class Sistemas{
         tiempo_solucion,
         fecha_termino_real,
         porcentaje,
+        categoria,
         id_personal_soporte,
         estado
             )
@@ -39,6 +40,7 @@ class Sistemas{
             '',
             '',
             0,
+            '".$categoria."',
             0,
             0
             )";

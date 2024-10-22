@@ -68,7 +68,6 @@ $con = $ClassConexionBD->conectarBD();
         $idPersonalSoporte = $row['id_personal_soporte'];
         $PersonalSoporte = $ClassContenido->Responsable($idPersonalSoporte);
         $fechaterminoreal = $row['fecha_termino_real'];
-              
 
         $explode = explode(' ',$row['fecha_creacion']);
         if($explode[0] == '0000-00-00'){
