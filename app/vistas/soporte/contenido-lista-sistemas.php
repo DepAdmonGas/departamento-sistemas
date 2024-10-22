@@ -84,9 +84,9 @@ $sql = "SELECT
         }else if($prioridad == 'Alta'){
             $colorPrioridad = 'text-danger';
         }
-        $Editar = '<a onclick="EditarTicket('.$id_ticket.')" class="dropdown-item"><i class="fa-solid fa-pencil"></i> Editar</a>';
+        $Editar = '<a onclick="EditarTicket('.$id_ticket.')" class="dropdown-item"><i class="fa-solid fa-pencil"></i> Responsable</a>';
         $Eliminar = '<a class="dropdown-item" onclick="EliminarTicket('.$id_ticket.')"><i class="fa-regular fa-trash-can"></i> Eliminar</a>';
-        $Detalle = '<a class="dropdown-item" onclick="ModalDetalle('.$id_ticket.')"><i class="fa-regular fa-eye"></i> Detalle</a>';
+        $Detalle = '<a class="dropdown-item" onclick="ModalDetalle('.$id_ticket.')"><i class="fa-regular fa-eye"></i> Seguimiento</a>';
         if($row['estado'] == 0){
 
             //$trColor = 'table-warning';
@@ -110,7 +110,7 @@ $sql = "SELECT
             //$trColor = 'table-success';
             $trColor = 'background-color: #b0f2c2';
             $estado = 'Finalizado';
-            $Editar = '<a class="dropdown-item grayscale"><i class="fa-solid fa-pencil"></i> Editar</a>';
+            $Editar = '<a class="dropdown-item grayscale"><i class="fa-solid fa-pencil"></i> Responsable</a>';
             $Eliminar = '<a class="dropdown-item grayscale" ><i class="fa-regular fa-trash-can"></i> Eliminar</a>';
 
         }else if($row['estado'] == 4){
@@ -118,7 +118,7 @@ $sql = "SELECT
             //$trColor = 'table-danger';
             $trColor = 'background-color: #ffb6af';
             $estado = 'Cancelado';
-            $Editar = '<a class="dropdown-item grayscale"><i class="fa-solid fa-pencil"></i> Editar</a>';
+            $Editar = '<a class="dropdown-item grayscale"><i class="fa-solid fa-pencil"></i> Responsable</a>';
             $Eliminar = '<a class="dropdown-item grayscale" ><i class="fa-regular fa-trash-can"></i> Eliminar</a>';
         }
 
