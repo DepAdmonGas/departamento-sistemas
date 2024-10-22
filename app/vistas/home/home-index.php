@@ -1,5 +1,8 @@
 <?php
 require('app/help.php');
+if($Session_IDUsuarioBD != 1){
+  header("location:actividades");
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
