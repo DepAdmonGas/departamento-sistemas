@@ -205,11 +205,11 @@ class Sistemas{
 
     //------------ FINALIZAR REGISTRO --------------//
 
-    public function FinalizarRegistro($idRegistro){
+    public function FinalizarRegistro($idRegistro,$idticket,$usuario){
 
         date_default_timezone_set('America/Mexico_City');
         $hoy = date("Y-m-d H:i:s");
-        $mensaje = "Validacion Exitosa";
+        $mensaje = "Se envia la solitud de sistemas con numero de ticket: $idticket";
         $sql = "UPDATE ds_soporte SET 
         fecha_creacion = '".$hoy."',
         estado = 1
@@ -217,7 +217,7 @@ class Sistemas{
 
         if (mysqli_query($this->con, $sql)) {
         $this->PersonalSistemas($idRegistro,1);
-        $this->telegram->enviarToken(1,$mensaje);
+        $this->telegram->enviarToken($usuario,$mensaje);
         $Resultado = 1;
         }else{
         $Resultado = 0;

@@ -1,6 +1,6 @@
 <?php 
 class Telegram extends Exception{
-    private $apiToken = "bot7325883923:AAFWJIR-Jklk0cfs0ZsYpHY6tA_2fpbcZ7U";
+    private $apiToken = "bot7819301219:AAHBn9Z8qO9E7G0OWrQ2JtY3xTfIlu8QV0o";
     private $con;
 
     public function __construct($con)
