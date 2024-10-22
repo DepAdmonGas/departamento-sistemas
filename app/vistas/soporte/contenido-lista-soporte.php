@@ -90,7 +90,7 @@ $con = $ClassConexionBD->conectarBD();
 
             $trColor = 'style="background-color: #fcfcda"';
             $estado = 'Creando';
-            $Editar = '<a class="dropdown-item" onclick="EditarTicket('.$id_ticket.',\''.$categoria.'\')"><i class="fa-solid fa-pencil"></i> Editar</a>';
+            $Editar = '<a class="dropdown-item" onclick="EditarTicket('.$id_ticket.')"><i class="fa-solid fa-pencil"></i> Editar</a>';
             $Eliminar = '<a class="dropdown-item" onclick="EliminarTicket('.$id_ticket.')"><i class="fa-regular fa-trash-can"></i> Eliminar</a>';
 
         }else if($row['estado'] == 1){

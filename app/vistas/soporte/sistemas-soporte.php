@@ -1,7 +1,5 @@
 <?php
-require('app/help.php');
-
-
+require 'app/help.php';
 ?>
 
 <!DOCTYPE html>
@@ -95,42 +93,8 @@ require('app/help.php');
       });
     }
 
-    function tarea() {
-      var parametros = {
-        "Accion": "nuevo-folio",
-        "categoria":"Tarea"
-      };
-
-      $.ajax({
-        data: parametros,
-        url: 'app/modelo/controlador-sistemas.php',
-        type: 'post',
-        beforeSend: function() {},
-        complete: function() {
-
-        },
-        success: function(response) {
-
-          if (response != 0) {
-            ContenidoSoporte();
-            EditarPrioridad(response);
-            $('#ModalTarea').modal('show');
-            $('#DivContenidoTarea').load('app/vistas/soporte/modal-tarea.php?idticket=' + response);
-          } else {
-            alertify.error('Error al crear');
-          }
-
-        }
-      });
-    }
-
     function EditarTicket(idticket,categoria) {
-      if(categoria == "Actividad"){
-        window.location.href = "nuevo-registro/" + idticket;
-      }else {
-        $('#ModalTarea').modal('show');
-        $('#DivContenidoTarea').load('app/vistas/soporte/modal-tarea.php?idticket=' + idticket);
-      }
+      window.location.href = "nuevo-registro/" + idticket;  
     }
 
     function EliminarTicket(idticket) {
@@ -263,114 +227,6 @@ require('app/help.php');
         });
       });
     }
-
-    //tareas
-    function EditarDescripcion(descripcion, idRegistro) {
-      let parametros = {
-        "Accion": "editar-descripcion",
-        "idRegistro": idRegistro,
-        "Dato": descripcion.value
-      };
-
-      $.ajax({
-        data: parametros,
-        url: 'app/modelo/controlador-sistemas.php',
-        type: 'post',
-        beforeSend: function() {},
-        complete: function() {
-
-        },
-        success: function(response) {
-
-        }
-      });
-
-    }
-
-    function EditarPrioridad(idRegistro) {
-      let Prioridad = "Alta";
-
-      let parametros = {
-        "Accion": "editar-prioridad",
-        "idRegistro": idRegistro,
-        "Dato": Prioridad
-      };
-
-      $.ajax({
-        data: parametros,
-        url: 'app/modelo/controlador-sistemas.php',
-        type: 'post',
-        beforeSend: function() {},
-        complete: function() {
-
-        },
-        success: function(response) {
-
-        }
-      });
-
-    }
-
-    function finalizarTarea(idRegistro) {
-
-      var data = new FormData();
-      Archivo = document.getElementById("EvidenciaArchivo");
-      Archivo_file = Archivo.files[0];
-      Archivo_filePath = Archivo.value;
-
-      if (Archivo_filePath != "") {
-        data.append('Accion', 'agregar-evidencia');
-        data.append('idRegistro', idRegistro);
-        data.append('EvidenciaDescripcion', idRegistro);
-        data.append('Archivo_file', Archivo_file);
-
-        $(".LoaderPage").show();
-
-        let url = 'app/modelo/controlador-sistemas.php';
-        $.ajax({
-          url: url,
-          type: 'POST',
-          contentType: false,
-          data: data,
-          processData: false,
-          cache: false
-        }).done(function(data) {
-          if (data == 1) {
-
-            $(".LoaderPage").hide();
-            $('#Modal').modal('hide');
-            ContenidoSoporte(idRegistro);
-
-          } else {
-            $(".LoaderPage").hide();
-            alertify.error('Error al crear la evidencia');
-          }
-
-        });
-
-      }
-      Finalizar(idRegistro)
-
-    }
-
-    function Finalizar(idRegistro) {
-      let parametros = {
-        "Accion": "finalizar-registro",
-        "idRegistro": idRegistro,
-        "categoria": "Tarea"
-      };
-      $.ajax({
-        data: parametros,
-        url: 'app/modelo/controlador-sistemas.php',
-        type: 'post',
-        beforeSend: function() {},
-        complete: function() {},
-        success: function(response) {
-          $('#ModalTarea').modal('hide');
-          ContenidoSoporte(idRegistro);
-        }
-      });
-    }
     window.addEventListener('pageshow', function(event) {
   if (event.persisted) {
   // Si la página está en la caché del navegador, recargarla
@@ -414,7 +270,7 @@ require('app/help.php');
               <div class="row">
 
                 <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 mt-3">
-                <span class="text-secondary"> * Tarea: Actividades especificas que se pueden realizar el mismo día <br> * Actividad: Conjunto de tareas que se requiere mayor tiempo para poder realizarlas.
+                <span class="text-secondary">Aquí podrás crear tus solicitudes para el área de sistemas y tener el seguimiento de la solución a dichas alertas.
                 </span>
                 </div>
 
@@ -428,7 +284,6 @@ require('app/help.php');
                       </button>
 
                       <ul class="dropdown-menu">
-                        <li onclick="tarea()"><a class="dropdown-item pointer"> <i class="fa-solid fa-pen-to-square"></i></i> Crear Tarea</a></li>
                         <li onclick="NuevoRegistro()"><a class="dropdown-item pointer"> <i class="fa-solid fa-calendar-check"></i> Crear Actividad</a></li>
                         <li onclick="ModalBuscar()"><a class="dropdown-item pointer"> <i class="fa-solid fa-magnifying-glass text-dark"></i> Buscar Registro</a></li>
                       </ul>
@@ -461,14 +316,6 @@ require('app/help.php');
     <div class="modal-dialog">
       <div class="modal-content">
         <div id="DivContenidoComentario"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal" id="ModalTarea">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div id="DivContenidoTarea"></div>
       </div>
     </div>
   </div>
