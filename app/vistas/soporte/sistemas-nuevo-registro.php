@@ -109,7 +109,7 @@ header("location:../soporte");
   function ActividadAgregar(idRegistro){
 
     var data = new FormData();
-    let ActividadDescripcion = $('#ActividadDescripcion').val();
+    let ActividadDescripcion = quill.root.innerHTML;
     Archivo = document.getElementById("ActividadArchivo");
     Archivo_file = Archivo.files[0];
     Archivo_filePath = Archivo.value;
@@ -132,7 +132,7 @@ header("location:../soporte");
         processData: false,
         cache: false
         }).done(function(data){
-
+          console.log(data)
        if(data == 1){
 
             $(".LoaderPage").hide();
@@ -260,11 +260,13 @@ function EliminarEvidencia(idRegistro,idActividad){
   });
 }
 
-function Finalizar(idRegistro){
+function Finalizar(idRegistro,idUsuario){
 
     let parametros = {
     "Accion" : "finalizar-registro",
     "idRegistro" : idRegistro,
+    "usuario":idUsuario,
+    "ticket":<?=$GET_IdRegistro?>
     };
 
     alertify.confirm('',
@@ -310,10 +312,10 @@ function Finalizar(idRegistro){
     <div class="m-2">
 
     </div>
-    <h6 class="mt-2 text-secondary">Descripción:</h6>
+    <h6 class="mt-2 fw-bold text-secondary">Breve Descripción del Ticket:</h6>
     <textarea class="form-control rounded-0" id="Descripcion" onkeyup="EditarDescripcion(this,<?=$GET_IdRegistro;?>)"><?=$InformacionTicket['descripcion'];?></textarea>
 
-    <h6 class="mt-2 text-secondary">Prioridad:</h6>
+    <h6 class="mt-2 fw-bold text-secondary">Prioridad:</h6>
     <select class="form-select rounded-0" id="Prioridad" onchange="EditarPrioridad(<?=$GET_IdRegistro;?>)">
     <option value="<?=$InformacionTicket['prioridad'];?>"><?=$InformacionTicket['prioridad'];?></option>
     <option value="Baja">Baja</option>
@@ -322,18 +324,19 @@ function Finalizar(idRegistro){
     </select>
 
 
-    <h6 class="mt-2 text-secondary">Detalle de la Actividad:</h6>
-    <div style="height: 300px;font-size: 1em;" id="editor"></div>
+    <h6 class="mt-2 fw-bold text-secondary">Detalle de la Actividad:</h6>
+    <div class="mb-2" style="height: 300px;font-size: 1em;" id="editor"></div>
+    <h6 class="fw-bold text-secondary">Agrege evidencias en el formato de tu elección, el cual puede ser: PDF, Excel, Word, JPG o PNG.</h6>
+    <input class="form-control rounded-0" type="file" id="ActividadArchivo">
     <hr>
 
     <div class="row">
     <div class="col-8">
-    <h6 class="fw-bold text-secondary">Agrege evidencias en el formato de tu elección, el cual puede ser: PDF, Excel, Word, JPG o PNG.</h6>
 
     </div>
 
     <div class="col-4">
-    <button type="button" class="btn btn-labeled2 btn-primary float-end mb-3" onclick="ModalActividad(<?=$GET_IdRegistro;?>)">
+    <button type="button" class="btn btn-labeled2 btn-primary float-end mb-3" onclick="ActividadAgregar(<?=$GET_IdRegistro;?>)">
     <span class="btn-label2"><i class="fa-solid fa-plus"></i></span>Agregar</button>
     </div>
     </div>
@@ -345,7 +348,7 @@ function Finalizar(idRegistro){
     <!----- BOTON DE FINALIZAR ----->
     <div class="row">
     <div class="col-12">
-    <button type="button" class="btn btn-labeled2 btn-success float-end" onclick="Finalizar(<?=$GET_IdRegistro;?>)">
+    <button type="button" class="btn btn-labeled2 btn-success float-end" onclick="Finalizar(<?=$GET_IdRegistro?>,<?=$Session_IDUsuarioBD?>)">
     <span class="btn-label2"><i class="fa-solid fa-check"></i></span>Finalizar registro</button>
     </div>
 

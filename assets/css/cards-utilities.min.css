@@ -1,0 +1,231 @@
+/*==================== COLORES DE LAS CARDS ====================*/
+
+:root {
+    /* ----- BORDER AND TEXT CARD ----- */
+    --c-white: #fff;
+    --c-dark: #000;
+    --c-fair-pink: #4bb7e6;
+  
+    /* ----- COLOR ESQUINA BORDE CARD ----- */
+    --c-apricot: #215d98;
+
+    --dark-color-lighten: #f2f5ff;
+    --blue-card: #4bb7e6;
+    --text2: #fbf7f7;
+  }
+ 
+   /*==================== DISEÑO DE CARD 2 ====================*/
+  .card2 {
+    border-radius: 16px;
+    box-shadow: 0 30px 30px -25px rgba(#4133B7, .25);
+    max-width: 100%;
+    transition: transform 0.3s ease;
+    cursor: pointer; /* Añade el cursor tipo "pointer" */
+  
+  }
+  
+  .card2:hover {
+    transform: translateY(-10px);
+  }
+  
+  .plan {
+    padding: 10px;
+    background-color: var(--c-white);
+  }
+  
+  
+  .plan .inner {
+    padding: 20px;
+    padding-top: 30px;
+    background: linear-gradient(to bottom right, #4bb7e6, #215d98); /* Opcion 1 */
+    /*background: linear-gradient(to bottom right, #4bb7e6, #4b7ae6);  Opcion 2 */
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .plan .pricing {
+    position: absolute;
+    top: 0;
+    left: 0; 
+    background-color: var(--c-apricot);
+    border-radius: 0 0 0 0 ;
+    display: flex;
+    align-items: center; /* Para alinear verticalmente */
+    justify-content: center; /* Para alinear horizontalmente */
+    height: 100%;
+    width: 70px;
+    font-size: 1.25rem;
+    color: var(--c-white);
+    border-radius: 0 2em 2em 0;
+  
+  }
+  
+  .plan .pricing small {
+    color: var(--c-white);
+    font-size: 0.75em;
+    margin-left: 0.25em;
+  }
+  
+  
+  .card3 img {
+    max-width: 100%;
+    height: 100%;
+  }
+     
+  
+  .card3 {
+    position: relative;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: var(--blue-card);
+    color: var(--text2);
+    cursor: pointer;
+  }
+  
+  
+  .product-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90px; /* Establece la altura deseada */
+    width: 100%; /* Opcional: usa el ancho completo del contenedor */
+    transform: scale(1);
+    transition: transform 0.5s ease;
+    filter: drop-shadow(5px 10px 15px rgba(8, 9, 13, 0.4));
+  }
+  
+  .product-image img {
+    max-width: 100%; /* Asegúrate de que la imagen no supere el ancho del contenedor */
+    max-height: 100%; /* Asegúrate de que la imagen no supere la altura del contenedor */
+    margin-top: -30px; /* Ajusta el valor según lo necesites */
+  }
+  
+  
+  .product-info {
+    text-align: center;
+  }
+  
+  .card3:hover .product-image {
+      transform: scale(1.25);
+  }
+  
+  .product-info h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+  
+  .product-info p {
+    margin: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  
+
+  /* ---------- */
+
+  .plan2 {
+    padding: 10px;
+    background-color: var(--c-white);
+  }
+
+  .plan2 .inner2 {
+    padding: 20px;
+    padding-top: 40px;
+    background: linear-gradient(to bottom right, #4bb7e6, #215d98); /* Cambia los colores según tus preferencias */
+    /*background: linear-gradient(to bottom right, #4bb7e6, #4b7ae6);  Opcion 2 */
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ---------- C0LOR INVERTIDO ---------- */
+
+  .plan3 {
+    padding: 10px;
+    background-color: var(--c-white);
+  }
+
+  .plan3 .inner3 {
+    padding: 20px;
+    padding-top: 40px;
+    background: linear-gradient(to top right, #215d98, #4bb7e6); /* Cambia los colores según tus preferencias */
+    /*background: linear-gradient(to bottom right, #4bb7e6, #4b7ae6);  Opcion 2 */
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+
+
+
+
+  
+/*
+*
+* ==========================================
+* CUSTOM UTIL CLASSES
+* ==========================================
+*
+*/ 
+
+
+.text-uppercase {
+  letter-spacing: 0.10em;
+}
+
+.cardGafete:hover {
+  transform: translateY(-10px);
+  transition: transform 0.3s ease;
+}
+
+
+   /*==================== DISEÑO BOTON FLOTANTE ACCESO DIRECTO ====================*/
+   .flotante-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #215d98;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    animation: breathe 2s ease-in-out infinite;
+  }
+  
+  /*Estilos solo al icono whatsapp*/
+  .flotante-i{
+    color: #fff;
+    font-size: 14px;
+    animation: beat 2s ease-in-out infinite;
+    text-decoration: none;
+  }
+  
+  /*Estilos con animation contorno respirando*/
+  @keyframes breathe {
+    0% {
+      box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);
+    }
+    70% {
+      box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+  }
+  
+  /*Estilos de animacion del icono latiendo*/
+  @keyframes beat {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
