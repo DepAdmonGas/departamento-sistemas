@@ -48,6 +48,12 @@ if ($partes_ruta[0] == 'departamento-sistemas')
         $ruta_elegida = 'app/vistas/soporte/sistemas-nuevo-registro.php';
         }
         //----- DETALLE REGISTRO -----//
+         //----- NUEVA ACTIVIDAD -----//
+         if ($partes_ruta[1] == 'nueva-actividad') {
+            $GET_IdRegistro = $partes_ruta[2];
+            $ruta_elegida = 'app/vistas/actividades/nueva-actividad.php';
+            }
+        //----- NUEVA ACTIVIDAD -----//
         else if ($partes_ruta[1] == 'detalle-registro') {
             $GET_IdRegistro = $partes_ruta[2];
             $ruta_elegida = 'app/vistas/soporte/sistemas-detalle-registro.php';

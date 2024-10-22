@@ -26,6 +26,7 @@ class Sistemas{
         tiempo_solucion,
         fecha_termino_real,
         porcentaje,
+        categoria,
         id_personal_soporte,
         estado,
         categoria
@@ -42,6 +43,7 @@ class Sistemas{
             '',
             '',
             0,
+            '".$categoria."',
             0,
             0,
             '".$categoria."'

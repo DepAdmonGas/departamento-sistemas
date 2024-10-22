@@ -2,8 +2,7 @@
 require('../help.php');
 
 if($_POST['Accion'] == 'nuevo-folio'){
-    $categoria = $_POST['categoria'];
-    $Resultado = $ClassSistemas->NuevoTicket($Session_IDUsuarioBD,$categoria);
+    $Resultado = $ClassSistemas->NuevoTicket($Session_IDUsuarioBD,$_POST['Categoria']);
     echo $Resultado;
 }
 else if($_POST['Accion'] == 'editar-prioridad'){
