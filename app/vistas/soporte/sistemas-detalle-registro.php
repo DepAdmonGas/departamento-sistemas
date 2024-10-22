@@ -1,5 +1,6 @@
-<?php 
-include_once "../../help.php";
+<?php
+include_once "app/help.php";
+
 $con = $ClassConexionBD->conectarBD();
 $idticket = $GET_IdRegistro;
 
@@ -379,7 +380,7 @@ $('#Comentario').css('border','2px solid #A52525');
             echo '<td class="align-middle">'.$Archivo.'</td>';
             echo '</tr>';
 
-            $num++;
+            $numActividad++;
             }
 
         }else{
@@ -415,7 +416,7 @@ $('#Comentario').css('border','2px solid #A52525');
                 echo '<td class="align-middle"><a href="'.RUTA_ARCHIVOS.$rowEvidencia['evidencia'].'" download><img src="'.RUTA_IMG_ICONOS.'descargar.png" ></a></td>';
                 echo '</tr>';
 
-                $num++;
+                $numEvidencia++;
                 }
 
             }else{

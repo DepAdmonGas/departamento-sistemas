@@ -32,6 +32,9 @@
           <a class="dropdown-item" href="<?=HTTP?><?=HOST?>/departamento-operativo/perfil">
             <i class="fa-solid fa-user" style="padding-right: 5px;"></i>Perfil
           </a>
+          <a class="dropdown-item pointer" onclick="tokenTelegram(<?= $Session_IDUsuarioBD ?>)">
+                  <i class="fa-brands fa-telegram" style="padding-right: 5px;"></i>Token Telegram
+                </a>
           <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="<?=RUTA_SALIR?>salir">
               <i class="fa-solid fa-power-off" style="padding-right: 5px;"></i> Cerrar Sesión

@@ -17,6 +17,9 @@ if ($partes_ruta[0] == 'departamento-sistemas')
 
     switch ($partes_ruta[1]) {
 
+        case 'sistemas':
+            $ruta_elegida = 'app/vistas/soporte/sistemas-index.php';
+        break;
         case 'home':
         $ruta_elegida = 'app/vistas/home/home-index.php';
         break;

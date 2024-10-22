@@ -38,7 +38,7 @@ else if($_POST['Accion'] == 'eliminar-evidencia'){
     echo $Resultado;
 }
 else if($_POST['Accion'] == 'finalizar-registro'){
-    $Resultado = $ClassSistemas->FinalizarRegistro($_POST['idRegistro']);
+    $Resultado = $ClassSistemas->FinalizarRegistro($_POST['idRegistro'],$_POST['ticket'],$_POST['usuario']);
     echo $Resultado;
 }
 else if($_POST['Accion'] == 'cancelar-ticket'){

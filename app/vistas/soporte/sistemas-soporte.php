@@ -1,7 +1,5 @@
 <?php
-require('app/help.php');
-
-
+require 'app/help.php';
 ?>
 
 <!DOCTYPE html>
@@ -29,7 +27,7 @@ require('app/help.php');
 
   <!---------- LIBRERIAS DEL DATATABLE ---------->
   <link href="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.0.3/b-3.0.1/b-colvis-3.0.1/b-html5-3.0.1/b-print-3.0.1/datatables.min.css" rel="stylesheet">
-
+  <script src="https://cdn.ckeditor.com/ckeditor5/35.0.1/classic/ckeditor.js"></script>
   <script type="text/javascript" src="<?= RUTA_JS ?>alertify.js"></script>
 
 
@@ -55,11 +53,11 @@ require('app/help.php');
           "lengthMenu": [25, 50, 75, 100], // Número de registros que se mostrarán
           "columnDefs": [{
               "orderable": false,
-              "targets": [9, 10, 11, 12]
+              "targets": [9, 10]
             }, // Deshabilitar ordenación en las columnas 1, 2 y 3 (comenzando desde 0)
             {
               "searchable": false,
-              "targets": [9, 10, 11, 12]
+              "targets": [9, 10]
             } // Deshabilitar filtrado en las columnas 1, 2 y 3 (comenzando desde 0)
           ]
         });
@@ -71,7 +69,8 @@ require('app/help.php');
     function NuevoRegistro() {
 
       var parametros = {
-        "Accion": "nuevo-folio"
+        "Accion": "nuevo-folio",
+        "categoria":"Actividad"
       };
 
       $.ajax({
@@ -94,8 +93,8 @@ require('app/help.php');
       });
     }
 
-    function EditarTicket(idticket) {
-      window.location.href = "nuevo-registro/" + idticket;
+    function EditarTicket(idticket,categoria) {
+      window.location.href = "nuevo-registro/" + idticket;  
     }
 
     function EliminarTicket(idticket) {
@@ -218,16 +217,23 @@ require('app/help.php');
           "lengthMenu": [25, 50, 75, 100], // Número de registros que se mostrarán
           "columnDefs": [{
               "orderable": false,
-              "targets": [9, 10, 11, 12]
+              "targets": [9, 10]
             }, // Deshabilitar ordenación en las columnas 1, 2 y 3 (comenzando desde 0)
             {
               "searchable": false,
-              "targets": [9, 10, 11, 12]
+              "targets": [9, 10]
             } // Deshabilitar filtrado en las columnas 1, 2 y 3 (comenzando desde 0)
           ]
         });
       });
     }
+    window.addEventListener('pageshow', function(event) {
+  if (event.persisted) {
+  // Si la página está en la caché del navegador, recargarla
+  window.location.reload();
+  sizeWindow();
+  }
+  });
   </script>
 
 </head>
@@ -264,7 +270,8 @@ require('app/help.php');
               <div class="row">
 
                 <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 mt-3">
-                  Aquí podrás crear tus solicitudes de pendientes para el área de sistemas y tener el seguimiento de la solución a dichas alertas.
+                <span class="text-secondary">Aquí podrás crear tus solicitudes para el área de sistemas y tener el seguimiento de la solución a dichas alertas.
+                </span>
                 </div>
 
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
@@ -277,7 +284,7 @@ require('app/help.php');
                       </button>
 
                       <ul class="dropdown-menu">
-                        <li onclick="NuevoRegistro()"><a class="dropdown-item pointer"> <i class="fa-solid fa-plus text-dark"></i> Crear Registro</a></li>
+                        <li onclick="NuevoRegistro()"><a class="dropdown-item pointer"> <i class="fa-solid fa-calendar-check"></i> Crear Actividad</a></li>
                         <li onclick="ModalBuscar()"><a class="dropdown-item pointer"> <i class="fa-solid fa-magnifying-glass text-dark"></i> Buscar Registro</a></li>
                       </ul>
 

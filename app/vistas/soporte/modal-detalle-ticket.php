@@ -16,6 +16,7 @@ ds_soporte.fecha_termino_real,
 ds_soporte.porcentaje,
 ds_soporte.id_personal_soporte,
 ds_soporte.estado,
+ds_soporte.categoria,
 tb_usuarios.nombre,
 tb_estaciones.nombre AS nomestacion,
 tb_puestos.tipo_puesto
@@ -38,6 +39,7 @@ while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
     $fechatermino = $row['fecha_termino'];
     $tiemposolucion = $row['tiempo_solucion'];
     $estado = $row['estado'];
+    $categoria = $row['categoria'];
 
 	$explode = explode(' ',$row['fecha_creacion']);
         if($explode[0] == '0000-00-00'){
@@ -167,7 +169,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 </div>
 
 <hr>
-
+<?php if($categoria == "Actividad"):?>
 <h6 class="mt-2 text-secondary">Actividad:</h6>
 
 
@@ -229,7 +231,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 		echo '<td class="align-middle">'.$Archivo.'</td>';
 		echo '</tr>';
 
-        $num++;
+        $numActividad++;
 		}
 
 	}else{
@@ -240,7 +242,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 	</tbody> 
 	</table>
 </div>
-  
+<?php else:?>
 <h6 class="text-secondary mt-2">Evidencia:</h6>
 
 <div class="table-responsive">
@@ -269,7 +271,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 		echo '<td class="align-middle"><a href="'.RUTA_ARCHIVOS.$rowEvidencia['evidencia'].'" download><img src="'.RUTA_IMG_ICONOS.'descargar.png" ></a></td>';
 		echo '</tr>';
 
-        $num++;
+        $numEvidencia++;
 		}
 
 	}else{
@@ -280,5 +282,5 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 	</tbody> 
 	</table>
     </div>
-
+<?php endif;?>
 </div>

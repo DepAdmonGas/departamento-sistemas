@@ -15,6 +15,7 @@ $con = $ClassConexionBD->conectarBD();
         ds_soporte.porcentaje,
         ds_soporte.id_personal_soporte,
         ds_soporte.estado,
+        ds_soporte.categoria,
         tb_usuarios.nombre,
         tb_estaciones.nombre AS nomestacion,
         tb_puestos.tipo_puesto
@@ -47,11 +48,8 @@ $con = $ClassConexionBD->conectarBD();
             <th class="align-middle text-center">Porcentaje</th> 
             <th class="align-middle text-center">Responsable</th>         
             <th class="align-middle text-center">Fecha termino real</th>
-
-            <th class="align-middle text-center" width="24px"><img src="<?=RUTA_IMG_ICONOS;?>detalle.png"></th>
             <th class="align-middle text-center" width="24px"><img src="<?=RUTA_IMG_ICONOS;?>comentarios.png"></th>
-			<th class="align-middle text-center" width="24px"><img src="<?=RUTA_IMG_ICONOS;?>editar.png"></th>
-			<th class="align-middle text-center" width="24px"><img src="<?=RUTA_IMG_ICONOS;?>eliminar.png"></th>
+            <th class="align-middle text-center" width="20"><i class="fas fa-ellipsis-v"></i></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -64,6 +62,7 @@ $con = $ClassConexionBD->conectarBD();
 		$descripcion = $row['descripcion'];
         $prioridad = $row['prioridad'];
         $porcentaje = $row['porcentaje'];
+        $categoria = $row['categoria'];
         $ToComentarios = $ClassContenido->ToComentarios($id_ticket);
         $idPersonalSoporte = $row['id_personal_soporte'];
         $PersonalSoporte = $ClassContenido->Responsable($idPersonalSoporte);
@@ -83,41 +82,39 @@ $con = $ClassConexionBD->conectarBD();
         }else if($prioridad == 'Alta'){
             $colorPrioridad = 'text-danger';
         }
-
+        $Editar = '<a class="dropdown-item grayscale"><i class="fa-solid fa-pencil"></i> Editar</a>';
+        $Eliminar = '<a class="dropdown-item grayscale" ><i class="fa-regular fa-trash-can"></i> Eliminar</a>';
+        $Detalle = '<a class="dropdown-item" onclick="ModalDetalle('.$id_ticket.')"><i class="fa-regular fa-eye"></i> Detalle</a>';
         if($row['estado'] == 0){
 
             $trColor = 'style="background-color: #fcfcda"';
             $estado = 'Creando';
-            $Editar = '<a onclick="EditarTicket('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'editar.png" ></a>';
-            $Eliminar = '<img src="'.RUTA_IMG_ICONOS.'eliminar.png" onclick="EliminarTicket('.$id_ticket.')">';
+            $Editar = '<a class="dropdown-item" onclick="EditarTicket('.$id_ticket.')"><i class="fa-solid fa-pencil"></i> Editar</a>';
+            $Eliminar = '<a class="dropdown-item" onclick="EliminarTicket('.$id_ticket.')"><i class="fa-regular fa-trash-can"></i> Eliminar</a>';
 
         }else if($row['estado'] == 1){
 
             $trColor = 'style="background-color: #ffffff"';
             $estado = 'Pendiente';
-            $Editar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'editar.png" >';
-            $Eliminar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'eliminar.png">';
+            
 
         }else if($row['estado'] == 2){
             
             $trColor = 'style="background-color: #cfe2ff"';
             $estado = 'En proceso';
-            $Editar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'editar.png" >';
-            $Eliminar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'eliminar.png">';
+            
 
         }else if($row['estado'] == 3){
 
             $trColor = 'style="background-color: #b0f2c2"';
             $estado = 'Finalizado';
-            $Editar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'editar.png" >';
-            $Eliminar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'eliminar.png">';
+            
 
         }else if($row['estado'] == 4){
 
             $trColor = 'style="background-color: #ffb6af"';
             $estado = 'Cancelado';
-            $Editar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'editar.png" >';
-            $Eliminar = '<img class="grayscale" src="'.RUTA_IMG_ICONOS.'eliminar.png">';
+            
 
         }
 
@@ -163,13 +160,20 @@ $con = $ClassConexionBD->conectarBD();
             echo '<td class="align-middle text-center">'.$porcentaje.' %</td>';
             echo '<td class="align-middle text-center">'.$PersonalSoporte.'</td>';
             echo '<td class="align-middle text-center"><b>'.$fechaterminoreal.'</b></td>';  
-    
-            echo '<td class="align-middle text-center"><a onclick="ModalDetalle('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'detalle.png" ></a></td>';
             echo '<td class="align-middle text-center"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
-            echo '<td class="align-middle text-center">'.$Editar.'</td>';
-            echo '<td class="align-middle text-center">'.$Eliminar.'</td>';
+            echo '<td class="align-middle text-center"> 
+            <div class="dropdown">
+            <a class="btn btn-sm btn-icon-only text-dropdown-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-ellipsis-v"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                ' . $Detalle . '
+                ' . $Editar . '
+                ' . $Eliminar . '
+            </div>
+            </div>
+            </td>';
             echo '</tr>';
-
         }else if($row['estado'] == 1){
 
             echo '<tr '.$trColor.'>';
@@ -185,12 +189,20 @@ $con = $ClassConexionBD->conectarBD();
             echo '<td class="align-middle text-center">'.$PersonalSoporte.'</td>';
             echo '<td class="align-middle text-center"><b>'.$fechaterminoreal.'</b></td>';  
     
-            echo '<td class="align-middle text-center"><a onclick="ModalDetalle('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'detalle.png" ></a></td>';
             echo '<td class="align-middle text-center"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
-            echo '<td class="align-middle text-center">'.$Editar.'</td>';
-            echo '<td class="align-middle text-center">'.$Eliminar.'</td>';
-            echo '</tr>';
-
+            echo '<td class="align-middle text-center"> 
+            <div class="dropdown">
+            <a class="btn btn-sm btn-icon-only text-dropdown-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-ellipsis-v"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                ' . $Detalle . '
+                ' . $Editar . '
+                ' . $Eliminar . '
+            </div>
+            </div>
+            </td>';
+        echo '</tr>';
         }else if($row['estado'] == 2){
 
             echo '<tr '.$trColor.'>';
@@ -206,12 +218,20 @@ $con = $ClassConexionBD->conectarBD();
             echo '<td class="align-middle text-center">'.$PersonalSoporte.'</td>';
             echo '<td class="align-middle text-center"><b>'.$fechaterminoreal.'</b></td>';  
     
-            echo '<td class="align-middle text-center"><a onclick="ModalDetalle('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'detalle.png" ></a></td>';
             echo '<td class="align-middle text-center"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
-            echo '<td class="align-middle text-center">'.$Editar.'</td>';
-            echo '<td class="align-middle text-center">'.$Eliminar.'</td>';
-            echo '</tr>';
-
+            echo '<td class="align-middle text-center"> 
+            <div class="dropdown">
+            <a class="btn btn-sm btn-icon-only text-dropdown-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-ellipsis-v"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                ' . $Detalle . '
+                ' . $Editar . '
+                ' . $Eliminar . '
+            </div>
+            </div>
+            </td>';
+        echo '</tr>';
         }else if($row['estado'] == 3){
 
             if($FechaCierreTicket >= $fecha_del_dia){
@@ -229,21 +249,28 @@ $con = $ClassConexionBD->conectarBD();
                 echo '<td class="align-middle text-center">'.$PersonalSoporte.'</td>';
                 echo '<td class="align-middle text-center"><b>'.$fechaterminoreal.'</b></td>';  
         
-                echo '<td class="align-middle text-center"><a onclick="ModalDetalle('.$id_ticket.')"><img src="'.RUTA_IMG_ICONOS.'detalle.png" ></a></td>';
                 echo '<td class="align-middle text-center"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
-                echo '<td class="align-middle text-center">'.$Editar.'</td>';
-                echo '<td class="align-middle text-center">'.$Eliminar.'</td>';
-                echo '</tr>';
+                echo '<td class="align-middle text-center"> 
+                <div class="dropdown">
+                <a class="btn btn-sm btn-icon-only text-dropdown-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-ellipsis-v"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                    ' . $Detalle . '
+                    ' . $Editar . '
+                    ' . $Eliminar . '
+                </div>
+                </div>
+                </td>';
+            echo '</tr>';
             
             }
 
         }
-
+                
 		}
 
-	}else{
-
-    }
+	}
 
 	?>
 	</tbody> 
