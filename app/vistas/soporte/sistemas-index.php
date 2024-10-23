@@ -59,12 +59,6 @@ require "app/help.php";
       });
     }
 
-
-
-    function EditarTicket(idticket) {
-      window.location.href = "nuevo-registro/" + idticket;
-    }
-
     function EliminarTicket(idticket) {
 
       let parametros = {
@@ -196,6 +190,15 @@ require "app/help.php";
       });
       $('#ModalComentario').modal('hide');
     }
+
+
+    window.addEventListener('pageshow', function(event) {
+  if (event.persisted) {
+  // Si la página está en la caché del navegador, recargarla
+  window.location.reload();
+  sizeWindow();
+  }
+  });
 
   </script>
   <style>

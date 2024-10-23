@@ -70,7 +70,7 @@ require 'app/help.php';
 
       var parametros = {
         "Accion": "nuevo-folio",
-        "categoria":"Actividad"
+        "Categoria":"Actividad"
       };
 
       $.ajax({
@@ -82,7 +82,6 @@ require 'app/help.php';
 
         },
         success: function(response) {
-
           if (response != 0) {
             window.location.href = "nuevo-registro/" + response;
           } else {

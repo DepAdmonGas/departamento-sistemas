@@ -63,6 +63,11 @@ if ($partes_ruta[0] == 'departamento-sistemas')
             $GET_IdRegistro = $partes_ruta[2];
             $ruta_elegida = 'app/vistas/soporte/sistemas-editar-registro.php';
             }
+        // DEATLLE ACTIVIDAD
+        else if ($partes_ruta[1] == 'detalle-actividad') {
+            $GET_IdRegistro = $partes_ruta[2];
+            $ruta_elegida = 'app/vistas/actividades/detalle-actividad.php';
+            }
     }
 }
 

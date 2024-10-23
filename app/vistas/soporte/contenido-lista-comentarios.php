@@ -15,12 +15,27 @@ if ($soporteContenido['estado'] == 3 || $soporteContenido['estado'] == 4) {
   $FechaCierreTicket = date("Y-m-d", strtotime($explode[0] . "+ 3 days"));
 
   if ($FechaCierreTicket >= $fecha_del_dia) {
-    $BotonComentarios = '<button type="button" class="btn btn-success rounded-0" onclick="GuardarComentario(' . $idticket . ')" >Guardar</button>';
+    $BotonComentarios = '
+    <tr class="bg-success" onclick="GuardarComentario(' . $idticket . ')">
+        <th class="text-center bg-success text-white p-2">
+          <i class="fa-regular fa-comment"></i> Guardar comentario
+        </th>
+      </tr>';
   } else {
-    $BotonComentarios = '<button type="button" class="btn btn-success rounded-0" disabled >Guardar</button>';
+    $BotonComentarios = '
+    <tr class="bg-success" disabled>
+        <th class="text-center bg-success text-white p-2">
+          <i class="fa-regular fa-comment"></i> Guardar comentario
+        </th>
+      </tr>';
   }
 } else {
-  $BotonComentarios = '<button type="button" class="btn btn-success rounded-0" onclick="GuardarComentario(' . $idticket . ')" >Guardar</button>';
+  $BotonComentarios = '
+  <tr class="bg-success" onclick="GuardarComentario(' . $idticket . ')">
+        <th class="text-center bg-success text-white p-2">
+          <i class="fa-regular fa-comment"></i> Guardar comentario
+        </th>
+      </tr>';
 }
 
 ?>
@@ -41,13 +56,16 @@ if ($soporteContenido['estado'] == 3 || $soporteContenido['estado'] == 4) {
             <?php
             if ($numero_comen > 0) {
               while ($row_comen = mysqli_fetch_array($result_comen, MYSQLI_ASSOC)) {
-                $idUsuario = $row_comen['id_usuario'];
+                $idUsuario = $row_comen['id_personal'];
                 $comentario = $row_comen['comentario'];
+                $NomUsuario = $ClassContenido->Responsable($idUsuario);
 
                 if ($Session_IDUsuarioBD == $idUsuario) {
-                  $margin = "margin-left: 50px;margin-right: 5px;";
+                  $margin = "margin-left: 40px;margin-right: 5px;";
+                  $bgcolor = 'bg-sistemas';
                 } else {
-                  $margin = "margin-right: 30px;margin-left: 5px;";
+                  $margin = "margin-right: 40px;margin-left: 5px;";
+                  $bgcolor = 'bg-personal';
                 }
 
                 $fechaExplode = explode(" ", $row_comen['fecha_hora']);
@@ -81,13 +99,7 @@ if ($soporteContenido['estado'] == 3 || $soporteContenido['estado'] == 4) {
           <textarea class="form-control rounded-0 border-0" id="Comentario" placeholder="Escribe tu comentario aquí..." style="height: 100px;"></textarea>
         </th>
       </tr>
-
-      <tr class="bg-success" onclick="GuardarComentario(<?= $IdReporte; ?>,<?= $idEstacion; ?>)">
-        <th class="text-center bg-success text-white p-2">
-          <i class="fa-regular fa-comment"></i> Guardar comentario
-        </th>
-      </tr>
-
+      <?= $BotonComentarios; ?>
       </tr>
     </tbody>
   </table>

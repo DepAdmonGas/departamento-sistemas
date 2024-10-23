@@ -329,13 +329,13 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
                   $EstadoActividad = $rowActividad['estado'];
 
                   if ($rowActividad['fecha_inicio'] == '0000-00-00') {
-                    $AtividadFechaInicio = '';
+                    $AtividadFechaInicio = 'S/I';
                   } else {
                     $AtividadFechaInicio = $rowActividad['fecha_inicio'];
                   }
 
                   if ($rowActividad['fecha_termino'] == '0000-00-00') {
-                    $AtividadFechaTermino = '';
+                    $AtividadFechaTermino = 'S/I';
                   } else {
                     $AtividadFechaTermino = $rowActividad['fecha_termino'];
                   }
@@ -357,16 +357,9 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
                   echo '<tr>';
                   echo '<th class="align-middle">' . $numActividad . '</th>';
                   echo '<td class="align-middle">' . $descripcionActividad . '</td>';
-                  echo '<td class="p-0"><input type="date" class="border-0 form-control" value="' . $AtividadFechaInicio . '" onchange="EditarActividad(this,' . $idActividad . ',1)"></td>';
-                  echo '<td class="p-0"><input type="date" class="border-0 form-control" value="' . $AtividadFechaTermino . '" onchange="EditarActividad(this,' . $idActividad . ',2)"></td>';
-                  echo '<td class="p-0">
-                <select class="form-control rounded-0 border-0" onchange="EditarActividad(this,' . $idActividad . ',3)">
-                    <option value="' . $EstadoActividad . '">' . $EstadoDetalle . '</option>
-                    <option value="0">Pendiente</option>
-                    <option value="1">En proceso</option>
-                    <option value="2">Finalizada</option>
-                </select>
-            </div>';
+                  echo '<td class="align-middle">' . $AtividadFechaInicio . '</td>';
+                  echo '<td class="align-middle">' . $AtividadFechaTermino . '</td>';
+                  echo '<td class="align-middle">' . $EstadoDetalle . '</td>';
                   echo '<td class="align-middle">' . $Archivo . '</td>';
                   echo '</tr>';
 

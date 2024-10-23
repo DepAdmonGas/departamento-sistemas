@@ -1,6 +1,5 @@
 <?php
 include_once "app/help.php";
-
 $con = $ClassConexionBD->conectarBD();
 $idticket = $GET_IdRegistro;
 
@@ -63,16 +62,16 @@ while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
 
   $explode1 = explode(' ', $row['fecha_inicio']);
   if ($explode1[0] == '0000-00-00') {
-    $fechaInicio = 'S/I';
+    $fechaInicio = '';
   } else {
-    $fechaInicio = FormatoFecha($explode1[0]);
+    $fechaInicio = $explode1[0];
   }
 
   $explode2 = explode(' ', $row['fecha_termino']);
   if ($explode2[0] == '0000-00-00') {
-    $fechaTermino = 'S/I';
+    $fechaTermino = '';
   } else {
-    $fechaTermino = FormatoFecha($explode2[0]);
+    $fechaTermino = $explode2[0];
   }
 
   if ($row['estado'] == 0) {
@@ -134,8 +133,12 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
       ContenidoComentarios(<?= $idticket; ?>);
     });
 
+    function regresarP() {
+      window.history.back();
+    }
+
     function ContenidoComentarios(idticket) {
-      $('#ContenidoComentarios').load('../app/vistas/soporte/contenido-lista-comentarios.php?idticket=' + idticket);
+      $('#ContenidoComentarios').load('../app/vistas/contenido-lista-comentarios.php?idticket=' + idticket);
     }
 
     function GuardarComentario(idticket) {
@@ -191,71 +194,10 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         complete: function() {
 
         },
-        success: function(response) {}
-      });
-
-    }
-
-    function FinalizarEdicion(idticket) {
-
-      let parametros = {
-        "Accion" : "asignar-personal-soporte",
-        "idticket": idticket
-      };
-
-      $.ajax({
-        data: parametros,
-        url: '../app/modelo/controlador-sistemas.php',
-        type: 'post',
-        beforeSend: function() {},
-        complete: function() {
-
-        },
         success: function(response) {
-          window.history.back();
 
         }
       });
-
-    }
-
-
-    function FinalizarSoporte(idticket) {
-
-      let parametros = {
-        "Accion": "finalizar-soporte",
-        "idticket": idticket
-      };
-
-      alertify.confirm('',
-        function() {
-
-          $.ajax({
-            data: parametros,
-            url: '../app/modelo/controlador-sistemas.php',
-            type: 'post',
-            beforeSend: function() {},
-            complete: function() {
-
-            },
-            success: function(response) {
-
-              window.history.back();
-
-            }
-          });
-
-        },
-        function() {
-
-        }).setHeader('Mensaje').set({
-        transition: 'zoom',
-        message: '¿Desea finalizar el soporte?',
-        labels: {
-          ok: 'Aceptar',
-          cancel: 'Cancelar'
-        }
-      }).show();
 
     }
 
@@ -283,18 +225,22 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         }
       });
     }
+
+    function FinalizarEdicion(idticket) {
+      let Responsable = $('#Responsable').val();
+
+      if (Responsable != 0) {
+        $('#Responsable').css('border', '');
+        regresarP();
+      } else {
+        $('#Responsable').css('border', '2px solid #A52525');
+      }
+
+    }
   </script>
   <style>
     .grayscale {
       filter: opacity(50%);
-    }
-
-    .bg-sistemas {
-      background: #D8EFDF;
-    }
-
-    .bg-personal {
-      background: #D8E3EF;
     }
   </style>
 </head>
@@ -309,6 +255,8 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
     <div class="contendAG">
 
       <div class="bg-white p-2 container">
+
+
         <div aria-label="breadcrumb" style="padding-left: 0; margin-bottom: 0;">
           <ol class="breadcrumb breadcrumb-caret">
             <li class="breadcrumb-item"><a onclick="history.back()" class="text-uppercase text-primary pointer"><i
@@ -327,143 +275,152 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
           </div>
         </div>
 
-
         <div class="row mt-3">
           <div class="col-2">
-            <h6 class="text-secondary"># Ticket</h6>
+            <h6 class="fw-bold"># Ticket</h6>
             <div>0<?= $id_ticket; ?></div>
           </div>
           <div class="col-3">
-            <h6 class="text-secondary">Fecha creación</h6>
+            <h6 class="fw-bold">Fecha creación</h6>
             <div><?= $fechaCreacion; ?></div>
           </div>
           <div class="col-3">
-            <h6 class="text-secondary">Estación o Departamento</h6>
+            <h6 class="fw-bold">Estación o Departamento</h6>
             <div><?= $EstacionDepartamento; ?></div>
           </div>
           <div class="col-2">
-            <h6 class="text-secondary">Solicitante</h6>
+            <h6 class="fw-bold">Solicitante</h6>
             <div><?= $solicitante; ?></div>
           </div>
           <div class="col-2">
-            <h6 class="text-secondary">Prioridad</h6>
+            <h6 class="fw-bold">Prioridad</h6>
             <div class="<?= $colorPrioridad; ?>"><b><?= $prioridad; ?></b></div>
           </div>
         </div>
 
-        <h6 class="mt-2 text-secondary">Descripción</h6>
+        <h6 class="mt-2 fw-bold">Descripción</h6>
         <div><?= $descripcion; ?></div>
 
         <hr>
 
+        <?php
+
+        $UltimoRegistro = $ClassContenido->UltimoRegistro();
+
+        if ($UltimoRegistro['nomestacion'] == 'Comodines') {
+          $EstacionDepartamentoUltimoRegistro = $UltimoRegistro['tipopuesto'];
+        } else {
+          $EstacionDepartamentoUltimoRegistro = $UltimoRegistro['nomestacion'];
+        }
+
+        $explode3 = explode(' ', $UltimoRegistro['fechatermino']);
+        if ($explode3[0] == '0000-00-00') {
+          $FechaUltimoRegistro = FormatoFecha($fecha_del_dia);
+        } else {
+          $FechaUltimoRegistro = FormatoFecha($explode3[0]);
+        }
+
+        echo '<div class="alert alert-warning" role="alert">
+     Información del ultimo registro agregado en la base de datos.</br>
+     # Ticket <b>0' . $UltimoRegistro['idticket'] . '</b>, Fecha termino: <b>' . $FechaUltimoRegistro . '</b>, Estación o Departamento:  <b>' . $EstacionDepartamentoUltimoRegistro . '</b> 
+     </div>';
+
+        ?>
+
         <h6 class="mt-2 text-secondary">Actividad:</h6>
-        <div class="table-responsive">
-          <table id="tabla-principal" class="custom-table " style="font-size: .8em;" width="100%">
-            <thead class="tables-bg">
-              <tr>
-                <th class="align-middle">#</th>
-                <th class="align-middle">Descripción de la actividad</th>
-                <th class="align-middle">Fecha inicio</th>
-                <th class="align-middle">Fecha termino</th>
-                <th class="align-middle">Estado</th>
-                <th class="align-middle text-center" width="24px"><img src="<?= RUTA_IMG_ICONOS; ?>descargar.png"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
+        <table class="table table-sm table-bordered mt-1 mb-1 pb-1" style="font-size: .8em;">
+          <thead class="table-light">
+            <tr>
+              <th class="align-middle">#</th>
+              <th class="align-middle">Descripción de la actividad</th>
+              <th class="align-middle">Fecha inicio</th>
+              <th class="align-middle">Fecha termino</th>
+              <th class="align-middle">Estado</th>
+              <th class="align-middle text-center" width="24px"><img src="<?= RUTA_IMG_ICONOS; ?>descargar.png"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
 
-              if ($numeroActividad > 0) {
-                $numActividad = 1;
+            if ($numeroActividad > 0) {
+              $numActividad = 1;
 
-                while ($rowActividad = mysqli_fetch_array($resultActividad, MYSQLI_ASSOC)) {
-                  $idActividad = $rowActividad['id'];
-                  $descripcionActividad = $rowActividad['descripcion'];
-                  $EstadoActividad = $rowActividad['estado'];
+              while ($rowActividad = mysqli_fetch_array($resultActividad, MYSQLI_ASSOC)) {
+                $idActividad = $rowActividad['id'];
+                $descripcionActividad = $rowActividad['descripcion'];
+                $EstadoActividad = $rowActividad['estado'];
 
-                  if ($rowActividad['fecha_inicio'] == '0000-00-00') {
-                    $AtividadFechaInicio = '';
-                  } else {
-                    $AtividadFechaInicio = FormatoFecha($rowActividad['fecha_inicio']);
-                  }
-
-                  if ($rowActividad['fecha_termino'] == '0000-00-00') {
-                    $AtividadFechaTermino = '';
-                  } else {
-                    $AtividadFechaTermino = FormatoFecha($rowActividad['fecha_termino']);
-                  }
-
-                  if ($rowActividad['estado'] == 0) {
-                    $EstadoDetalle = 'Pendiente';
-                  } else if ($rowActividad['estado'] == 1) {
-                    $EstadoDetalle = 'En proceso';
-                  } else if ($rowActividad['estado'] == 2) {
-                    $EstadoDetalle = 'Finalizada';
-                  }
-
-                  if ($rowActividad['archivo'] == "") {
-                    $Archivo = '<a><img src="' . RUTA_IMG_ICONOS . 'eliminar.png" ></a>';
-                  } else {
-                    $Archivo = '<a href="' . RUTA_ARCHIVOS . $rowActividad['archivo'] . '" download><img src="' . RUTA_IMG_ICONOS . 'descargar.png" ></a>';
-                  }
-
-                  echo '<tr>';
-                  echo '<th class="align-middle">' . $numActividad . '</th>';
-                  echo '<td class="align-middle">' . $descripcionActividad . '</td>';
-                  echo '<td class="align-middle">' . $AtividadFechaInicio . '</td>';
-                  echo '<td class="align-middle">' . $AtividadFechaTermino . '</td>';
-                  echo '<td class="align-middle">' . $EstadoDetalle . '</td>';
-                  echo '<td class="align-middle">' . $Archivo . '</td>';
-                  echo '</tr>';
-
-                  $numActividad++;
+                if ($rowActividad['fecha_inicio'] == '0000-00-00') {
+                  $AtividadFechaInicio = '';
+                } else {
+                  $AtividadFechaInicio = $rowActividad['fecha_inicio'];
                 }
-              } else {
-                echo "<tr><td colspan='5' class='text-center'><small>No se encontró información para mostrar</small></td></tr>";
-              }
 
-              ?>
-            </tbody>
-          </table>
-        </div>
+                if ($rowActividad['fecha_termino'] == '0000-00-00') {
+                  $AtividadFechaTermino = '';
+                } else {
+                  $AtividadFechaTermino = $rowActividad['fecha_termino'];
+                }
+
+                if ($rowActividad['estado'] == 0) {
+                  $EstadoDetalle = 'Pendiente';
+                } else if ($rowActividad['estado'] == 1) {
+                  $EstadoDetalle = 'En proceso';
+                } else if ($rowActividad['estado'] == 2) {
+                  $EstadoDetalle = 'Finalizada';
+                }
+
+                if ($rowActividad['archivo'] == "") {
+                  $Archivo = '<a><img src="' . RUTA_IMG_ICONOS . 'eliminar.png" ></a>';
+                } else {
+                  $Archivo = '<a href="' . RUTA_ARCHIVOS . $rowActividad['archivo'] . '" download><img src="' . RUTA_IMG_ICONOS . 'descargar.png" ></a>';
+                }
+
+                echo '<tr>';
+                echo '<td class="align-middle">' . $numActividad . '</td>';
+                echo '<td class="align-middle">' . $descripcionActividad . '</td>';
+                echo '<td class="p-0"><input type="date" class="border-0 form-control" value="' . $AtividadFechaInicio . '" onchange="EditarActividad(this,' . $idActividad . ',1)"></td>';
+                echo '<td class="p-0"><input type="date" class="border-0 form-control" value="' . $AtividadFechaTermino . '" onchange="EditarActividad(this,' . $idActividad . ',2)"></td>';
+                echo '<td class="p-0">
+                <select class="form-control rounded-0 border-0" onchange="EditarActividad(this,' . $idActividad . ',3)">
+                    <option value="' . $EstadoActividad . '">' . $EstadoDetalle . '</option>
+                    <option value="0">Pendiente</option>
+                    <option value="1">En proceso</option>
+                    <option value="2">Finalizada</option>
+                </select>
+            </div>';
+                echo '<td class="align-middle">' . $Archivo . '</td>';
+                echo '</tr>';
+
+                $numActividad++;
+              }
+            } else {
+              echo "<tr><td colspan='5' class='text-center'><small>No se encontró información para mostrar</small></td></tr>";
+            }
+
+            ?>
+          </tbody>
+        </table>
+
         <hr>
 
         <div class="row">
-          <div class="col-7">
-
-            <div class="row">
-              <div class="col-4 mt-3">
-                <h6 class="text-secondary">Responsable</h6>
-                <select class="form-control rounded-0" onchange="EditarTicket(this,<?= $idticket; ?>,4)" id="Responsable">
-                  <option value="<?= $idPersonalSoporte; ?>"><?= $PersonalSoporte; ?></option>
-                  <?php
-
-                  $sql_resp = "SELECT id, nombre FROM tb_usuarios WHERE id_puesto = 2 ";
-                  $result_resp = mysqli_query($con, $sql_resp);
-                  $numero_resp = mysqli_num_rows($result_resp);
-                  while ($row_resp = mysqli_fetch_array($result_resp, MYSQLI_ASSOC)) {
-
-                    echo '<option value="' . $row_resp['id'] . '">' . $row_resp['nombre'] . '</option>';
-                  }
-
-                  ?>
-                </select>
-              </div>
-              <div class="col-4 mt-3">
-                <h6 class="text-secondary">Porcentaje</h6>
-                <?= $porcentaje ?> %
-              </div>
-              <div class="col-4 mt-3">
-                <h6 class="text-secondary">Estado</h6>
-                <?= $porcentaje ?> %
-              </div>
-              <div class="text-end mt-3"><button type="button" class="btn btn-primary rounded-0" onclick="FinalizarEdicion(<?= $idticket ?>)">Finalizar edición</button></div>
-            </div>
-
+          <div class="col-4 mt-3">
+            <h6 class="text-secondary">Fecha inicio</h6>
+            <input type="date" class="form-control rounded-0" value="<?= $fechaInicio; ?>" onchange="EditarTicket(this,<?= $idticket; ?>,2)">
           </div>
-          <div class="col-5">
-            <div id="ContenidoComentarios"></div>
+          <div class="col-4 mt-3">
+            <h6 class="text-secondary">Fecha termino</h6>
+            <input type="date" class="form-control rounded-0" value="<?= $fechaTermino; ?>" onchange="EditarTicket(this,<?= $idticket; ?>,3)">
+          </div>
+          <div class="col-4 mt-3">
+            <h6 class="text-secondary">Responsable</h6>
+            <?= $PersonalSoporte; ?>
           </div>
         </div>
+
+        <div class="text-end mt-3"><button type="button" class="btn btn-primary rounded-0" onclick="FinalizarEdicion(<?= $idticket; ?>)">Finalizar edición</button></div>
+
       </div>
 
     </div>
