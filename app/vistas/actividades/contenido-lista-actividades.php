@@ -5,29 +5,32 @@ date_default_timezone_set('America/Mexico_City');
 $fecha_del_dia = date("Y-m-d");
 
 $sql = "SELECT
-        ds_soporte.id_ticket, 
-        ds_soporte.id_personal,
-        ds_soporte.descripcion,
-        ds_soporte.prioridad,
-        ds_soporte.fecha_creacion,
-        ds_soporte.fecha_inicio,        
-        ds_soporte.fecha_termino,
-        ds_soporte.tiempo_solucion,
-        ds_soporte.fecha_termino_real,
-        ds_soporte.porcentaje,
-        ds_soporte.id_personal_soporte,
-        ds_soporte.estado,
-        tb_usuarios.nombre,
-        tb_estaciones.nombre AS nomestacion,
-        tb_puestos.tipo_puesto
-        FROM ds_soporte 
-        INNER JOIN tb_usuarios 
-        ON ds_soporte.id_personal = tb_usuarios.id
-        INNER JOIN tb_estaciones
-        ON tb_usuarios.id_gas = tb_estaciones.id
-        INNER JOIN tb_puestos
-        ON tb_usuarios.id_puesto = tb_puestos.id WHERE (ds_soporte.estado <> 0 AND ds_soporte.estado <> 4) 
-        ORDER BY ds_soporte.estado ASC, ds_soporte.fecha_creacion DESC";
+    ds_soporte.id_ticket, 
+    ds_soporte.id_personal,
+    ds_soporte.descripcion,
+    ds_soporte.prioridad,
+    ds_soporte.fecha_creacion,
+    ds_soporte.fecha_inicio,        
+    ds_soporte.fecha_termino,
+    ds_soporte.tiempo_solucion,
+    ds_soporte.fecha_termino_real,
+    ds_soporte.porcentaje,
+    ds_soporte.id_personal_soporte,
+    ds_soporte.estado,
+    tb_usuarios.nombre,
+    tb_estaciones.nombre AS nomestacion,
+    tb_puestos.tipo_puesto
+FROM ds_soporte 
+INNER JOIN tb_usuarios 
+    ON ds_soporte.id_personal = tb_usuarios.id
+INNER JOIN tb_estaciones
+    ON tb_usuarios.id_gas = tb_estaciones.id
+INNER JOIN tb_puestos
+    ON tb_usuarios.id_puesto = tb_puestos.id
+WHERE ds_soporte.estado <> 0 
+    AND ds_soporte.estado <> 4
+    AND ds_soporte.id_personal_soporte = $Session_IDUsuarioBD
+ORDER BY ds_soporte.estado ASC, ds_soporte.fecha_creacion DESC";
         $result = mysqli_query($con, $sql);
         $numero = mysqli_num_rows($result);
 ?>

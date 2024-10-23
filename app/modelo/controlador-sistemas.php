@@ -60,6 +60,9 @@ else if($_POST['Accion'] == 'editar-actividad'){
 else if($_POST['Accion'] == 'finalizar-soporte'){
     $Resultado = $ClassSistemas->FinalizarSoporte($_POST['idticket'],$Session_IDUsuarioBD);
     echo $Resultado;
+} else if($_POST['Accion'] == 'asignar-personal-soporte'){
+    $Resultado = $ClassSistemas->asignarPersonal($_POST['idticket']);
+    echo $Resultado;
 }
 
 
