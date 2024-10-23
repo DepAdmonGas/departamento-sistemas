@@ -437,7 +437,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
                   <option value="<?= $idPersonalSoporte; ?>"><?= $PersonalSoporte; ?></option>
                   <?php
 
-                  $sql_resp = "SELECT id, nombre FROM tb_usuarios WHERE id_puesto = 2 ";
+                  $sql_resp = "SELECT id, nombre FROM tb_usuarios WHERE id_puesto = 25 ";
                   $result_resp = mysqli_query($con, $sql_resp);
                   $numero_resp = mysqli_num_rows($result_resp);
                   while ($row_resp = mysqli_fetch_array($result_resp, MYSQLI_ASSOC)) {
