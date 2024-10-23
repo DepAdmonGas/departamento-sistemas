@@ -1,13 +1,16 @@
 <?php
 require "app/help.php";
-
+$btn = 'd-none';
+if ($Session_IDUsuarioBD == 496) {
+  $btn = '';
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
-<meta charset="utf-8">
+  <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>Portal AdmonGas</title>
   <meta name="description" content="">
@@ -31,12 +34,11 @@ require "app/help.php";
   <script type="text/javascript">
     $(document).ready(function($) {
       $(".LoaderPage").fadeOut("slow");
-      ContenidoSistemas();
+      ContenidoSistemas(<?= $Session_IDUsuarioBD ?>);
     });
 
- 
-    function ContenidoSistemas() {
-      $('#ContenidoSistemas').load('app/vistas/actividades/contenido-lista-actividades.php', function() {
+    function ContenidoSistemas(usuario) {
+      $('#ContenidoSistemas').load('app/vistas/actividades/contenido-lista-actividades.php?usuario=' + usuario, function() {
         // Una vez que se carguen los datos en la tabla, inicializa DataTables
         $('#tabla-sistemas').DataTable({
           "language": {
@@ -193,13 +195,12 @@ require "app/help.php";
 
 
     window.addEventListener('pageshow', function(event) {
-  if (event.persisted) {
-  // Si la página está en la caché del navegador, recargarla
-  window.location.reload();
-  sizeWindow();
-  }
-  });
-
+      if (event.persisted) {
+        // Si la página está en la caché del navegador, recargarla
+        window.location.reload();
+        sizeWindow();
+      }
+    });
   </script>
   <style>
     .grayscale {
@@ -244,10 +245,25 @@ require "app/help.php";
               <h3 class="text-secondary" style="padding-left: 0; margin-bottom: 0; margin-top: 0;">Departamento de Sistemas</h3>
             </div>
 
-            <div class="col-2">
-
-
+            <div class="col-2 <?= $btn ?>">
               <div class="text-end">
+                <div class="btn-group dropleft">
+                  <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Usuarios
+                  </button>
+                  <div class="dropdown-menu">
+                    <?php
+                    $sql = "SELECT id, nombre FROM tb_usuarios WHERE id_puesto = 25";
+                    $result = mysqli_query($con, $sql);
+                    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+                    ?>
+                      <a class="dropdown-item pointer" onclick="ContenidoSistemas(<?= $row['id'] ?>)"><?= $row['nombre'] ?></a>
+                    <?php } ?>
+                  </div>
+
+
+                </div>
+
                 <div class="dropdown d-inline ms-2">
 
                   <button type="button" class="btn dropdown-toggle btn-primary" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -255,23 +271,22 @@ require "app/help.php";
                   </button>
 
                   <ul class="dropdown-menu">
-                    <li onclick="ModalBuscar()"><a class="dropdown-item pointer"> <i class="fa-solid fa-magnifying-glass text-dark"></i> Buscar Registro</a></li>
+                    <li onclick="ModalBuscar()"><a class="dropdown-item pointer"> <i class="fa-solid fa-plus text-dark"></i> Agregar Actividad</a></li>
                   </ul>
 
                 </div>
               </div>
-
             </div>
 
           </div>
         </div>
 
       </div>
-<hr>
-<div class="col-12 mb-2">
-<div id="ContenidoSistemas"></div>
+      <hr>
+      <div class="col-12 mb-2">
+        <div id="ContenidoSistemas"></div>
 
-</div>
+      </div>
 
     </div>
 
@@ -296,8 +311,8 @@ require "app/help.php";
   </div>
 
   <script src="<?= RUTA_JS ?>bootstrap.min.js"></script>
-<!---------- LIBRERIAS DEL DATATABLE ---------->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <!---------- LIBRERIAS DEL DATATABLE ---------->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
   <script src="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.0.3/b-3.0.1/b-colvis-3.0.1/b-html5-3.0.1/b-print-3.0.1/datatables.min.js"></script>
 

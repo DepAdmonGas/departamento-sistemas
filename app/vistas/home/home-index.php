@@ -1,6 +1,6 @@
 <?php
 require('app/help.php');
-if($Session_IDUsuarioBD != 1){
+if($Session_IDUsuarioBD != 496){
   header("location:actividades");
 }
 ?>

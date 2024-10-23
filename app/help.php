@@ -27,6 +27,7 @@ if (isset($_COOKIE['COOKIEADMONGAS']) && !empty($_COOKIE['COOKIEADMONGAS'])) :
         $Session_IDPuestoBD = $decoded->id_puesto_usuario;
         $Session_NombreEstacion = $decoded->nombre_gas_usuario;
         $Session_TipoPuestoBD = $decoded->tipo_puesto_usuario;
+        $con = $ClassConexionBD->conectarBD();
     } catch (Exception $e) {
         echo 'Error: ', $e->getMessage();
     }
