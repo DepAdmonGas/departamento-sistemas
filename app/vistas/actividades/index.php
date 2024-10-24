@@ -193,6 +193,32 @@ if ($Session_IDUsuarioBD == 496) {
       $('#ModalComentario').modal('hide');
     }
 
+    function NuevoRegistro() {
+
+      var parametros = {
+        "Accion": "nuevo-folio",
+        "Categoria": "Actividad"
+      };
+
+      $.ajax({
+        data: parametros,
+        url: 'app/modelo/controlador-sistemas.php',
+        type: 'post',
+        beforeSend: function() {},
+        complete: function() {
+
+        },
+        success: function(response) {
+          if (response != 0) {
+            window.location.href = "nueva-actividad/" + response;
+          } else {
+            alertify.error('Error al crear');
+          }
+
+        }
+      });
+    }
+
 
     window.addEventListener('pageshow', function(event) {
       if (event.persisted) {
@@ -271,7 +297,7 @@ if ($Session_IDUsuarioBD == 496) {
                   </button>
 
                   <ul class="dropdown-menu">
-                    <li onclick="ModalBuscar()"><a class="dropdown-item pointer"> <i class="fa-solid fa-plus text-dark"></i> Agregar Actividad</a></li>
+                    <li onclick="NuevoRegistro()"><a class="dropdown-item pointer"> <i class="fa-solid fa-plus text-dark"></i> Agregar Actividad</a></li>
                   </ul>
 
                 </div>
