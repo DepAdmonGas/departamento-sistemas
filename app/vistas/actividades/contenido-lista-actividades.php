@@ -81,7 +81,7 @@ ORDER BY ds_soporte.estado ASC, ds_soporte.fecha_creacion DESC";
         }else{
             $fechaCreacion = FormatoFecha($explode[0]).', '.date("g:i a",strtotime($explode[1]));
         }
-
+        $colorPrioridad = '';
         if($prioridad == 'Baja'){
             $colorPrioridad = 'text-primary';
         }else if($prioridad == 'Media'){
