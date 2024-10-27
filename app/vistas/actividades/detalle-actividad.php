@@ -237,6 +237,45 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
       }
 
     }
+
+    function FinalizarSoporte(idticket) {
+
+      let parametros = {
+        "Accion": "finalizar-soporte",
+        "idticket": idticket
+      };
+
+      alertify.confirm('',
+        function() {
+
+          $.ajax({
+            data: parametros,
+            url: '../app/modelo/controlador-sistemas.php',
+            type: 'post',
+            beforeSend: function() {},
+            complete: function() {
+
+            },
+            success: function(response) {
+
+              window.history.back();
+
+            }
+          });
+
+        },
+        function() {
+
+        }).setHeader('Mensaje').set({
+        transition: 'zoom',
+        message: '¿Desea finalizar el soporte?',
+        labels: {
+          ok: 'Aceptar',
+          cancel: 'Cancelar'
+        }
+      }).show();
+
+    }
   </script>
   <style>
     .grayscale {
@@ -417,9 +456,28 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
             <h6 class="text-secondary">Responsable</h6>
             <?= $PersonalSoporte; ?>
           </div>
+          <div class="col-6 mt-3">
+            <h6 class="text-secondary">Porcentaje</h6>
+            <?php
+
+            if ($Valorestado == 3 || $Valorestado == 4) {
+              echo $porcentaje . ' %';
+            } else {
+              echo '<select class="form-control rounded-0" onchange="EditarTicket(this,' . $idticket . ',5)">';
+              echo '<option value="' . $porcentaje . '">' . $porcentaje . ' %</option>';
+              for ($i = 1; $i <= 10; $i++) {
+                echo '<option value="' . $i . '0">' . $i . '0 %</option>';
+              }
+              echo '</select>';
+            }
+            ?>
+          </div>
         </div>
 
-        <div class="text-end mt-3"><button type="button" class="btn btn-primary rounded-0" onclick="FinalizarEdicion(<?= $idticket; ?>)">Finalizar edición</button></div>
+        <div class="text-end mt-3">
+          <button type="button" class="btn btn-primary rounded-0" onclick="FinalizarEdicion(<?= $idticket; ?>)">Finalizar edición</button>
+          <button type="button" class="btn btn-primary rounded-0" onclick="FinalizarSoporte(<?= $idticket; ?>)">Finalizar soporte</button>
+        </div>
 
       </div>
 

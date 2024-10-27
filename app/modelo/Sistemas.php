@@ -449,7 +449,7 @@ class Sistemas
     $SoporteContenido = $ClassContenido->soporteContenido($idticket);
     $estado = $SoporteContenido['estado'];
     $comentario = 'Se finalizo el soporte por el área de sistemas, recuerda que tienes tres días para darle seguimiento antes de que se cierre el ticket.';
-
+    $mensaje = "Se finalizo el soporte con id ticker $idticket";
     date_default_timezone_set('America/Mexico_City');
     $hoy = date("Y-m-d H:i:s");
 
@@ -496,7 +496,7 @@ class Sistemas
         $Resultado = 0;
       }
     }
-
+    $this->telegram->enviarToken($idPersonal, $mensaje);
     return $Resultado;
   }
   public function asignarPersonal($idticket): int
