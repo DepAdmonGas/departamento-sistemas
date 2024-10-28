@@ -28,7 +28,7 @@ if ($Session_IDUsuarioBD == 496) {
 
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
-
+  <script type="text/javascript" src="<?= RUTA_JS ?>alertify.js"></script>
   <!---------- LIBRERIAS DEL DATATABLE ---------->
   <link href="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.0.3/b-3.0.1/b-colvis-3.0.1/b-html5-3.0.1/b-print-3.0.1/datatables.min.css" rel="stylesheet">
   <script type="text/javascript">
@@ -81,7 +81,7 @@ if ($Session_IDUsuarioBD == 496) {
             },
             success: function(response) {
 
-              ContenidoSistemas(1);
+              ContenidoSistemas(<?= $Session_IDUsuarioBD ?>);
 
             }
           });
@@ -128,8 +128,7 @@ if ($Session_IDUsuarioBD == 496) {
 
           },
           success: function(response) {
-
-            ContenidoSistemas(1);
+            ContenidoSistemas(<?= $Session_IDUsuarioBD ?>);
             $('#DivContenidoComentario').load('app/vistas/soporte/modal-comentarios-ticket.php?idticket=' + idticket);
 
           }
@@ -219,7 +218,6 @@ if ($Session_IDUsuarioBD == 496) {
       });
     }
 
-
     window.addEventListener('pageshow', function(event) {
       if (event.persisted) {
         // Si la página está en la caché del navegador, recargarla
@@ -227,6 +225,7 @@ if ($Session_IDUsuarioBD == 496) {
         sizeWindow();
       }
     });
+
   </script>
   <style>
     .grayscale {
@@ -271,9 +270,9 @@ if ($Session_IDUsuarioBD == 496) {
               <h3 class="text-secondary" style="padding-left: 0; margin-bottom: 0; margin-top: 0;">Departamento de Sistemas</h3>
             </div>
 
-            <div class="col-2 <?= $btn ?>">
+            <div class="col-2">
               <div class="text-end">
-                <div class="btn-group dropleft">
+                <div class="btn-group dropleft <?= $btn ?>">
                   <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Usuarios
                   </button>

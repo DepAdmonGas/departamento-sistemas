@@ -113,8 +113,8 @@ if ($InformacionTicket['estado'] != 0) {
       Archivo_file = Archivo.files[0];
       Archivo_filePath = Archivo.value;
 
-      if (ActividadDescripcion != "") {
-        $('#ActividadDescripcion').css('border', '');
+      if (ActividadDescripcion.trim() != "" && ActividadDescripcion !== "<p><br></p>") {
+        $('#editor').css('border', '');
         data.append('Accion', 'agregar-actividad');
         data.append('idRegistro', idRegistro);
         data.append('ActividadDescripcion', ActividadDescripcion);
@@ -131,13 +131,12 @@ if ($InformacionTicket['estado'] != 0) {
           processData: false,
           cache: false
         }).done(function(data) {
-          console.log(data)
           if (data == 1) {
 
             $(".LoaderPage").hide();
             $('#Modal').modal('hide');
             ContenidoActividad(idRegistro);
-
+            quill.setContents([]);
           } else {
             $(".LoaderPage").hide();
             alertify.error('Error al crear la actividad');
@@ -146,7 +145,7 @@ if ($InformacionTicket['estado'] != 0) {
         });
 
       } else {
-        $('#ActividadDescripcion').css('border', '2px solid #A52525');
+        $('#editor').css('border', '2px solid #A52525');
       }
 
     }

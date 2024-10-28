@@ -163,11 +163,11 @@ ORDER BY ds_soporte.estado ASC, ds_soporte.fecha_creacion DESC";
         if($row['estado'] == 1){
 
             echo '<tr style="'.$trColor.'">';
-            echo '<th class="align-middle"><b>0'.$id_ticket.'</b></th>';
+            echo '<th class="align-middle">0'.$id_ticket.'</th>';
             echo '<td class="align-middle"><small>'.$fechaCreacion.'</small></td>';
             echo '<td class="align-middle">'.$descripcion.'</td>';
-            echo '<td class="align-middle"><b>'.$EstacionDepartamento.'</b></td>';
-            echo '<td class="align-middle '.$colorPrioridad.'"><small><b>'.$prioridad.'</b></small></td>';
+            echo '<td class="align-middle">'.$EstacionDepartamento.'</td>';
+            echo '<td class="align-middle '.$colorPrioridad.'"><small>'.$prioridad.'</small></td>';
 
             echo '<td class="align-middle"><small>'.$fechaInicio.'</small></td>';
             echo '<td class="align-middle"><small>'.$fechaTermino.'</small></td>';
@@ -175,7 +175,7 @@ ORDER BY ds_soporte.estado ASC, ds_soporte.fecha_creacion DESC";
             echo '<td class="align-middle">'.$estado.'</td>';
             echo '<td class="align-middle">'.$porcentaje.' %</td>';
             echo '<td class="align-middle text-secondary">'.$PersonalSoporte.'</td>';
-            echo '<td class="align-middle"><b>'.$fechaterminoreal.'</b></td>';
+            echo '<td class="align-middle">'.$fechaterminoreal.'</td>';
 
             echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
             echo '<td class="align-middle text-center"> 
@@ -194,11 +194,11 @@ ORDER BY ds_soporte.estado ASC, ds_soporte.fecha_creacion DESC";
         }else if($row['estado'] == 2){
 
             echo '<tr style="'.$trColor.'">';
-            echo '<th class="align-middle"><b>0'.$id_ticket.'</b></th>';
+            echo '<th class="align-middle">0'.$id_ticket.'</th>';
             echo '<td class="align-middle"><small>'.$fechaCreacion.'</small></td>';
             echo '<td class="align-middle">'.$descripcion.'</td>';
-            echo '<td class="align-middle"><b>'.$EstacionDepartamento.'</b></td>';
-            echo '<td class="align-middle '.$colorPrioridad.'"><small><b>'.$prioridad.'</b></small></td>';
+            echo '<td class="align-middle">'.$EstacionDepartamento.'</td>';
+            echo '<td class="align-middle '.$colorPrioridad.'"><small>'.$prioridad.'</small></td>';
 
             echo '<td class="align-middle"><small>'.$fechaInicio.'</small></td>';
             echo '<td class="align-middle"><small>'.$fechaTermino.'</small></td>';
@@ -206,7 +206,7 @@ ORDER BY ds_soporte.estado ASC, ds_soporte.fecha_creacion DESC";
             echo '<td class="align-middle">'.$estado.'</td>';
             echo '<td class="align-middle">'.$porcentaje.' %</td>';
             echo '<td class="align-middle text-secondary">'.$PersonalSoporte.'</td>';
-            echo '<td class="align-middle"><b>'.$fechaterminoreal.'</b></td>';
+            echo '<td class="align-middle">'.$fechaterminoreal.'</td>';
 
             echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
             echo '<td class="align-middle text-center"> 
@@ -225,11 +225,11 @@ ORDER BY ds_soporte.estado ASC, ds_soporte.fecha_creacion DESC";
         }else if($row['estado'] == 3){
 
             echo '<tr style="'.$trColor.'">';
-            echo '<th class="align-middle"><b>0'.$id_ticket.'</b></th>';
+            echo '<th class="align-middle">0'.$id_ticket.'</th>';
             echo '<td class="align-middle"><small>'.$fechaCreacion.'</small></td>';
             echo '<td class="align-middle">'.$descripcion.'</td>';
-            echo '<td class="align-middle"><b>'.$EstacionDepartamento.'</b></td>';
-            echo '<td class="align-middle '.$colorPrioridad.'"><small><b>'.$prioridad.'</b></small></td>';
+            echo '<td class="align-middle">'.$EstacionDepartamento.'</td>';
+            echo '<td class="align-middle '.$colorPrioridad.'"><small>'.$prioridad.'</small></td>';
 
             echo '<td class="align-middle"><small>'.$fechaInicio.'</small></td>';
             echo '<td class="align-middle"><small>'.$fechaTermino.'</small></td>';
@@ -237,7 +237,7 @@ ORDER BY ds_soporte.estado ASC, ds_soporte.fecha_creacion DESC";
             echo '<td class="align-middle">'.$estado.'</td>';
             echo '<td class="align-middle">'.$porcentaje.' %</td>';
             echo '<td class="align-middle text-secondary">'.$PersonalSoporte.'</td>';
-            echo '<td class="align-middle"><b>'.$fechaterminoreal.'</b></td>';
+            echo '<td class="align-middle">'.$fechaterminoreal.'</td>';
 
             echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
             echo '<td class="align-middle text-center"> 

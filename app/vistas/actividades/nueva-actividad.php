@@ -6,7 +6,10 @@ $InformacionTicket = $ClassContenido->soporteContenido($GET_IdRegistro);
 if ($InformacionTicket['estado'] != 0) {
   header("location:../soporte");
 }
-
+$sentencia = "SELECT id, nombre FROM tb_usuarios WHERE id = $Session_IDUsuarioBD";
+if($Session_IDUsuarioBD == 496){
+  $sentencia = "SELECT id, nombre FROM tb_usuarios WHERE id_puesto = 25";
+}
 ?>
 
 <!DOCTYPE html>
@@ -113,8 +116,8 @@ if ($InformacionTicket['estado'] != 0) {
       Archivo_file = Archivo.files[0];
       Archivo_filePath = Archivo.value;
 
-      if (ActividadDescripcion != "") {
-        $('#ActividadDescripcion').css('border', '');
+      if (ActividadDescripcion.trim() != "" && ActividadDescripcion !== "<p><br></p>") {
+        $('#editor').css('border', '');
         data.append('Accion', 'agregar-actividad');
         data.append('idRegistro', idRegistro);
         data.append('ActividadDescripcion', ActividadDescripcion);
@@ -131,13 +134,12 @@ if ($InformacionTicket['estado'] != 0) {
           processData: false,
           cache: false
         }).done(function(data) {
-          console.log(data)
           if (data == 1) {
 
             $(".LoaderPage").hide();
             $('#Modal').modal('hide');
             ContenidoActividad(idRegistro);
-
+            quill.setContents([]);
           } else {
             $(".LoaderPage").hide();
             alertify.error('Error al crear la actividad');
@@ -146,7 +148,7 @@ if ($InformacionTicket['estado'] != 0) {
         });
 
       } else {
-        $('#ActividadDescripcion').css('border', '2px solid #A52525');
+        $('#editor').css('border', '2px solid #A52525');
       }
 
     }
@@ -274,13 +276,9 @@ if ($InformacionTicket['estado'] != 0) {
             url: '../app/modelo/controlador-sistemas.php',
             type: 'post',
             beforeSend: function() {},
-            complete: function() {
-
-            },
+            complete: function() {},
             success: function(response) {
-
               window.history.back();
-
             }
           });
 
@@ -320,6 +318,13 @@ if ($InformacionTicket['estado'] != 0) {
       });
 
     }
+    window.addEventListener('pageshow', function(event) {
+      if (event.persisted) {
+        // Si la página está en la caché del navegador, recargarla
+        window.location.reload();
+        sizeWindow();
+      }
+    });
   </script>
 </head>
 
@@ -351,9 +356,10 @@ if ($InformacionTicket['estado'] != 0) {
 
         <h6 class="fw-bold text-secondary mt-2">Responsable</h6>
         <select class="form-control rounded-0" onchange="EditarTicket(this,<?= $GET_IdRegistro; ?>,4)" id="Responsable">
+          <option value="">Seleccionar responsable</option>
           <?php
 
-          $sql_resp = "SELECT id, nombre FROM tb_usuarios WHERE id_puesto = 25 ";
+          $sql_resp = $sentencia;
           $result_resp = mysqli_query($con, $sql_resp);
           $numero_resp = mysqli_num_rows($result_resp);
           while ($row_resp = mysqli_fetch_array($result_resp, MYSQLI_ASSOC)) {
