@@ -113,13 +113,14 @@ class Sistemas
 
   public function AgregarActividad($idRegistro, $Descripcion, $Name, $Temporal)
   {
-    $aleatorio = uniqid();
-    $extension = pathinfo($Name, PATHINFO_EXTENSION);
-    $UpDoc = "../../assets/archivos/" . "Actividad" . date("Y") . date("m") . date("d") . "-" . $aleatorio . "." . $extension;
-    if (move_uploaded_file($Temporal, $UpDoc)) {
-      $Archivo = "Actividad" . date("Y") . date("m") . date("d") . "-" . $aleatorio . "." . $extension;
-    } else {
-      $Archivo = "";
+    $Archivo = "";
+    if ($Name != "" && $Temporal != "") {
+      $aleatorio = uniqid();
+      $extension = pathinfo($Name, PATHINFO_EXTENSION);
+      $UpDoc = "../../assets/archivos/" . "Actividad" . date("Y") . date("m") . date("d") . "-" . $aleatorio . "." . $extension;
+      if (move_uploaded_file($Temporal, $UpDoc)) {
+        $Archivo = "Actividad" . date("Y") . date("m") . date("d") . "-" . $aleatorio . "." . $extension;
+      }
     }
 
     $sqlInsert1 = "INSERT INTO ds_soporte_actividades (
@@ -219,7 +220,8 @@ class Sistemas
 
     date_default_timezone_set('America/Mexico_City');
     $hoy = date("Y-m-d H:i:s");
-    $mensaje = "Se envia la solitud de sistemas con numero de ticket: $idticket";
+    $mensaje = $this->detalleTicket($idticket);
+    //$mensaje = "Se envia la solitud de sistemas con numero de ticket: $idticket";
     $sql = "UPDATE ds_soporte SET 
         fecha_creacion = '" . $hoy . "',
         estado = 1
@@ -234,6 +236,37 @@ class Sistemas
     }
 
     return $Resultado;
+  }
+  private function detalleTicket($idticket): string
+  {
+    $detalle = "";
+    $prioridad = "";
+    $descripcion = "";
+    $sql = "SELECT 
+                tb_usuarios.nombre,
+                ds_soporte.prioridad,
+                ds_soporte.descripcion,
+                ds_soporte.id_personal
+            FROM 
+                ds_soporte
+            INNER JOIN 
+                tb_usuarios ON ds_soporte.id_personal = tb_usuarios.id
+            WHERE 
+                ds_soporte.id_ticket = ?";
+    $stmt = $this->con->prepare($sql);
+    $stmt->bind_param("i", $idticket);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Verifica si hay resultados
+    if ($result->num_rows > 0) {
+      $row = $result->fetch_assoc();
+      $prioridad = $row['prioridad'];
+      $descripcion = $row['descripcion'];
+      $personal = $row['nombre'];
+    }
+    $detalle = "Solicitud de ticket numero: $idticket \nCreado por: \n$personal \nPrioridad: $prioridad \n\nDetalle:\n $descripcion";
+    return $detalle;
   }
 
   public function PersonalSistemas($idRegistro, $opcion)
@@ -318,7 +351,7 @@ class Sistemas
 
   public function GuardarComentario($idticket, $comentario, $idPersonal, $opcion)
   {
-    $detalle = 'Tienes un nuevo comentario en Soporte de Sistemas en el Ticket #0' . $idticket;
+    $detalle = "Tienes un nuevo comentario en Soporte de Sistemas en el Ticket #0$idticket";
     $sql = "INSERT INTO ds_soporte_comentarios (
             id_ticket,
             id_personal,
@@ -344,12 +377,12 @@ class Sistemas
         $token = $this->TokenPersonal($idSolicitante);
         $this->sendNotification($token, $detalle);
       }
-
       $Resultado = 1;
     } else {
       $Resultado = 0;
     }
-
+    $mensaje = "Tienes un nuevo comentario con el ticket $idticket";
+    $this->telegram->enviarToken($idPersonal, $mensaje);
     return $Resultado;
   }
 
@@ -357,7 +390,7 @@ class Sistemas
 
   public function TokenPersonal($idSolicitante)
   {
-
+    $token = "";
     $sql = "SELECT 
         tb_usuarios.id,
         tb_usuarios_token.id AS idToken,
@@ -449,7 +482,6 @@ class Sistemas
     $SoporteContenido = $ClassContenido->soporteContenido($idticket);
     $estado = $SoporteContenido['estado'];
     $comentario = 'Se finalizo el soporte por el área de sistemas, recuerda que tienes tres días para darle seguimiento antes de que se cierre el ticket.';
-    $mensaje = "Se finalizo el soporte con id ticker $idticket";
     date_default_timezone_set('America/Mexico_City');
     $hoy = date("Y-m-d H:i:s");
 
@@ -496,12 +528,30 @@ class Sistemas
         $Resultado = 0;
       }
     }
+    $personal = $this->personal($idPersonal);
+    $mensaje = "Se finalizo el soporte con id ticket $idticket asignado a: $personal";
     $this->telegram->enviarToken($idPersonal, $mensaje);
     return $Resultado;
   }
+  private function personal($idPersonal): string
+  {
+    $personal = "";
+    $sql = "SELECT nombre FROM tb_usuarios WHERE id = ?";
+    $stmt = $this->con->prepare($sql);
+    $stmt->bind_param("i", $idPersonal);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Verifica si hay resultados
+    if ($result->num_rows > 0) {
+      $row = $result->fetch_assoc();
+      $personal = $row['nombre'];
+    }
+    return $personal;
+  }
   public function asignarPersonal($idticket): int
   {
-    $mensaje = "Se envia la solitud de sistemas con numero de ticket: $idticket";
+    $mensaje = "Silvino Lopéz Farfan te asigno una nueva actividad con el id ticket: $idticket";
     $sql = "SELECT id_personal_soporte FROM ds_soporte WHERE id_ticket='" . $idticket . "' ";
 
     $result = mysqli_query($this->con, $sql);

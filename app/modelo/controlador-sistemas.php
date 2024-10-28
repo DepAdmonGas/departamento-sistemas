@@ -14,10 +14,12 @@ else if($_POST['Accion'] == 'editar-descripcion'){
     echo $Resultado;
 }
 else if($_POST['Accion'] == 'agregar-actividad'){
-
-    $Name = $_FILES['Archivo_file']['name'];
-    $Temporal = $_FILES['Archivo_file']['tmp_name'];
-
+    $Name = "";
+    $Temporal = "";
+    if (isset($_FILES['Archivo_file'])) {
+        $Name = $_FILES['Archivo_file']['name'];
+        $Temporal = $_FILES['Archivo_file']['tmp_name'];
+    }
     $Resultado = $ClassSistemas->AgregarActividad($_POST['idRegistro'],$_POST['ActividadDescripcion'],$Name, $Temporal);
     echo $Resultado;
 }

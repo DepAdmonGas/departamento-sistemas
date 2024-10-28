@@ -475,8 +475,11 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         </div>
 
         <div class="text-end mt-3">
+          <?php if($fechaInicio == ''){?>
           <button type="button" class="btn btn-primary rounded-0" onclick="FinalizarEdicion(<?= $idticket; ?>)">Finalizar edición</button>
+          <?php } else{?>
           <button type="button" class="btn btn-primary rounded-0" onclick="FinalizarSoporte(<?= $idticket; ?>)">Finalizar soporte</button>
+          <?php }?>
         </div>
 
       </div>
