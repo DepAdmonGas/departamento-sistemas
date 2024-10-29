@@ -6,10 +6,7 @@ $InformacionTicket = $ClassContenido->soporteContenido($GET_IdRegistro);
 if ($InformacionTicket['estado'] != 0) {
   header("location:../soporte");
 }
-$sentencia = "SELECT id, nombre FROM tb_usuarios WHERE id = $Session_IDUsuarioBD";
-if($Session_IDUsuarioBD == 496){
-  $sentencia = "SELECT id, nombre FROM tb_usuarios WHERE id_puesto = 25";
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -294,8 +291,7 @@ if($Session_IDUsuarioBD == 496){
         }
       }).show();
     }
-    function EditarTicket(val, idticket, opcion) {
-      let Detalle = val.value;
+    function EditarTicket(Detalle, idticket, opcion) {
 
       let parametros = {
         "Accion": "editar-registro",
@@ -353,22 +349,25 @@ if($Session_IDUsuarioBD == 496){
           <option value="Media">Media</option>
           <option value="Alta">Alta</option>
         </select>
+        <?php
+        // Condicion si no es el encargado de sistemas qu eno pueda mostrar la siguiente informacion (Silvino Lopez-> Encargado) 
+        if($Session_IDUsuarioBD == 496):?>
+          <h6 class="fw-bold text-secondary mt-2">Responsable</h6>
+          <select class="form-control rounded-0" onchange="EditarTicket(value,<?= $GET_IdRegistro; ?>,4)" id="Responsable">
+            <option value="">Seleccionar responsable</option>
+            <?php
 
-        <h6 class="fw-bold text-secondary mt-2">Responsable</h6>
-        <select class="form-control rounded-0" onchange="EditarTicket(this,<?= $GET_IdRegistro; ?>,4)" id="Responsable">
-          <option value="">Seleccionar responsable</option>
-          <?php
+            $sql_resp = "SELECT id, nombre FROM tb_usuarios WHERE id_puesto = 25";
+            $result_resp = mysqli_query($con, $sql_resp);
+            $numero_resp = mysqli_num_rows($result_resp);
+            while ($row_resp = mysqli_fetch_array($result_resp, MYSQLI_ASSOC)) {
 
-          $sql_resp = $sentencia;
-          $result_resp = mysqli_query($con, $sql_resp);
-          $numero_resp = mysqli_num_rows($result_resp);
-          while ($row_resp = mysqli_fetch_array($result_resp, MYSQLI_ASSOC)) {
+              echo '<option value="' . $row_resp['id'] . '">' . $row_resp['nombre'] . '</option>';
+            }
 
-            echo '<option value="' . $row_resp['id'] . '">' . $row_resp['nombre'] . '</option>';
-          }
-
-          ?>
-        </select>
+            ?>
+          </select>
+        <?php endif;?>
 
 
         <h6 class="mt-2 fw-bold text-secondary">Detalle de la Actividad:</h6>
@@ -395,8 +394,17 @@ if($Session_IDUsuarioBD == 496){
         <!----- BOTON DE FINALIZAR ----->
         <div class="row">
           <div class="col-12">
-            <button type="button" class="btn btn-labeled2 btn-success float-end" onclick="Finalizar(<?= $GET_IdRegistro ?>,<?= $Session_IDUsuarioBD ?>)">
+            <?php if($Session_IDUsuarioBD == 496):?>
+              <button type="button" class="btn btn-labeled2 btn-success float-end" onclick="Finalizar(<?= $GET_IdRegistro ?>,<?= $Session_IDUsuarioBD ?>)">
               <span class="btn-label2"><i class="fa-solid fa-check"></i></span>Finalizar registro</button>
+            <?php else :?>
+              <button type="button" class="btn btn-labeled2 btn-success float-end" 
+                onclick="
+                  Finalizar(<?= $GET_IdRegistro ?>,<?= $Session_IDUsuarioBD ?>);
+                  EditarTicket(<?=$Session_IDUsuarioBD?>,<?= $GET_IdRegistro; ?>,4)
+                ">
+              <span class="btn-label2"><i class="fa-solid fa-check"></i></span>Finalizar registro</button>
+            <?php endif;?>
           </div>
 
         </div>

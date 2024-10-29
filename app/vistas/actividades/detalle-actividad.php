@@ -128,10 +128,16 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
   <script type="text/javascript" src="<?= RUTA_JS ?>alertify.js"></script>
 
   <script type="text/javascript">
-    $(document).ready(function($) {
-      $(".LoaderPage").fadeOut("slow");
-      ContenidoComentarios(<?= $idticket; ?>);
+    $(document).ready(function() {
+    $(".LoaderPage").fadeOut("slow");
+    ContenidoComentarios(<?= $idticket; ?>);
+
+    // JavaScript para detectar el cambio y actualizar automáticamente
+    $('#dias_habiles').on('change', function() {
+        $('#diasHabilesForm').submit();
     });
+});
+
 
     function regresarP() {
       window.history.back();
@@ -193,9 +199,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         complete: function() {
 
         },
-        success: function(response) {
-          console.log(response)
-        }
+        success: function(response) {}
       });
 
     }
@@ -230,7 +234,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 
       if (Responsable != 0) {
         $('#Responsable').css('border', '');
-        //regresarP();
+        regresarP();
       } else {
         $('#Responsable').css('border', '2px solid #A52525');
       }
@@ -473,32 +477,30 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         // Restamos un día al final porque el bucle suma un día extra
         $fechaFin->modify('-1 day');
 
-        // Mostramos las fechas de inicio y fin
-        echo "Fecha de inicio: " . FormatoFecha($fechaInicio->format('Y-m-d')) . "<br>";
-        echo "Fecha de término: " . FormatoFecha($fechaFin->format('Y-m-d')) . "<br>";
+        /* Mostramos las fechas de inicio y fin
+          echo "Fecha de inicio: " . FormatoFecha($fechaInicio->format('Y-m-d')) . "<br>";
+          echo "Fecha de término: " . FormatoFecha($fechaFin->format('Y-m-d')) . "<br>";
+        */
         ?>
-        <form method="get" id="diasHabilesForm">
-            <label for="dias_habiles">Dias de desarrollo</label>
-            <input type="number" name="dias_habiles" id="dias_habiles" value="<?php echo $diasHabiles; ?>" min="1">
-          </form>
-          <!-- JavaScript para detectar el cambio y actualizar automáticamente -->
-          <script>
-            document.getElementById('dias_habiles').addEventListener('change', function() {
-              document.getElementById('diasHabilesForm').submit();
-            });
-          </script>
         <div class="row">
-          <div class="col-4 mt-3">
+          <div class="col-3 mt-3">
+            <form method="get" id="diasHabilesForm">
+              <h6 class="text-secondary" for="dias_habiles">Dias de desarrollo</h6>
+              <input type="number" name="dias_habiles" id="dias_habiles" value="<?php echo $diasHabiles; ?>" min="1">
+            </form>
+          </div>
+
+          <div class="col-3 mt-3">
             <h6 class="text-secondary">Fecha inicio</h6>
-            <?=FormatoFecha($fechaInicio->format('Y-m-d'))?>
-            <input type="date" class="form-control rounded-0" value="<?= $fechaTermino ?>" onchange="EditarTicket(value,<?= $idticket; ?>,2)">
+            <?= FormatoFecha($fechaInicio->format('Y-m-d')) ?>
+            <!--<input type="date" class="form-control rounded-0" value="<?= $fechaTermino ?>" onchange="EditarTicket(value,<?= $idticket; ?>,2)">-->
           </div>
-          <div class="col-4 mt-3">
+          <div class="col-3 mt-3">
             <h6 class="text-secondary">Fecha termino</h6>
-            <?=FormatoFecha($fechaFin->format('Y-m-d'))?>
-            <input type="date" class="form-control rounded-0" value="<?= $fechaTermino; ?>" onchange="EditarTicket(value,<?= $idticket; ?>,3)">
+            <?= FormatoFecha($fechaFin->format('Y-m-d')) ?>
+            <!--<input type="date" class="form-control rounded-0" value="<?= $fechaTermino; ?>" onchange="EditarTicket(value,<?= $idticket; ?>,3)">-->
           </div>
-          <div class="col-4 mt-3">
+          <div class="col-3 mt-3">
             <h6 class="text-secondary">Responsable</h6>
             <?= $PersonalSoporte; ?>
           </div>
@@ -524,8 +526,8 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
           <?php if ($fechaTermino == '') { ?>
             <button type="button" class="btn btn-primary rounded-0" onclick="
               FinalizarEdicion(<?= $idticket; ?>);
-              EditarTicket('<?=$fechaInicio->format('Y-m-d')?>',<?= $idticket; ?>,2);
-              EditarTicket('<?=$fechaFin->format('Y-m-d')?>',<?= $idticket; ?>,3)">Finalizar edición</button>
+              EditarTicket('<?= $fechaInicio->format('Y-m-d') ?>',<?= $idticket; ?>,2);
+              EditarTicket('<?= $fechaFin->format('Y-m-d') ?>',<?= $idticket; ?>,3)">Finalizar edición</button>
           <?php } else { ?>
             <button type="button" class="btn btn-primary rounded-0" onclick="FinalizarSoporte(<?= $idticket; ?>)">Finalizar soporte</button>
           <?php } ?>
