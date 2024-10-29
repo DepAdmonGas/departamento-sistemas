@@ -120,6 +120,7 @@ class SistemasContenido
               ON tb_usuarios.id_puesto = tb_puestos.id
           WHERE ds_soporte.fecha_termino <> '0000-00-00 00:00:00'
               AND ds_soporte.id_personal_soporte = $idPersonal
+              AND ds_soporte.estado <> 4
           ORDER BY ds_soporte.fecha_termino DESC 
           LIMIT 1";
     $result = mysqli_query($this->con, $sql);
