@@ -176,8 +176,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 
     }
 
-    function EditarTicket(val, idticket, opcion) {
-      let Detalle = val.value;
+    function EditarTicket(Detalle, idticket, opcion) {
 
       let parametros = {
         "Accion": "editar-registro",
@@ -195,7 +194,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 
         },
         success: function(response) {
-
+          console.log(response)
         }
       });
 
@@ -231,7 +230,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 
       if (Responsable != 0) {
         $('#Responsable').css('border', '');
-        regresarP();
+        //regresarP();
       } else {
         $('#Responsable').css('border', '2px solid #A52525');
       }
@@ -344,7 +343,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 
         <?php
 
-        $UltimoRegistro = $ClassContenido->UltimoRegistro();
+        $UltimoRegistro = $ClassContenido->UltimoRegistro($Session_IDUsuarioBD);
 
         if ($UltimoRegistro['nomestacion'] == 'Comodines') {
           $EstacionDepartamentoUltimoRegistro = $UltimoRegistro['tipopuesto'];
@@ -442,15 +441,62 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         </table>
 
         <hr>
+        <!--Codigo que permite validar los dias habiles-->
+        <?php
+        $fechaInicio = new DateTime($explode3[0]);
+        $fechaInicio->modify('+1 day');
 
+        // Validación para que, si la fecha de inicio cae en sábado o domingo, empiece desde el próximo lunes
+        if ($fechaInicio->format('N') == 6) {
+          // Si es sábado, mover al lunes (2 días más)
+          $fechaInicio->modify('+2 days');
+        } elseif ($fechaInicio->format('N') == 7) {
+          // Si es domingo, mover al lunes (1 día más)
+          $fechaInicio->modify('+1 day');
+        }
+        // Verifica si se ha enviado el número de días hábiles desde el formulario
+        $diasHabiles = isset($_GET['dias_habiles']) ? (int)$_GET['dias_habiles'] : 2; // Valor predeterminado: 2 días
+
+        // Contador de días hábiles
+        $contador = 0;
+        $fechaFin = clone $fechaInicio;
+
+        while ($contador < $diasHabiles) {
+          // Si es día de la semana (lunes a viernes), contamos el día
+          if ($fechaFin->format('N') < 6) {
+            $contador++;
+          }
+          // Sumamos un día (independientemente de si es hábil o no)
+          $fechaFin->modify('+1 day');
+        }
+
+        // Restamos un día al final porque el bucle suma un día extra
+        $fechaFin->modify('-1 day');
+
+        // Mostramos las fechas de inicio y fin
+        echo "Fecha de inicio: " . FormatoFecha($fechaInicio->format('Y-m-d')) . "<br>";
+        echo "Fecha de término: " . FormatoFecha($fechaFin->format('Y-m-d')) . "<br>";
+        ?>
+        <form method="get" id="diasHabilesForm">
+            <label for="dias_habiles">Dias de desarrollo</label>
+            <input type="number" name="dias_habiles" id="dias_habiles" value="<?php echo $diasHabiles; ?>" min="1">
+          </form>
+          <!-- JavaScript para detectar el cambio y actualizar automáticamente -->
+          <script>
+            document.getElementById('dias_habiles').addEventListener('change', function() {
+              document.getElementById('diasHabilesForm').submit();
+            });
+          </script>
         <div class="row">
           <div class="col-4 mt-3">
             <h6 class="text-secondary">Fecha inicio</h6>
-            <input type="date" class="form-control rounded-0" value="<?= $fechaInicio; ?>" onchange="EditarTicket(this,<?= $idticket; ?>,2)">
+            <?=FormatoFecha($fechaInicio->format('Y-m-d'))?>
+            <input type="date" class="form-control rounded-0" value="<?= $fechaTermino ?>" onchange="EditarTicket(value,<?= $idticket; ?>,2)">
           </div>
           <div class="col-4 mt-3">
             <h6 class="text-secondary">Fecha termino</h6>
-            <input type="date" class="form-control rounded-0" value="<?= $fechaTermino; ?>" onchange="EditarTicket(this,<?= $idticket; ?>,3)">
+            <?=FormatoFecha($fechaFin->format('Y-m-d'))?>
+            <input type="date" class="form-control rounded-0" value="<?= $fechaTermino; ?>" onchange="EditarTicket(value,<?= $idticket; ?>,3)">
           </div>
           <div class="col-4 mt-3">
             <h6 class="text-secondary">Responsable</h6>
@@ -463,7 +509,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
             if ($Valorestado == 3 || $Valorestado == 4) {
               echo $porcentaje . ' %';
             } else {
-              echo '<select class="form-control rounded-0" onchange="EditarTicket(this,' . $idticket . ',5)">';
+              echo '<select class="form-control rounded-0" onchange="EditarTicket(value,' . $idticket . ',5)">';
               echo '<option value="' . $porcentaje . '">' . $porcentaje . ' %</option>';
               for ($i = 1; $i <= 10; $i++) {
                 echo '<option value="' . $i . '0">' . $i . '0 %</option>';
@@ -475,11 +521,14 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         </div>
 
         <div class="text-end mt-3">
-          <?php if($fechaInicio == ''){?>
-          <button type="button" class="btn btn-primary rounded-0" onclick="FinalizarEdicion(<?= $idticket; ?>)">Finalizar edición</button>
-          <?php } else{?>
-          <button type="button" class="btn btn-primary rounded-0" onclick="FinalizarSoporte(<?= $idticket; ?>)">Finalizar soporte</button>
-          <?php }?>
+          <?php if ($fechaTermino == '') { ?>
+            <button type="button" class="btn btn-primary rounded-0" onclick="
+              FinalizarEdicion(<?= $idticket; ?>);
+              EditarTicket('<?=$fechaInicio->format('Y-m-d')?>',<?= $idticket; ?>,2);
+              EditarTicket('<?=$fechaFin->format('Y-m-d')?>',<?= $idticket; ?>,3)">Finalizar edición</button>
+          <?php } else { ?>
+            <button type="button" class="btn btn-primary rounded-0" onclick="FinalizarSoporte(<?= $idticket; ?>)">Finalizar soporte</button>
+          <?php } ?>
         </div>
 
       </div>
