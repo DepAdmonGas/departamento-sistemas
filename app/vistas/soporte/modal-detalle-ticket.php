@@ -280,6 +280,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 </div>
 <div class="modal-footer">
   <?php if($estado == 'En proceso' && $porcentaje == 100):?>
-<button type="button" class="btn btn-primary rounded-0" onclick="FinalizarSoporte(<?= $idticket ?>)">Finalizar soporte</button>
+    <button type="button" class="btn btn-labeled2 btn-primary" onclick="FinalizarSoporte(<?= $idticket; ?>)">
+              <span class="btn-label2"><i class="fa-solid fa-check"></i></span>Finalizar soporte</button>
     <?php endif;?>
 </div>
