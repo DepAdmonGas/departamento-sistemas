@@ -547,12 +547,15 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 
         <div class="text-end mt-3">
           <?php if ($fechaTermino == '') { ?>
-            <button type="button" class="btn btn-primary rounded-0" onclick="
-              FinalizarEdicion(<?= $idticket; ?>);
+            <button type="button" class="btn btn-labeled2 btn-success" 
+            onclick="
+            FinalizarEdicion(<?= $idticket; ?>);
               EditarTicket('<?= $fechaInicio->format('Y-m-d') ?>',<?= $idticket; ?>,2);
-              EditarTicket('<?= $fechaFin->format('Y-m-d') ?>',<?= $idticket; ?>,3)">Finalizar edición</button>
+              EditarTicket('<?= $fechaFin->format('Y-m-d') ?>',<?= $idticket; ?>,3)">
+              <span class="btn-label2"><i class="fa-solid fa-check"></i></span>Finalizar edicion</button>
           <?php } else { ?>
-            <button type="button" class="btn btn-primary rounded-0" onclick="FinalizarSoporte(<?= $idticket; ?>)">Finalizar soporte</button>
+            <button type="button" class="btn btn-labeled2 btn-success" onclick="FinalizarSoporte(<?= $idticket; ?>)">
+              <span class="btn-label2"><i class="fa-solid fa-check"></i></span>Finalizar soporte</button>
           <?php } ?>
         </div>
 

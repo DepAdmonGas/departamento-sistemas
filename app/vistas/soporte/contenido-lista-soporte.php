@@ -205,7 +205,7 @@ $con = $ClassConexionBD->conectarBD();
         echo '</tr>';
         }else if($row['estado'] == 2){
 
-            echo '<tr '.$trColor.'>';
+            echo '<tr '.$trColor.' onclick="ModalDetalle('.$id_ticket.')">';
             echo '<th class="align-middle text-center"><b>0'.$id_ticket.'</b></th>';
             echo '<td class="align-middle text-center">'.$descripcion.'</td>';
             echo '<td class="align-middle text-center '.$colorPrioridad.'"><small><b>'.$prioridad.'</b></small></td>';
