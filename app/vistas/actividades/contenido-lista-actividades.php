@@ -31,7 +31,7 @@ INNER JOIN tb_puestos
 WHERE ds_soporte.estado <> 0 
     AND ds_soporte.estado <> 4
     AND ds_soporte.id_personal_soporte = $usuario
-ORDER BY ds_soporte.estado ASC, ds_soporte.fecha_creacion DESC";
+ORDER BY ds_soporte.fecha_inicio ASC, ds_soporte.estado DESC";
 
         $result = mysqli_query($con, $sql);
         $numero = mysqli_num_rows($result);

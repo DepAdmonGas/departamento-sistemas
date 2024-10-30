@@ -70,7 +70,7 @@ require 'app/help.php';
 
       var parametros = {
         "Accion": "nuevo-folio",
-        "Categoria":"Actividad"
+        "Categoria": "Actividad"
       };
 
       $.ajax({
@@ -92,8 +92,8 @@ require 'app/help.php';
       });
     }
 
-    function EditarTicket(idticket,categoria) {
-      window.location.href = "nuevo-registro/" + idticket;  
+    function EditarTicket(idticket, categoria) {
+      window.location.href = "nuevo-registro/" + idticket;
     }
 
     function EliminarTicket(idticket) {
@@ -226,13 +226,52 @@ require 'app/help.php';
         });
       });
     }
+
+    function FinalizarSoporte(idticket) {
+
+      let parametros = {
+        "Accion": "finalizar-soporte",
+        "idticket": idticket,
+        "finalizar": 3
+      };
+
+      alertify.confirm('',
+        function() {
+
+          $.ajax({
+            data: parametros,
+            url: 'app/modelo/controlador-sistemas.php',
+            type: 'post',
+            beforeSend: function() {},
+            complete: function() {
+
+            },
+            success: function(response) {
+              $('#ModalDetalle').modal('hide');
+              ContenidoSoporte();
+            }
+          });
+
+        },
+        function() {
+
+        }).setHeader('Mensaje').set({
+        transition: 'zoom',
+        message: '¿Desea finalizar el soporte?',
+        labels: {
+          ok: 'Aceptar',
+          cancel: 'Cancelar'
+        }
+      }).show();
+
+    }
     window.addEventListener('pageshow', function(event) {
-  if (event.persisted) {
-  // Si la página está en la caché del navegador, recargarla
-  window.location.reload();
-  sizeWindow();
-  }
-  });
+      if (event.persisted) {
+        // Si la página está en la caché del navegador, recargarla
+        window.location.reload();
+        sizeWindow();
+      }
+    });
   </script>
 
 </head>
@@ -269,8 +308,8 @@ require 'app/help.php';
               <div class="row">
 
                 <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 mt-3">
-                <span class="text-secondary">Aquí podrás crear tus solicitudes para el área de sistemas y tener el seguimiento de la solución a dichas alertas.
-                </span>
+                  <span class="text-secondary">Aquí podrás crear tus solicitudes para el área de sistemas y tener el seguimiento de la solución a dichas alertas.
+                  </span>
                 </div>
 
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">

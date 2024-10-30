@@ -265,7 +265,7 @@ class Sistemas
       $descripcion = $row['descripcion'];
       $personal = $row['nombre'];
     }
-    $detalle = "Solicitud de ticket numero: $idticket \nCreado por: \n$personal \nPrioridad: $prioridad \n\nDetalle:\n $descripcion";
+    $detalle = "$personal ha creado una nueva actividad con numero de ticket $idticket, prioridad $prioridad, requiriendo lo siguiente:\n $descripcion";
     return $detalle;
   }
 
@@ -476,7 +476,7 @@ class Sistemas
 
   //------------ FINALIZAR SOPORTE ------------------//
 
-  public function FinalizarSoporte($idticket, $idPersonal)
+  public function FinalizarSoporte($idticket, $idPersonal,$finalizar)
   {
     $ClassContenido = new SistemasContenido();
     $SoporteContenido = $ClassContenido->soporteContenido($idticket);
@@ -493,7 +493,7 @@ class Sistemas
                 fecha_termino_real = '" . $hoy . "',
                 porcentaje = 100,
                 id_personal_soporte = '" . $idPersonal . "',
-                estado = 3              
+                estado = '" . $finalizar . "'
                 WHERE id_ticket = '" . $idticket . "' ";
 
       $sql2 = "UPDATE ds_soporte_actividades SET 
@@ -513,7 +513,7 @@ class Sistemas
                 fecha_termino_real = '" . $hoy . "',
                 porcentaje = 100,
                 id_personal_soporte = '" . $idPersonal . "',
-                estado = 3              
+                estado = '" . $finalizar . "'              
                 WHERE id_ticket = '" . $idticket . "' ";
 
       $sql2 = "UPDATE ds_soporte_actividades SET 
@@ -529,8 +529,12 @@ class Sistemas
       }
     }
     $personal = $this->personal($idPersonal);
-    $mensaje = "Se finalizo el soporte con id ticket $idticket asignado a: $personal";
+    $mensaje = "$personal finalizo el soporte con ticket $idticket, favor de revisar y dar visto bueno a la actividad.";
     $this->telegram->enviarToken($idPersonal, $mensaje);
+    if($finalizar == 3){
+      $mensaje = "Se concluyo la actividad con exito del ticket $idticket";
+      $this->telegram->enviarToken($idPersonal, $mensaje);
+    }
     return $Resultado;
   }
   private function personal($idPersonal): string
@@ -551,11 +555,12 @@ class Sistemas
   }
   public function asignarPersonal($idticket): int
   {
-    $mensaje = "Silvino Lopéz Farfan te asigno una nueva actividad con el id ticket: $idticket";
-    $sql = "SELECT id_personal_soporte FROM ds_soporte WHERE id_ticket='" . $idticket . "' ";
+    $sql = "SELECT id_personal_soporte,prioridad FROM ds_soporte WHERE id_ticket='" . $idticket . "' ";
 
     $result = mysqli_query($this->con, $sql);
     while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+      $prioridad = $row['prioridad'];
+      $mensaje = "Silvino Lopéz Farfan te asigno una nueva actividad con el id ticket: $idticket y prioridad $prioridad";
       $this->telegram->enviarToken($row['id_personal_soporte'], $mensaje);
     }
     $Resultado = 1;
