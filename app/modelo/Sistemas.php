@@ -411,7 +411,7 @@ class Sistemas
 
   //----------- EDITAR REGISTRO  --------//
 
-  public function EditarRegistro($idticket, $Detalle, $opcion)
+  public function EditarRegistro($idticket, $Detalle, $opcion,$diasHabiles)
   {
 
     date_default_timezone_set('America/Mexico_City');
@@ -428,7 +428,7 @@ class Sistemas
     } else if ($opcion == 2) {
       $Query = 'fecha_inicio = "' . $Detalle . ' ' . $hora_del_dia . '" ';
     } else if ($opcion == 3) {
-      $Query = 'fecha_termino = "' . $Detalle . ' ' . $hora_del_dia . '" ';
+      $Query = 'fecha_termino = "' . $Detalle . ' ' . $hora_del_dia . '", tiempo_solucion = ' . $diasHabiles . '';
     } else if ($opcion == 4) {
       $Query = 'id_personal_soporte = ' . $Detalle;
     } else if ($opcion == 5) {

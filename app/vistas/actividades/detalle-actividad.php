@@ -35,15 +35,28 @@ while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
   $descripcion = $row['descripcion'];
   $prioridad = $row['prioridad'];
   $porcentaje = $row['porcentaje'];
-  $fechainicio = $row['fecha_inicio'];
-  $fechatermino = $row['fecha_termino'];
   $tiemposolucion = $row['tiempo_solucion'];
   $fechaterminoreal = $row['fecha_termino_real'];
   $Valorestado = $row['estado'];
   $nomestacion = $row['nomestacion'];
   $solicitante = $row['nombre'];
+  $tiemposolucion = $row['tiempo_solucion'];
   $idPersonalSoporte = $row['id_personal_soporte'];
   $PersonalSoporte = $ClassContenido->Responsable($idPersonalSoporte);
+
+  // se usa para mostrar las fechas en caso de que ya se hañlla asignado la atividad
+  $explodeInicio = explode(' ', $row['fecha_inicio']);
+  $fechainicio = '';
+  if ($explodeInicio[0] != '0000-00-00') {
+    $fechainicio = FormatoFecha($explodeInicio[0]);
+  }
+
+  $explodeTermino = explode(' ', $row['fecha_termino']);
+  $fechatermino = '';
+  if ($explodeTermino[0] != '0000-00-00') {
+    $fechatermino = FormatoFecha($explodeTermino[0]);
+  }
+
 
   $explode = explode(' ', $row['fecha_creacion']);
   if ($explode[0] == '0000-00-00') {
@@ -129,18 +142,20 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 
   <script type="text/javascript">
     $(document).ready(function() {
-    $(".LoaderPage").fadeOut("slow");
-    ContenidoComentarios(<?= $idticket; ?>);
-
-    // JavaScript para detectar el cambio y actualizar automáticamente
-    $('#dias_habiles').on('change', function() {
+      $(".LoaderPage").fadeOut("slow");
+      ContenidoComentarios(<?= $idticket; ?>);
+      $('#dias_habiles').focus();
+      // JavaScript para detectar el cambio y actualizar automáticamente
+      $('#dias_habiles').on('change', function() {
         $('#diasHabilesForm').submit();
+        $('#dias_habiles').focus(); // Vuelve a enfocar el campo después de enviar el formulario
+      });
+
     });
-});
 
 
     function regresarP() {
-      window.history.back();
+      window.location.href = '../actividades';
     }
 
     function ContenidoComentarios(idticket) {
@@ -190,6 +205,11 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         "idticket": idticket,
         "opcion": opcion
       };
+      // Agregar el campo 'dias_habiles' solo si opcion es igual a 3
+      if (opcion == 3) {
+        const diasHabiles = document.getElementById("dias_habiles").value;
+        parametros.dias_habiles = diasHabiles;
+      }
 
       $.ajax({
         data: parametros,
@@ -220,12 +240,8 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         url: '../app/modelo/controlador-sistemas.php',
         type: 'post',
         beforeSend: function() {},
-        complete: function() {
-
-        },
-        success: function(response) {
-
-        }
+        complete: function() {},
+        success: function(response) {}
       });
     }
 
@@ -301,7 +317,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 
         <div aria-label="breadcrumb" style="padding-left: 0; margin-bottom: 0;">
           <ol class="breadcrumb breadcrumb-caret">
-            <li class="breadcrumb-item"><a onclick="history.back()" class="text-uppercase text-primary pointer"><i
+            <li class="breadcrumb-item"><a onclick="regresarP()" class="text-uppercase text-primary pointer"><i
                   class="fa-solid fa-chevron-left"></i>
                 Departamento Sistemas</a></li>
             <li aria-current="page" class="breadcrumb-item active text-uppercase">
@@ -346,158 +362,162 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         <hr>
 
         <?php
+        if ($fechatermino == '') {
+          $UltimoRegistro = $ClassContenido->UltimoRegistro($Session_IDUsuarioBD);
 
-        $UltimoRegistro = $ClassContenido->UltimoRegistro($Session_IDUsuarioBD);
-
-        if ($UltimoRegistro['nomestacion'] == 'Comodines') {
-          $EstacionDepartamentoUltimoRegistro = $UltimoRegistro['tipopuesto'];
-        } else {
-          $EstacionDepartamentoUltimoRegistro = $UltimoRegistro['nomestacion'];
-        }
-
-        $explode3 = explode(' ', $UltimoRegistro['fechatermino']);
-        if ($explode3[0] == '0000-00-00') {
-          $FechaUltimoRegistro = FormatoFecha($fecha_del_dia);
-        } else {
-          $FechaUltimoRegistro = FormatoFecha($explode3[0]);
-        }
-
-        echo '<div class="alert alert-warning" role="alert">
-     Información del ultimo registro agregado en la base de datos.</br>
-     # Ticket <b>0' . $UltimoRegistro['idticket'] . '</b>, Fecha termino: <b>' . $FechaUltimoRegistro . '</b>, Estación o Departamento:  <b>' . $EstacionDepartamentoUltimoRegistro . '</b> 
-     </div>';
-
-        ?>
-
-        <h6 class="mt-2 text-secondary">Actividad:</h6>
-        <table class="table table-sm table-bordered mt-1 mb-1 pb-1" style="font-size: .8em;">
-          <thead class="table-light">
-            <tr>
-              <th class="align-middle">#</th>
-              <th class="align-middle">Descripción de la actividad</th>
-              <th class="align-middle">Fecha inicio</th>
-              <th class="align-middle">Fecha termino</th>
-              <th class="align-middle">Estado</th>
-              <th class="align-middle text-center" width="24px"><img src="<?= RUTA_IMG_ICONOS; ?>descargar.png"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
-
-            if ($numeroActividad > 0) {
-              $numActividad = 1;
-
-              while ($rowActividad = mysqli_fetch_array($resultActividad, MYSQLI_ASSOC)) {
-                $idActividad = $rowActividad['id'];
-                $descripcionActividad = $rowActividad['descripcion'];
-                $EstadoActividad = $rowActividad['estado'];
-
-                if ($rowActividad['fecha_inicio'] == '0000-00-00') {
-                  $AtividadFechaInicio = '';
-                } else {
-                  $AtividadFechaInicio = $rowActividad['fecha_inicio'];
-                }
-
-                if ($rowActividad['fecha_termino'] == '0000-00-00') {
-                  $AtividadFechaTermino = '';
-                } else {
-                  $AtividadFechaTermino = $rowActividad['fecha_termino'];
-                }
-
-                if ($rowActividad['estado'] == 0) {
-                  $EstadoDetalle = 'Pendiente';
-                } else if ($rowActividad['estado'] == 1) {
-                  $EstadoDetalle = 'En proceso';
-                } else if ($rowActividad['estado'] == 2) {
-                  $EstadoDetalle = 'Finalizada';
-                }
-
-                if ($rowActividad['archivo'] == "") {
-                  $Archivo = '<a><img src="' . RUTA_IMG_ICONOS . 'eliminar.png" ></a>';
-                } else {
-                  $Archivo = '<a href="' . RUTA_ARCHIVOS . $rowActividad['archivo'] . '" download><img src="' . RUTA_IMG_ICONOS . 'descargar.png" ></a>';
-                }
-
-                echo '<tr>';
-                echo '<td class="align-middle">' . $numActividad . '</td>';
-                echo '<td class="align-middle">' . $descripcionActividad . '</td>';
-                echo '<td class="p-0"><input type="date" class="border-0 form-control" value="' . $AtividadFechaInicio . '" onchange="EditarActividad(this,' . $idActividad . ',1)"></td>';
-                echo '<td class="p-0"><input type="date" class="border-0 form-control" value="' . $AtividadFechaTermino . '" onchange="EditarActividad(this,' . $idActividad . ',2)"></td>';
-                echo '<td class="p-0">
-                <select class="form-control rounded-0 border-0" onchange="EditarActividad(this,' . $idActividad . ',3)">
-                    <option value="' . $EstadoActividad . '">' . $EstadoDetalle . '</option>
-                    <option value="0">Pendiente</option>
-                    <option value="1">En proceso</option>
-                    <option value="2">Finalizada</option>
-                </select>
-            </div>';
-                echo '<td class="align-middle">' . $Archivo . '</td>';
-                echo '</tr>';
-
-                $numActividad++;
-              }
-            } else {
-              echo "<tr><td colspan='5' class='text-center'><small>No se encontró información para mostrar</small></td></tr>";
-            }
-
-            ?>
-          </tbody>
-        </table>
-
-        <hr>
-        <!--Codigo que permite validar los dias habiles-->
-        <?php
-        $fechaInicio = new DateTime($explode3[0]);
-        $fechaInicio->modify('+1 day');
-
-        // Validación para que, si la fecha de inicio cae en sábado o domingo, empiece desde el próximo lunes
-        if ($fechaInicio->format('N') == 6) {
-          // Si es sábado, mover al lunes (2 días más)
-          $fechaInicio->modify('+2 days');
-        } elseif ($fechaInicio->format('N') == 7) {
-          // Si es domingo, mover al lunes (1 día más)
-          $fechaInicio->modify('+1 day');
-        }
-        // Verifica si se ha enviado el número de días hábiles desde el formulario
-        $diasHabiles = isset($_GET['dias_habiles']) ? (int)$_GET['dias_habiles'] : 2; // Valor predeterminado: 2 días
-
-        // Contador de días hábiles
-        $contador = 0;
-        $fechaFin = clone $fechaInicio;
-
-        while ($contador < $diasHabiles) {
-          // Si es día de la semana (lunes a viernes), contamos el día
-          if ($fechaFin->format('N') < 6) {
-            $contador++;
+          if ($UltimoRegistro['nomestacion'] == 'Comodines') {
+            $EstacionDepartamentoUltimoRegistro = $UltimoRegistro['tipopuesto'];
+          } else {
+            $EstacionDepartamentoUltimoRegistro = $UltimoRegistro['nomestacion'];
           }
-          // Sumamos un día (independientemente de si es hábil o no)
-          $fechaFin->modify('+1 day');
+
+          $explode3 = explode(' ', $UltimoRegistro['fechatermino']);
+          if ($explode3[0] == '0000-00-00') {
+            $FechaUltimoRegistro = FormatoFecha($fecha_del_dia);
+          } else {
+            $FechaUltimoRegistro = FormatoFecha($explode3[0]);
+          }
+
+          echo '<div class="alert alert-warning" role="alert">
+                  Información del ultimo registro agregado en la base de datos.</br>
+                  # Ticket <b>0' . $UltimoRegistro['idticket'] . '</b>, Fecha termino: <b>' . $FechaUltimoRegistro . '</b>, Estación o Departamento:  <b>' . $EstacionDepartamentoUltimoRegistro . '</b> 
+                  </div>';
+
+          //Codigo que permite validar los dias habiles-->
+          $fechaInicio = new DateTime($explode3[0]);
+          $fechaInicio->modify('+1 day');
+
+          // Validación para que, si la fecha de inicio cae en sábado o domingo, empiece desde el próximo lunes
+          if ($fechaInicio->format('N') == 6) {
+            // Si es sábado, mover al lunes (2 días más)
+            $fechaInicio->modify('+2 days');
+          } elseif ($fechaInicio->format('N') == 7) {
+            // Si es domingo, mover al lunes (1 día más)
+            $fechaInicio->modify('+1 day');
+          }
+          // Verifica si se ha enviado el número de días hábiles desde el formulario
+          $diasHabiles = isset($_GET['dias_habiles']) ? (int)$_GET['dias_habiles'] : 2; // Valor predeterminado: 2 días
+
+          // Contador de días hábiles
+          $contador = 0;
+          $fechaFin = clone $fechaInicio;
+
+          while ($contador < $diasHabiles) {
+            // Si es día de la semana (lunes a viernes), contamos el día
+            if ($fechaFin->format('N') < 6) {
+              $contador++;
+            }
+            // Sumamos un día (independientemente de si es hábil o no)
+            $fechaFin->modify('+1 day');
+          }
+
+          // Restamos un día al final porque el bucle suma un día extra
+          $fechaFin->modify('-1 day');
         }
 
-        // Restamos un día al final porque el bucle suma un día extra
-        $fechaFin->modify('-1 day');
-
-        /* Mostramos las fechas de inicio y fin
-          echo "Fecha de inicio: " . FormatoFecha($fechaInicio->format('Y-m-d')) . "<br>";
-          echo "Fecha de término: " . FormatoFecha($fechaFin->format('Y-m-d')) . "<br>";
-        */
+        if ($numeroActividad > 0) {
         ?>
+          <h6 class="mt-2 text-secondary">Actividad:</h6>
+          <div class="table-responsive">
+            <table id="tabla-sistemas" class="custom-table mt-2" style="font-size: 14px;" width="100%">
+              <thead class="navbar-bg">
+                <tr>
+                  <th class="align-middle">#</th>
+                  <th class="align-middle">Descripción de la actividad</th>
+                  <th class="align-middle">Estado</th>
+                  <th class="align-middle text-center" width="24px"><img src="<?= RUTA_IMG_ICONOS; ?>descargar.png"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                $numActividad = 1;
+
+                while ($rowActividad = mysqli_fetch_array($resultActividad, MYSQLI_ASSOC)) {
+                  $idActividad = $rowActividad['id'];
+                  $descripcionActividad = $rowActividad['descripcion'];
+                  $EstadoActividad = $rowActividad['estado'];
+
+                  if ($rowActividad['fecha_inicio'] == '0000-00-00') {
+                    $AtividadFechaInicio = '';
+                  } else {
+                    $AtividadFechaInicio = $rowActividad['fecha_inicio'];
+                  }
+
+                  if ($rowActividad['fecha_termino'] == '0000-00-00') {
+                    $AtividadFechaTermino = '';
+                  } else {
+                    $AtividadFechaTermino = $rowActividad['fecha_termino'];
+                  }
+
+                  if ($rowActividad['estado'] == 0) {
+                    $EstadoDetalle = 'Pendiente';
+                  } else if ($rowActividad['estado'] == 1) {
+                    $EstadoDetalle = 'En proceso';
+                  } else if ($rowActividad['estado'] == 2) {
+                    $EstadoDetalle = 'Finalizada';
+                  }
+
+                  if ($rowActividad['archivo'] == "") {
+                    $Archivo = '<a><img src="' . RUTA_IMG_ICONOS . 'eliminar.png" ></a>';
+                  } else {
+                    $Archivo = '<a href="' . RUTA_ARCHIVOS . $rowActividad['archivo'] . '" download><img src="' . RUTA_IMG_ICONOS . 'descargar.png" ></a>';
+                  }
+
+                  echo '<tr>';
+                  echo '<th class="align-middle">' . $numActividad . '</th>';
+                  echo '<td class="align-middle">' . $descripcionActividad . '</td>';
+                  echo '<td class="p-0">
+                          <select class="form-control rounded-0 border-0" onchange="EditarActividad(this,' . $idActividad . ',3)">
+                              <option value="' . $EstadoActividad . '">' . $EstadoDetalle . '</option>
+                              <option value="0">Pendiente</option>
+                              <option value="1">En proceso</option>
+                              <option value="2">Finalizada</option>
+                          </select>
+                        </td>';
+                  echo '<td class="align-middle">' . $Archivo . '</td>';
+                  echo '</tr>';
+
+                  $numActividad++;
+                }
+
+
+                ?>
+              </tbody>
+            </table>
+          </div>
+          <hr>
+        <?php } ?>
+
+
         <div class="row">
           <div class="col-3 mt-3">
             <form method="get" id="diasHabilesForm">
-              <h6 class="text-secondary" for="dias_habiles">Dias de desarrollo</h6>
-              <input type="number" name="dias_habiles" id="dias_habiles" value="<?php echo $diasHabiles; ?>" min="1">
+              <h6 class="text-secondary" for="dias_habiles">Tiempo solucion</h6>
+              <?php if ($fechatermino == '') : ?>
+                <input type="number" name="dias_habiles" id="dias_habiles" value="<?php echo $diasHabiles; ?>" min="1" style="text-align: right;">
+              <?php else : echo $tiemposolucion;
+              endif; ?>
             </form>
           </div>
 
           <div class="col-3 mt-3">
             <h6 class="text-secondary">Fecha inicio</h6>
-            <?= FormatoFecha($fechaInicio->format('Y-m-d')) ?>
+            <?php if ($fechatermino == '') {
+              echo FormatoFecha($fechaInicio->format('Y-m-d'));
+            } else {
+              echo $fechainicio;
+            }
+            ?>
             <!--<input type="date" class="form-control rounded-0" value="<?= $fechaTermino ?>" onchange="EditarTicket(value,<?= $idticket; ?>,2)">-->
           </div>
           <div class="col-3 mt-3">
             <h6 class="text-secondary">Fecha termino</h6>
-            <?= FormatoFecha($fechaFin->format('Y-m-d')) ?>
+            <?php if ($fechatermino == '') {
+              echo FormatoFecha($fechaFin->format('Y-m-d'));
+            } else {
+              echo $fechatermino;
+            }
+            ?>
             <!--<input type="date" class="form-control rounded-0" value="<?= $fechaTermino; ?>" onchange="EditarTicket(value,<?= $idticket; ?>,3)">-->
           </div>
           <div class="col-3 mt-3">
