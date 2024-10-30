@@ -258,10 +258,14 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
     }
 
     function FinalizarSoporte(idticket) {
-
+      let fin = 2;
+      if('<?=$EstacionDepartamento?>' == 'Departamento Sistemas'){
+        fin = 3;
+      }
       let parametros = {
         "Accion": "finalizar-soporte",
-        "idticket": idticket
+        "idticket": idticket,
+        "finalizar": fin
       };
 
       alertify.confirm('',
@@ -527,7 +531,6 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
           <div class="col-6 mt-3">
             <h6 class="text-secondary">Porcentaje</h6>
             <?php
-
             if ($Valorestado == 3 || $Valorestado == 4) {
               echo $porcentaje . ' %';
             } else {
