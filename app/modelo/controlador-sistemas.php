@@ -52,8 +52,7 @@ else if($_POST['Accion'] == 'guardar-comentario'){
     echo $Resultado;
 }
 else if($_POST['Accion'] == 'editar-registro'){
-    $diasValidos = isset($_POST['dias_habiles']) ? $_POST['dias_habiles'] : 0;
-    $Resultado = $ClassSistemas->EditarRegistro($_POST['idticket'],$_POST['Detalle'],$_POST['opcion'],$diasValidos);
+    $Resultado = $ClassSistemas->EditarRegistro($_POST['idticket'],$_POST['Detalle'],$_POST['opcion']);
     echo $Resultado;
 }
 else if($_POST['Accion'] == 'editar-actividad'){

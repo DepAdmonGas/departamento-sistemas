@@ -381,13 +381,13 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
                   $EstadoActividad = $rowActividad['estado'];
 
                   if ($rowActividad['fecha_inicio'] == '0000-00-00') {
-                    $AtividadFechaInicio = '';
+                    $AtividadFechaInicio = 'S/I';
                   } else {
                     $AtividadFechaInicio = FormatoFecha($rowActividad['fecha_inicio']);
                   }
 
                   if ($rowActividad['fecha_termino'] == '0000-00-00') {
-                    $AtividadFechaTermino = '';
+                    $AtividadFechaTermino = 'S/I';
                   } else {
                     $AtividadFechaTermino = FormatoFecha($rowActividad['fecha_termino']);
                   }

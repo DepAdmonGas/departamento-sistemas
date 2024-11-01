@@ -411,9 +411,8 @@ class Sistemas
 
   //----------- EDITAR REGISTRO  --------//
 
-  public function EditarRegistro($idticket, $Detalle, $opcion,$diasHabiles)
+  public function EditarRegistro($idticket, $Detalle, $opcion)
   {
-
     date_default_timezone_set('America/Mexico_City');
     $hoy = date("Y-m-d H:i:s");
     $hora_del_dia = date("H:i:s");
@@ -428,7 +427,7 @@ class Sistemas
     } else if ($opcion == 2) {
       $Query = 'fecha_inicio = "' . $Detalle . ' ' . $hora_del_dia . '" ';
     } else if ($opcion == 3) {
-      $Query = 'fecha_termino = "' . $Detalle . ' ' . $hora_del_dia . '", tiempo_solucion = ' . $diasHabiles . '';
+      $Query = 'fecha_termino = "' . $Detalle . ' ' . $hora_del_dia . '"';
     } else if ($opcion == 4) {
       $Query = 'id_personal_soporte = ' . $Detalle;
     } else if ($opcion == 5) {
@@ -440,12 +439,45 @@ class Sistemas
         WHERE id_ticket = '" . $idticket . "' ";
 
     if (mysqli_query($this->con, $sql)) {
+      $diasHabiles = 0;
+      if ($opcion == 3) {
+        $diasHabiles = $this->diasHabiles($idticket);
+        $sql2 = "UPDATE ds_soporte SET tiempo_solucion = '" . $diasHabiles . "' 
+        WHERE id_ticket = '" . $idticket . "' ";
+        mysqli_query($this->con, $sql2);
+      }
       $Resultado = 1;
     } else {
       $Resultado = 0;
     }
 
     return $Resultado;
+  }
+  private function diasHabiles($idticket): int
+  {
+    $dias = 0;
+    // Sentencia SQL con cálculo de diferencia de días
+    $sql = "SELECT DATEDIFF(fecha_termino, fecha_inicio) AS dias_diferencia FROM ds_soporte WHERE id_ticket = ?";
+
+    // Preparar la consulta
+    $stmt = $this->con->prepare($sql);
+
+    // Asignar el valor del parámetro (id_ticket)
+    $stmt->bind_param("i", $idticket);
+
+    // Ejecutar la consulta
+    $stmt->execute();
+
+    // Obtener los resultados
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+      $dias = $row['dias_diferencia'];
+    }
+
+    // Cerrar la sentencia
+    $stmt->close();
+
+    return $dias;
   }
 
   //------------------- EDITAR ACTIVIDAD --------------//
@@ -476,7 +508,7 @@ class Sistemas
 
   //------------ FINALIZAR SOPORTE ------------------//
 
-  public function FinalizarSoporte($idticket, $idPersonal,$finalizar)
+  public function FinalizarSoporte($idticket, $idPersonal, $finalizar)
   {
     $ClassContenido = new SistemasContenido();
     $SoporteContenido = $ClassContenido->soporteContenido($idticket);
@@ -531,7 +563,7 @@ class Sistemas
     $personal = $this->personal($idPersonal);
     $mensaje = "$personal finalizo el soporte con ticket $idticket, favor de revisar y dar visto bueno a la actividad.";
     $this->telegram->enviarToken($idPersonal, $mensaje);
-    if($finalizar == 3){
+    if ($finalizar == 3) {
       $mensaje = "Se concluyo la actividad con exito del ticket $idticket";
       $this->telegram->enviarToken($idPersonal, $mensaje);
     }
