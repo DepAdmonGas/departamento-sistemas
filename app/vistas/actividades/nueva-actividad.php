@@ -257,40 +257,53 @@ if ($InformacionTicket['estado'] != 0) {
     }
 
     function Finalizar(idRegistro, idUsuario) {
+      let descripcionElem = document.getElementById("Descripcion");
+      let descripcion = descripcionElem.value.trim();
+      let prioridadElem = document.getElementById("Prioridad");
+      let prioridad = prioridadElem.value;
+      if (descripcion != '') {
+        $('#Descripcion').css('border', '');
+        if (["Baja", "Media", "Alta"].includes(prioridad)) {
+          $('#Prioridad').css('border', '');
+          alertify.confirm('',
+            function() {
 
+              $.ajax({
+                data: parametros,
+                url: '../app/modelo/controlador-sistemas.php',
+                type: 'post',
+                beforeSend: function() {},
+                complete: function() {},
+                success: function(response) {
+                  window.history.back();
+                }
+              });
+
+            },
+            function() {
+
+            }).setHeader('Mensaje').set({
+            transition: 'zoom',
+            message: '¿Desea finalizar el registro?',
+            labels: {
+              ok: 'Aceptar',
+              cancel: 'Cancelar'
+            }
+          }).show();
+        } else {
+          $('#Prioridad').css('border', '2px solid #A52525');
+        }
+      } else {
+        $('#Descripcion').css('border', '2px solid #A52525');
+      }
       let parametros = {
         "Accion": "finalizar-registro",
         "idRegistro": idRegistro,
         "usuario": idUsuario,
         "ticket": <?= $GET_IdRegistro ?>
       };
-
-      alertify.confirm('',
-        function() {
-
-          $.ajax({
-            data: parametros,
-            url: '../app/modelo/controlador-sistemas.php',
-            type: 'post',
-            beforeSend: function() {},
-            complete: function() {},
-            success: function(response) {
-              window.history.back();
-            }
-          });
-
-        },
-        function() {
-
-        }).setHeader('Mensaje').set({
-        transition: 'zoom',
-        message: '¿Desea finalizar el registro?',
-        labels: {
-          ok: 'Aceptar',
-          cancel: 'Cancelar'
-        }
-      }).show();
     }
+
     function EditarTicket(Detalle, idticket, opcion) {
 
       let parametros = {
@@ -351,7 +364,7 @@ if ($InformacionTicket['estado'] != 0) {
         </select>
         <?php
         // Condicion si no es el encargado de sistemas qu eno pueda mostrar la siguiente informacion (Silvino Lopez-> Encargado) 
-        if($Session_IDUsuarioBD == 496):?>
+        if ($Session_IDUsuarioBD == 496): ?>
           <h6 class="fw-bold text-secondary mt-2">Responsable</h6>
           <select class="form-control rounded-0" onchange="EditarTicket(value,<?= $GET_IdRegistro; ?>,4)" id="Responsable">
             <option value="">Seleccionar responsable</option>
@@ -367,7 +380,7 @@ if ($InformacionTicket['estado'] != 0) {
 
             ?>
           </select>
-        <?php endif;?>
+        <?php endif; ?>
 
 
         <h6 class="mt-2 fw-bold text-secondary">Detalle de la Actividad:</h6>
@@ -394,17 +407,17 @@ if ($InformacionTicket['estado'] != 0) {
         <!----- BOTON DE FINALIZAR ----->
         <div class="row">
           <div class="col-12">
-            <?php if($Session_IDUsuarioBD == 496):?>
+            <?php if ($Session_IDUsuarioBD == 496): ?>
               <button type="button" class="btn btn-labeled2 btn-success float-end" onclick="Finalizar(<?= $GET_IdRegistro ?>,<?= $Session_IDUsuarioBD ?>)">
-              <span class="btn-label2"><i class="fa-solid fa-check"></i></span>Finalizar registro</button>
-            <?php else :?>
-              <button type="button" class="btn btn-labeled2 btn-success float-end" 
+                <span class="btn-label2"><i class="fa-solid fa-check"></i></span>Finalizar registro</button>
+            <?php else : ?>
+              <button type="button" class="btn btn-labeled2 btn-success float-end"
                 onclick="
                   Finalizar(<?= $GET_IdRegistro ?>,<?= $Session_IDUsuarioBD ?>);
-                  EditarTicket(<?=$Session_IDUsuarioBD?>,<?= $GET_IdRegistro; ?>,4)
+                  EditarTicket(<?= $Session_IDUsuarioBD ?>,<?= $GET_IdRegistro; ?>,4)
                 ">
-              <span class="btn-label2"><i class="fa-solid fa-check"></i></span>Finalizar registro</button>
-            <?php endif;?>
+                <span class="btn-label2"><i class="fa-solid fa-check"></i></span>Finalizar registro</button>
+            <?php endif; ?>
           </div>
 
         </div>
