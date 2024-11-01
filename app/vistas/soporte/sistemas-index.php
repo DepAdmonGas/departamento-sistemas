@@ -32,12 +32,12 @@ require "app/help.php";
   <script type="text/javascript">
     $(document).ready(function($) {
       $(".LoaderPage").fadeOut("slow");
-      ContenidoSistemas();
+      ContenidoSistemas(<?= $Session_IDUsuarioBD ?>);
     });
 
  
-    function ContenidoSistemas() {
-      $('#ContenidoSistemas').load('app/vistas/soporte/contenido-lista-sistemas.php', function() {
+    function ContenidoSistemas(usuario) {
+      $('#ContenidoSistemas').load('app/vistas/soporte/contenido-lista-sistemas.php?usuario='+ usuario, function() {
         // Una vez que se carguen los datos en la tabla, inicializa DataTables
         $('#tabla-sistemas').DataTable({
           "language": {
@@ -234,7 +234,7 @@ require "app/help.php";
           <div aria-label="breadcrumb" style="padding-left: 0; margin-bottom: 0;">
             <ol class="breadcrumb breadcrumb-caret">
               <li class="breadcrumb-item"><a onclick="history.back()" class="text-uppercase text-primary pointer"><i class="fa-solid fa-house"></i> Inicio</a></li>
-              <li aria-current="page" class="breadcrumb-item active text-uppercase">Departamento de Sistemas</li>
+              <li aria-current="page" class="breadcrumb-item active text-uppercase">Departamento de Sistemas Soporte</li>
             </ol>
           </div>
 
@@ -242,7 +242,7 @@ require "app/help.php";
           <div class="row">
 
             <div class="col-10">
-              <h3 class="text-secondary" style="padding-left: 0; margin-bottom: 0; margin-top: 0;">Departamento de Sistemas</h3>
+              <h3 class="text-secondary" style="padding-left: 0; margin-bottom: 0; margin-top: 0;">Departamento de Sistemas Soporte</h3>
             </div>
 
             <div class="col-2">

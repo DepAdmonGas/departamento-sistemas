@@ -3,7 +3,7 @@ include_once "../../help.php";
 $con = $ClassConexionBD->conectarBD();
 date_default_timezone_set('America/Mexico_City');
 $fecha_del_dia = date("Y-m-d");
-
+$usuario = $_GET['usuario'];
 $sql = "SELECT
         ds_soporte.id_ticket, 
         ds_soporte.id_personal,
@@ -26,7 +26,7 @@ $sql = "SELECT
         INNER JOIN tb_estaciones
         ON tb_usuarios.id_gas = tb_estaciones.id
         INNER JOIN tb_puestos
-        ON tb_usuarios.id_puesto = tb_puestos.id WHERE (ds_soporte.estado <> 0 AND ds_soporte.estado <> 4) 
+        ON tb_usuarios.id_puesto = tb_puestos.id WHERE (ds_soporte.estado <> 0 AND ds_soporte.estado <> 4 AND ds_soporte.id_personal_soporte = $usuario AND tb_puestos.tipo_puesto <> 'Departamento Sistemas') 
         ORDER BY ds_soporte.estado ASC, ds_soporte.fecha_creacion DESC";
         $result = mysqli_query($con, $sql);
         $numero = mysqli_num_rows($result);

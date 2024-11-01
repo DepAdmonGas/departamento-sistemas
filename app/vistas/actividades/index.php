@@ -259,7 +259,7 @@ if ($Session_IDUsuarioBD == 496) {
           <div aria-label="breadcrumb" style="padding-left: 0; margin-bottom: 0;">
             <ol class="breadcrumb breadcrumb-caret">
               <li class="breadcrumb-item"><a onclick="history.back()" class="text-uppercase text-primary pointer"><i class="fa-solid fa-house"></i> Inicio</a></li>
-              <li aria-current="page" class="breadcrumb-item active text-uppercase">Departamento de Sistemas</li>
+              <li aria-current="page" class="breadcrumb-item active text-uppercase">Actividades Sistemas</li>
             </ol>
           </div>
 
@@ -267,7 +267,7 @@ if ($Session_IDUsuarioBD == 496) {
           <div class="row">
 
             <div class="col-10">
-              <h3 class="text-secondary" style="padding-left: 0; margin-bottom: 0; margin-top: 0;">Departamento de Sistemas</h3>
+              <h3 class="text-secondary" style="padding-left: 0; margin-bottom: 0; margin-top: 0;">Actividades Sistemas</h3>
             </div>
 
             <div class="col-2">
