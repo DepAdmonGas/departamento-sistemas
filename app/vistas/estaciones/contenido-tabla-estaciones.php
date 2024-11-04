@@ -1,7 +1,7 @@
 <?php
 include_once "../../help.php";
 ?>
-<table class="table table-sm table-hover bg-white table-striped" id="tabla-estaciones">
+<table class="table table-bordered table-sm table-hover bg-white table-striped" id="tabla-estaciones">
     <thead class="bg-primary text-white">
         <tr>
             <th class="text-center align-middle">#</th>
