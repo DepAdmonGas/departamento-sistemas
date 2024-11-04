@@ -205,9 +205,47 @@ $tickets = contarActividadesIncompletas($con,1,$admin,$Session_IDUsuarioBD);
       <ul class="list-unstyled components">
         <li>
           <a class="pointer" href="home">
-            <i class="fa-solid fa-house" aria-hidden="true" style="padding-right: 10px;"></i>Inicio
+            <i class="fa-solid fa-house" aria-hidden="true" style="padding-right: 10px;"></i> Inicio
           </a>
         </li>
+        <li>
+          <a class="pointer" href="estaciones">
+          <i class="fa-solid fa-gas-pump" style="padding-right: 10px;"></i> Estaciones
+          </a>
+        </li>
+        <li>
+          <a class="pointer" href="puestos">
+          <i class="fa-solid fa-circle" style="padding-right: 10px;"></i> Puestos
+          </a>
+        </li>
+        <li>
+          <a class="pointer" href="personal">
+          <i class="fa-solid fa-users" style="padding-right: 10px;"></i> Personal
+          </a>
+        </li>
+
+        <li>
+          <a class="pointer" href="corte-diario">
+          <i class="fa-solid fa-money-check" style="padding-right: 10px;"></i> Corte Diario
+          </a>
+        </li>
+        <li>
+          <a class="pointer" href="cursos">
+          <i class="fa-solid fa-person-chalkboard" style="padding-right: 10px;"></i> Cursos
+          </a>
+        </li>
+
+        <li>
+          <a class="pointer" href="solicitud-cheque">
+          <i class="fa-solid fa-money-check" style="padding-right: 10px;"></i> Solicitud de cheque
+          </a>
+        </li>
+        <li>
+          <a class="pointer" href="solicitud-vale">
+          <i class="fa-solid fa-money-check" style="padding-right: 10px;"></i> Solicitud de vales
+          </a>
+        </li>
+
       </ul>
     </nav>-->
 

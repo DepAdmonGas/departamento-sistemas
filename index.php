@@ -18,11 +18,34 @@ if ($partes_ruta[0] == 'departamento-sistemas')
     switch ($partes_ruta[1]) {
 
         case 'sistemas':
-            $ruta_elegida = 'app/vistas/soporte/sistemas-index.php';
+        $ruta_elegida = 'app/vistas/soporte/sistemas-index.php';
         break;
         case 'home':
         $ruta_elegida = 'app/vistas/home/home-index.php';
         break;
+        case 'estaciones':
+        $ruta_elegida = 'app/vistas/estaciones/index.php';
+        break;
+        case 'puestos':
+        $ruta_elegida = 'app/vistas/area-departamento-puesto/puesto-index.php';
+        break;
+        case 'personal':
+        $ruta_elegida = 'app/vistas/personal/index.php';
+        break;
+        case 'corte-diario':
+        $ruta_elegida = 'app/vistas/corporativo/corte-diario-index.php';
+        break;
+        case 'cursos':
+        $ruta_elegida = 'app/vistas/cursos/cursos-index.php';
+        break;
+        case 'solicitud-cheque':
+        $ruta_elegida = 'app/vistas/solicitud-cheque/index.php';
+        break;
+        case 'solicitud-vale':
+        $ruta_elegida = 'app/vistas/solicitud-vale/index.php';
+        break;
+
+
         //----- SOPORTE -----//
 	    case 'soporte':
         $ruta_elegida = 'app/vistas/soporte/sistemas-soporte.php';
@@ -32,6 +55,8 @@ if ($partes_ruta[0] == 'departamento-sistemas')
 	    case 'actividades':
         $ruta_elegida = 'app/vistas/actividades/index.php';
         break;
+
+
         //-------------------//
         //----- CERRAR SESION DEL USUARIO -----//
 	    case 'salir':
