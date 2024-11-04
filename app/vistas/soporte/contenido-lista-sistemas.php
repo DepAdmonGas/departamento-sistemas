@@ -2,7 +2,7 @@
 include_once "../../help.php";
 $con = $ClassConexionBD->conectarBD();
 date_default_timezone_set('America/Mexico_City');
-$fecha_del_dia = date("Y-m-d");
+$fecha_del_dia = date("Y-m-d H:i:s");
 $usuario = $_GET['usuario'];
 $opcion = $_GET['opcion'];
 $consulta = "";
