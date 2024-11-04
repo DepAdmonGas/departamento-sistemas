@@ -31,7 +31,8 @@ INNER JOIN tb_puestos
 WHERE ds_soporte.estado <> 0 
     AND ds_soporte.estado <> 4
     AND ds_soporte.id_personal_soporte = $usuario
-ORDER BY ds_soporte.estado ASC, ds_soporte.fecha_creacion DESC";
+    AND tb_puestos.tipo_puesto = 'Departamento Sistemas'
+ORDER BY ds_soporte.fecha_inicio ASC, ds_soporte.estado DESC";
 
         $result = mysqli_query($con, $sql);
         $numero = mysqli_num_rows($result);
@@ -177,7 +178,7 @@ ORDER BY ds_soporte.estado ASC, ds_soporte.fecha_creacion DESC";
             echo '<td class="align-middle text-secondary">'.$PersonalSoporte.'</td>';
             echo '<td class="align-middle">'.$fechaterminoreal.'</td>';
 
-            echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
+            echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.','.$Session_IDUsuarioBD.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
             echo '<td class="align-middle text-center"> 
             <div class="dropdown">
             <a class="btn btn-sm btn-icon-only text-dropdown-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -208,7 +209,7 @@ ORDER BY ds_soporte.estado ASC, ds_soporte.fecha_creacion DESC";
             echo '<td class="align-middle text-secondary">'.$PersonalSoporte.'</td>';
             echo '<td class="align-middle">'.$fechaterminoreal.'</td>';
 
-            echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
+            echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.','.$Session_IDUsuarioBD.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
             echo '<td class="align-middle text-center"> 
             <div class="dropdown">
             <a class="btn btn-sm btn-icon-only text-dropdown-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -239,7 +240,7 @@ ORDER BY ds_soporte.estado ASC, ds_soporte.fecha_creacion DESC";
             echo '<td class="align-middle text-secondary">'.$PersonalSoporte.'</td>';
             echo '<td class="align-middle">'.$fechaterminoreal.'</td>';
 
-            echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
+            echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.','.$Session_IDUsuarioBD.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
             echo '<td class="align-middle text-center"> 
             <div class="dropdown">
             <a class="btn btn-sm btn-icon-only text-dropdown-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">

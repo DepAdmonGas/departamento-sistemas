@@ -1,6 +1,5 @@
 <?php
 include_once "app/help.php";
-
 $InformacionTicket = $ClassContenido->soporteContenido($GET_IdRegistro);
 
 if ($InformacionTicket['estado'] != 0) {
@@ -28,7 +27,6 @@ if ($InformacionTicket['estado'] != 0) {
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   <script type="text/javascript" src="<?= RUTA_JS ?>alertify.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
 
   <script type="text/javascript">
     $(document).ready(function($) {
@@ -108,13 +106,13 @@ if ($InformacionTicket['estado'] != 0) {
     function ActividadAgregar(idRegistro) {
 
       var data = new FormData();
-      let ActividadDescripcion = quill.root.innerHTML;
+      let ActividadDescripcion = $('#ActividadDescripcion').val();
       Archivo = document.getElementById("ActividadArchivo");
       Archivo_file = Archivo.files[0];
       Archivo_filePath = Archivo.value;
 
-      if (ActividadDescripcion.trim() != "" && ActividadDescripcion !== "<p><br></p>") {
-        $('#editor').css('border', '');
+      if (ActividadDescripcion != "") {
+        $('#ActividadDescripcion').css('border', '');
         data.append('Accion', 'agregar-actividad');
         data.append('idRegistro', idRegistro);
         data.append('ActividadDescripcion', ActividadDescripcion);
@@ -131,12 +129,13 @@ if ($InformacionTicket['estado'] != 0) {
           processData: false,
           cache: false
         }).done(function(data) {
+
           if (data == 1) {
 
             $(".LoaderPage").hide();
             $('#Modal').modal('hide');
             ContenidoActividad(idRegistro);
-            quill.setContents([]);
+
           } else {
             $(".LoaderPage").hide();
             alertify.error('Error al crear la actividad');
@@ -145,7 +144,7 @@ if ($InformacionTicket['estado'] != 0) {
         });
 
       } else {
-        $('#editor').css('border', '2px solid #A52525');
+        $('#ActividadDescripcion').css('border', '2px solid #A52525');
       }
 
     }
@@ -176,6 +175,7 @@ if ($InformacionTicket['estado'] != 0) {
           processData: false,
           cache: false
         }).done(function(data) {
+
           if (data == 1) {
 
             $(".LoaderPage").hide();
@@ -256,44 +256,55 @@ if ($InformacionTicket['estado'] != 0) {
       });
     }
 
-    function Finalizar(idRegistro, idUsuario) {
+    function Finalizar(idRegistro,idUsuario) {
+      let descripcionElem = document.getElementById("Descripcion");
+      let descripcion = descripcionElem.value.trim();
+      let prioridadElem = document.getElementById("Prioridad");
+      let prioridad = prioridadElem.value;
+      if (descripcion != '') {
+        $('#Descripcion').css('border', '');
+        if (["Baja", "Media", "Alta"].includes(prioridad)) {
+          $('#Prioridad').css('border', '');
+          let parametros = {
+            "Accion": "finalizar-registro",
+            "idRegistro": idRegistro,
+            "usuario": idUsuario,
+            "ticket": <?= $GET_IdRegistro ?>
+          };
 
-      let parametros = {
-        "Accion": "finalizar-registro",
-        "idRegistro": idRegistro,
-        "usuario": idUsuario,
-        "ticket": <?= $GET_IdRegistro ?>
-      };
+          alertify.confirm('',
+            function() {
 
-      alertify.confirm('',
-        function() {
+              $.ajax({
+                data: parametros,
+                url: '../app/modelo/controlador-sistemas.php',
+                type: 'post',
+                beforeSend: function() {},
+                complete: function() {},
+                success: function(response) {
 
-          $.ajax({
-            data: parametros,
-            url: '../app/modelo/controlador-sistemas.php',
-            type: 'post',
-            beforeSend: function() {},
-            complete: function() {
+                  window.history.back();
 
+                }
+              });
             },
-            success: function(response) {
+            function() {
 
-              window.history.back();
-
+            }).setHeader('Mensaje').set({
+            transition: 'zoom',
+            message: '¿Desea finalizar el registro?',
+            labels: {
+              ok: 'Aceptar',
+              cancel: 'Cancelar'
             }
-          });
+          }).show();
 
-        },
-        function() {
-
-        }).setHeader('Mensaje').set({
-        transition: 'zoom',
-        message: '¿Desea finalizar el registro?',
-        labels: {
-          ok: 'Aceptar',
-          cancel: 'Cancelar'
+        } else {
+          $('#Prioridad').css('border', '2px solid #A52525');
         }
-      }).show();
+      } else {
+        $('#Descripcion').css('border', '2px solid #A52525');
+      }
     }
   </script>
 </head>
@@ -309,11 +320,10 @@ if ($InformacionTicket['estado'] != 0) {
       <div class="container bg-white p-3">
 
         <h4 class="text-primary">Crear Registro</h4>
-        <h5 class="fw-bold"># Ticket: 0<?= $GET_IdRegistro; ?></h5>
-        <div class="m-2">
+        <h5 class="text-secondary"># Ticket: 0<?= $GET_IdRegistro; ?></h5>
+        <span class="fw-bold"> Crea tu solicitud de pendientes para el área de Sistemas, es impórtate que detalles la descripción o las actividades a realizar. </span>
 
-        </div>
-        <h6 class="mt-2 fw-bold text-secondary">Breve Descripción del Ticket:</h6>
+        <h6 class="mt-2 fw-bold text-secondary">Descripción:</h6>
         <textarea class="form-control rounded-0" id="Descripcion" onkeyup="EditarDescripcion(this,<?= $GET_IdRegistro; ?>)"><?= $InformacionTicket['descripcion']; ?></textarea>
 
         <h6 class="mt-2 fw-bold text-secondary">Prioridad:</h6>
@@ -324,20 +334,15 @@ if ($InformacionTicket['estado'] != 0) {
           <option value="Alta">Alta</option>
         </select>
 
-
-        <h6 class="mt-2 fw-bold text-secondary">Detalle de la Actividad:</h6>
-        <div class="mb-2" style="height: 300px;font-size: 1em;" id="editor"></div>
-        <h6 class="fw-bold text-secondary">Agrege evidencias en el formato de tu elección, el cual puede ser: PDF, Excel, Word, JPG o PNG.</h6>
-        <input class="form-control rounded-0" type="file" id="ActividadArchivo">
         <hr>
 
         <div class="row">
           <div class="col-8">
-
+            <h6 class="mt-2 fw-bold text-secondary">Agrega las actividades en el formato de tu elección, el cual puede ser: PDF, Excel, Word, JPG o PNG.</h6>
           </div>
 
           <div class="col-4">
-            <button type="button" class="btn btn-labeled2 btn-primary float-end mb-3" onclick="ActividadAgregar(<?= $GET_IdRegistro; ?>)">
+            <button type="button" class="btn btn-labeled2 btn-primary float-end mb-3" onclick="ModalActividad(<?= $GET_IdRegistro; ?>)">
               <span class="btn-label2"><i class="fa-solid fa-plus"></i></span>Agregar</button>
           </div>
         </div>
@@ -346,6 +351,21 @@ if ($InformacionTicket['estado'] != 0) {
 
         <hr>
 
+        <!----- APARTADO DE EVIDENCIA 
+        <div class="row">
+          <div class="col-6">
+            <h6 class="mt-2 text-secondary">Evidencia:</h6>
+          </div>
+
+          <div class="col-6">
+            <button type="button" class="btn btn-labeled2 btn-primary float-end mb-3" onclick="ModalEvidencia(<?= $GET_IdRegistro; ?>)">
+              <span class="btn-label2"><i class="fa-solid fa-plus"></i></span>Agregar</button>
+          </div>
+        </div>
+
+        <div class="mt-2" id="ContenidoEvidencia"></div>
+        <hr>
+          -->
         <!----- BOTON DE FINALIZAR ----->
         <div class="row">
           <div class="col-12">
@@ -373,15 +393,7 @@ if ($InformacionTicket['estado'] != 0) {
   </div>
 
   <script src="<?= RUTA_JS ?>bootstrap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
-  <script>
-    const quill = new Quill('#editor', {
-      modules: {
-        toolbar: true
-      },
-      theme: 'snow'
-    });
-  </script>
+
 </body>
 
 </html>

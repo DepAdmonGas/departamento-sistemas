@@ -1,7 +1,7 @@
   
-  <nav class="navbar navbar-expand navbar-light navbar-bg" >
+  <nav class="navbar navbar-expand navbar-bg" >
   
-  <i class="fa-solid fa-bars menu-btn rounded pointer" id="sidebarCollapse"></i>
+  <!--<i class="fa-solid fa-bars menu-btn rounded pointer" id="sidebarCollapse"></i>-->
   <div class="mt-1"><h5>Departamento Sistemas</h5></div>  
   <div class="navbar-collapse collapse">
 
@@ -15,7 +15,7 @@
       </a>
       <a class="nav-link dropdown-toggle d-none d-sm-inline-block pointer" data-bs-toggle="dropdown">
         <img src="<?=RUTA_IMG_ICONOS."usuario.png";?>" class="avatar img-fluid rounded-circle"/>
-        <span class="text-dark" style="padding-left: 10px;">
+        <span class="text-white" style="padding-left: 10px;">
           <?=$Session_TipoPuestoBD;?>  
         </span>
       </a>

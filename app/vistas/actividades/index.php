@@ -36,7 +36,9 @@ if ($Session_IDUsuarioBD == 496) {
       $(".LoaderPage").fadeOut("slow");
       ContenidoSistemas(<?= $Session_IDUsuarioBD ?>);
     });
-
+    function regresarP() {
+      window.location.href = 'home';
+    }
     function ContenidoSistemas(usuario) {
       $('#ContenidoSistemas').load('app/vistas/actividades/contenido-lista-actividades.php?usuario=' + usuario, function() {
         // Una vez que se carguen los datos en la tabla, inicializa DataTables
@@ -100,12 +102,12 @@ if ($Session_IDUsuarioBD == 496) {
 
     }
 
-    function ModalComentarios(idticket) {
+    function ModalComentarios(idticket,usuario) {
       $('#ModalComentario').modal('show');
-      $('#DivContenidoComentario').load('app/vistas/soporte/modal-comentarios-ticket.php?idticket=' + idticket);
+      $('#DivContenidoComentario').load('app/vistas/soporte/modal-comentarios-ticket.php?idticket=' + idticket + '&usuario=' + usuario);
     }
 
-    function GuardarComentario(idticket) {
+    function GuardarComentario(idticket,usuario) {
 
       var Comentario = $('#Comentario').val();
 
@@ -128,7 +130,7 @@ if ($Session_IDUsuarioBD == 496) {
 
           },
           success: function(response) {
-            ContenidoSistemas(<?= $Session_IDUsuarioBD ?>);
+            ContenidoSistemas(usuario);
             $('#DivContenidoComentario').load('app/vistas/soporte/modal-comentarios-ticket.php?idticket=' + idticket);
 
           }
@@ -258,8 +260,8 @@ if ($Session_IDUsuarioBD == 496) {
 
           <div aria-label="breadcrumb" style="padding-left: 0; margin-bottom: 0;">
             <ol class="breadcrumb breadcrumb-caret">
-              <li class="breadcrumb-item"><a onclick="history.back()" class="text-uppercase text-primary pointer"><i class="fa-solid fa-house"></i> Inicio</a></li>
-              <li aria-current="page" class="breadcrumb-item active text-uppercase">Departamento de Sistemas</li>
+              <li class="breadcrumb-item"><a onclick="regresarP()" class="text-uppercase text-primary pointer"><i class="fa-solid fa-house"></i> Inicio</a></li>
+              <li aria-current="page" class="breadcrumb-item active text-uppercase">Actividades Sistemas</li>
             </ol>
           </div>
 
@@ -267,7 +269,7 @@ if ($Session_IDUsuarioBD == 496) {
           <div class="row">
 
             <div class="col-10">
-              <h3 class="text-secondary" style="padding-left: 0; margin-bottom: 0; margin-top: 0;">Departamento de Sistemas</h3>
+              <h3 class="text-secondary" style="padding-left: 0; margin-bottom: 0; margin-top: 0;">Actividades Sistemas</h3>
             </div>
 
             <div class="col-2">
@@ -320,7 +322,7 @@ if ($Session_IDUsuarioBD == 496) {
   </div>
 
   <div class="modal" id="ModalComentario">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content" style="margin-top: 83px;">
         <div id="DivContenidoComentario"></div>
       </div>

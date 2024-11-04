@@ -4,6 +4,12 @@ $con = $ClassConexionBD->conectarBD();
 date_default_timezone_set('America/Mexico_City');
 $fecha_del_dia = date("Y-m-d");
 
+$usuario = $_GET['usuario'];
+$opcion = $_GET['opcion'];
+$consulta = "";
+if($opcion == 1 || $Session_IDUsuarioBD != 496){
+    $consulta = "AND ds_soporte.id_personal_soporte = $usuario";
+}
 $sql = "SELECT
         ds_soporte.id_ticket, 
         ds_soporte.id_personal,
@@ -26,7 +32,7 @@ $sql = "SELECT
         INNER JOIN tb_estaciones
         ON tb_usuarios.id_gas = tb_estaciones.id
         INNER JOIN tb_puestos
-        ON tb_usuarios.id_puesto = tb_puestos.id WHERE (ds_soporte.estado <> 0 AND ds_soporte.estado <> 4) 
+        ON tb_usuarios.id_puesto = tb_puestos.id WHERE (ds_soporte.estado <> 0 AND ds_soporte.estado <> 4 AND tb_puestos.tipo_puesto <> 'Departamento Sistemas' $consulta) 
         ORDER BY ds_soporte.estado ASC, ds_soporte.fecha_creacion DESC";
         $result = mysqli_query($con, $sql);
         $numero = mysqli_num_rows($result);
@@ -84,9 +90,13 @@ $sql = "SELECT
         }else if($prioridad == 'Alta'){
             $colorPrioridad = 'text-danger';
         }
-       
-        $Eliminar = '<a class="dropdown-item" onclick="EliminarTicket('.$id_ticket.')"><i class="fa-regular fa-trash-can"></i> Eliminar</a>';
-        $Detalle = '<a class="dropdown-item" onclick="ModalDetalle('.$id_ticket.')"><i class="fa-regular fa-eye"></i> Seguimiento</a>';
+        $none = "d-none";
+        if($Session_IDUsuarioBD == 496){
+            $none = "";
+        }
+        $Eliminar = '<a class="dropdown-item" onclick="EliminarTicket('.$id_ticket.','.$usuario.')"><i class="fa-regular fa-trash-can"></i> Eliminar</a>';
+        $Detalle = '<a class="dropdown-item '.$none.'" onclick="ModalDetalle('.$id_ticket.')"><i class="fa-regular fa-eye"></i> Asignacion</a>';
+        $editar = '<a class="dropdown-item" onclick="EditarTicket('.$id_ticket.')"><i class="fa-solid fa-pencil"></i> Seguimiento</a>';
         if($row['estado'] == 0){
 
             //$trColor = 'table-warning';
@@ -137,7 +147,8 @@ $sql = "SELECT
         }
 
         if($ToComentarios > 0){
-            $ToComent = '<div class="float-end"><span class="badge bg-danger rounded-circle" style="font-size: .5em;margin-top:12px;margin-left:-10px;position: absolute;">'.$ToComentarios.'</span></div>';
+            $ToComent = '<div class="position-absolute" style="margin-bottom: -15px; right: 2px;"><span class="badge bg-danger text-white rounded-circle"><span class="fw-bold" style="font-size: 10px;">'.$ToComentarios.' </span></span></div>';
+            //$ToComent = '<div class="float-end"><span class="badge bg-danger rounded-circle" style="font-size: .5em;margin-top:12px;margin-left:-10px;position: absolute;">'.$ToComentarios.'</span></div>';
           }else{
            $ToComent = ''; 
           }
@@ -171,8 +182,8 @@ $sql = "SELECT
             echo '<td class="align-middle">'.$porcentaje.' %</td>';
             echo '<td class="align-middle text-secondary">'.$PersonalSoporte.'</td>';
             echo '<td class="align-middle"><b>'.$fechaterminoreal.'</b></td>';
-
-            echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
+            echo '<td class="align-middle text-center position-relative" onclick="ModalComentarios('.$id_ticket.','.$usuario.')">'.$ToComent.'<img class="pointer" src="'.RUTA_IMG_ICONOS.'comentarios.png" data-toggle="tooltip" data-placement="top" title="Comentarios"></td>';
+            //echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.','.$usuario.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
             echo '<td class="align-middle text-center"> 
             <div class="dropdown">
             <a class="btn btn-sm btn-icon-only text-dropdown-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -180,6 +191,7 @@ $sql = "SELECT
             </a>
             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                 ' . $Detalle . '
+                '.$editar.'
                 ' . $Eliminar . '
             </div>
             </div>
@@ -202,8 +214,8 @@ $sql = "SELECT
             echo '<td class="align-middle">'.$porcentaje.' %</td>';
             echo '<td class="align-middle text-secondary">'.$PersonalSoporte.'</td>';
             echo '<td class="align-middle"><b>'.$fechaterminoreal.'</b></td>';
-
-            echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
+            echo '<td class="align-middle text-center position-relative" onclick="ModalComentarios('.$id_ticket.','.$usuario.')">'.$ToComent.'<img class="pointer" src="'.RUTA_IMG_ICONOS.'comentarios.png" data-toggle="tooltip" data-placement="top" title="Comentarios"></td>';
+            //echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.','.$usuario.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
             echo '<td class="align-middle text-center"> 
             <div class="dropdown">
             <a class="btn btn-sm btn-icon-only text-dropdown-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -211,7 +223,9 @@ $sql = "SELECT
             </a>
             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                 ' . $Detalle . '
+                '.$editar.'
                 ' . $Eliminar . '
+                
             </div>
             </div>
             </td>';
@@ -233,8 +247,8 @@ $sql = "SELECT
             echo '<td class="align-middle">'.$porcentaje.' %</td>';
             echo '<td class="align-middle text-secondary">'.$PersonalSoporte.'</td>';
             echo '<td class="align-middle"><b>'.$fechaterminoreal.'</b></td>';
-
-            echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
+            echo '<td class="align-middle text-center position-relative" onclick="ModalComentarios('.$id_ticket.','.$usuario.')">'.$ToComent.'<img class="pointer" src="'.RUTA_IMG_ICONOS.'comentarios.png" data-toggle="tooltip" data-placement="top" title="Comentarios"></td>';
+            //echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.','.$usuario.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
             echo '<td class="align-middle text-center"> 
             <div class="dropdown">
             <a class="btn btn-sm btn-icon-only text-dropdown-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -242,6 +256,7 @@ $sql = "SELECT
             </a>
             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                 ' . $Detalle . '
+                '.$editar.'
                 ' . $Eliminar . '
             </div>
             </div>
