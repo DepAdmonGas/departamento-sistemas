@@ -12,13 +12,18 @@ if($soporteContenido['estado'] == 3 || $soporteContenido['estado'] == 4){
     $FechaCierreTicket = date("Y-m-d",strtotime($explode[0]."+ 3 days"));
 
     if($FechaCierreTicket >= $fecha_del_dia){
-        $BotonComentarios = '<button type="button" class="btn btn-success rounded-0" onclick="GuardarComentario('.$idticket.','.$usuario.')" >Guardar</button>';  
+        $BotonComentarios = '
+        <button type="button" class="btn btn-labeled2 btn-success" onclick="GuardarComentario('.$idticket.','.$usuario.')">
+            <span class="btn-label2"><i class="fa fa-check"></i></span>Guardar</button>';  
     }else{
         $BotonComentarios = '<button type="button" class="btn btn-success rounded-0" disabled >Guardar</button>';    
     } 
 
 }else{
-    $BotonComentarios = '<button type="button" class="btn btn-success rounded-0" onclick="GuardarComentario('.$idticket.','.$usuario.')" >Guardar</button>';
+    $BotonComentarios = '
+    <button type="button" class="btn btn-labeled2 btn-success" onclick="GuardarComentario('.$idticket.','.$usuario.')">
+            <span class="btn-label2"><i class="fa fa-check"></i></span>Guardar</button>
+    ';
     
 }
     
