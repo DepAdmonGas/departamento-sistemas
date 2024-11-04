@@ -83,8 +83,10 @@ while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
   $explode2 = explode(' ', $row['fecha_termino']);
   if ($explode2[0] == '0000-00-00') {
     $fechaTermino = '';
+    $ocultar = "";
   } else {
     $fechaTermino = $explode2[0];
+    $ocultar = "d-none";
   }
 
   if ($row['estado'] == 0) {
@@ -442,14 +444,18 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 
                     if ($rowActividad['fecha_inicio'] == '0000-00-00') {
                       $AtividadFechaInicio = '';
+                      $readonly = '';
                     } else {
                       $AtividadFechaInicio = $rowActividad['fecha_inicio'];
+                      $readonly = 'readonly';
                     }
 
                     if ($rowActividad['fecha_termino'] == '0000-00-00') {
                       $AtividadFechaTermino = '';
+                      $readonly = '';
                     } else {
                       $AtividadFechaTermino = $rowActividad['fecha_termino'];
+                      $readonly = 'readonly';
                     }
 
                     if ($rowActividad['estado'] == 0) {
@@ -469,8 +475,8 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
                     echo '<tr>';
                     echo '<th class="align-middle">' . $numActividad . '</th>';
                     echo '<td class="align-middle">' . $descripcionActividad . '</td>';
-                    echo '<td class="p-0"><input type="date" class="border-0 form-control" value="' . $AtividadFechaInicio . '" onchange="EditarActividad(this,' . $idActividad . ',1)"></td>';
-                    echo '<td class="p-0"><input type="date" class="border-0 form-control" value="' . $AtividadFechaTermino . '" onchange="EditarActividad(this,' . $idActividad . ',2)"></td>';
+                    echo '<td class="p-0"><input type="date" class="border-0 form-control" value="' . $AtividadFechaInicio . '" onchange="EditarActividad(this,' . $idActividad . ',1)" ' . $readonly . ' ></td>';
+                    echo '<td class="p-0"><input type="date" class="border-0 form-control" value="' . $AtividadFechaTermino . '" onchange="EditarActividad(this,' . $idActividad . ',2)" ' . $readonly . ' ></td>';
                     echo '<td class="p-0">
                             <select class="form-control rounded-0 border-0" onchange="EditarActividad(this,' . $idActividad . ',3)">
                                 <option value="' . $EstadoActividad . '">' . $EstadoDetalle . '</option>
@@ -498,17 +504,19 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
             $idActividad = '';
             $sqlActividad = "SELECT fecha_termino FROM ds_soporte_actividades WHERE id_ticket = '" . $idticket . "' ORDER BY id ASC";
             $resultActividad = mysqli_query($con, $sqlActividad);
-            while ($rowActividad = mysqli_fetch_array($resultActividad, MYSQLI_ASSOC)) {
-              $idActividad = $rowActividad['fecha_termino'];
-            }
-            $fechaTerminoGlobal = 'S/I';
-            if ($idActividad != '0000-00-00'){
-              $fechaTerminoGlobal = FormatoFecha($idActividad);
-              $fechaFinGuardar = $idActividad;
-            } 
-            }else { 
-              $fechaTerminoGlobal = FormatoFecha($fechaFin->format('Y-m-d'));
-              $fechaFinGuardar = $fechaFin->format('Y-m-d');
+            
+              while ($rowActividad = mysqli_fetch_array($resultActividad, MYSQLI_ASSOC)) {
+                $idActividad = $rowActividad['fecha_termino'];
+              }
+              $fechaTerminoGlobal = 'S/I';
+              if ($idActividad != '0000-00-00'){
+                $fechaTerminoGlobal = FormatoFecha($idActividad);
+                $fechaFinGuardar = $idActividad;
+              } 
+              }else { 
+                $fechaTerminoGlobal = FormatoFecha($fechaFin->format('Y-m-d'));
+                $fechaFinGuardar = $fechaFin->format('Y-m-d');
+            
             ?>
             
           <div class="col-3 mt-3">

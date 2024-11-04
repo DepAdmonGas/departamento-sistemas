@@ -199,7 +199,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
     function FinalizarEdicion(idticket) {
 
       let parametros = {
-        "Accion" : "asignar-personal-soporte",
+        "Accion": "asignar-personal-soporte",
         "idticket": idticket
       };
 
@@ -351,8 +351,16 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
           </div>
         </div>
 
-        <h6 class="mt-2 text-secondary">Descripción</h6>
-        <div><?= $descripcion; ?></div>
+        <div class="row">
+          <div class="text-start">
+            <h6 class="mt-2 text-secondary">Descripción</h6>
+            <div><?= $descripcion; ?></div>
+          </div>
+          <div class="text-end mt-3">
+            <button type="button" class="btn btn-labeled2 btn-primary" onclick="FinalizarEdicion(<?= $idticket ?>)">
+              <span class="btn-label2"><i class="fa fa-check"></i></span>Finalizar</button>
+          </div>
+        </div>
 
         <hr>
 
@@ -428,12 +436,12 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         <hr>
 
         <div class="row">
-          <div class="col-7">
+          <div class="col-12">
 
             <div class="row">
               <div class="col-4 mt-3">
                 <h6 class="text-secondary">Responsable</h6>
-                <select class="form-control rounded-0" onchange="EditarTicket(this,<?= $idticket; ?>,4)" id="Responsable">
+                <select class="form-select rounded-0" onchange="EditarTicket(this,<?= $idticket; ?>,4)" id="Responsable">
                   <option value="<?= $idPersonalSoporte; ?>"><?= $PersonalSoporte; ?></option>
                   <?php
 
@@ -456,36 +464,35 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
                 <h6 class="text-secondary">Estado</h6>
                 <?= $porcentaje ?> %
               </div>
-              <div class="text-end mt-3"><button type="button" class="btn btn-primary rounded-0" onclick="FinalizarEdicion(<?= $idticket ?>)">Finalizar edición</button></div>
-            </div>
 
+
+            </div>
           </div>
-          <div class="col-5">
+          <div class="col-8">
             <div id="ContenidoComentarios"></div>
           </div>
         </div>
-      </div>
 
-    </div>
-  </div>
-
-  <div class="modal" id="ModalComentario">
-    <div class="modal-dialog">
-      <div class="modal-content" style="margin-top: 83px;">
-        <div id="DivContenidoComentario"></div>
       </div>
     </div>
-  </div>
 
-  <div class="modal fade bd-example-modal-lg" id="ModalActividades" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document" style="margin-top: 83px;">
-      <div class="modal-content">
-        <div id="DivModalActividades"></div>
+    <div class="modal" id="ModalComentario">
+      <div class="modal-dialog">
+        <div class="modal-content" style="margin-top: 83px;">
+          <div id="DivContenidoComentario"></div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <script src="<?= RUTA_JS ?>bootstrap.min.js"></script>
+    <div class="modal fade bd-example-modal-lg" id="ModalActividades" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document" style="margin-top: 83px;">
+        <div class="modal-content">
+          <div id="DivModalActividades"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="<?= RUTA_JS ?>bootstrap.min.js"></script>
 
 </body>
 

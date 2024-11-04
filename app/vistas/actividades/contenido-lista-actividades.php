@@ -178,7 +178,7 @@ ORDER BY ds_soporte.fecha_inicio ASC, ds_soporte.estado DESC";
             echo '<td class="align-middle text-secondary">'.$PersonalSoporte.'</td>';
             echo '<td class="align-middle">'.$fechaterminoreal.'</td>';
 
-            echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
+            echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.','.$Session_IDUsuarioBD.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
             echo '<td class="align-middle text-center"> 
             <div class="dropdown">
             <a class="btn btn-sm btn-icon-only text-dropdown-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -209,7 +209,7 @@ ORDER BY ds_soporte.fecha_inicio ASC, ds_soporte.estado DESC";
             echo '<td class="align-middle text-secondary">'.$PersonalSoporte.'</td>';
             echo '<td class="align-middle">'.$fechaterminoreal.'</td>';
 
-            echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
+            echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.','.$Session_IDUsuarioBD.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
             echo '<td class="align-middle text-center"> 
             <div class="dropdown">
             <a class="btn btn-sm btn-icon-only text-dropdown-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -240,7 +240,7 @@ ORDER BY ds_soporte.fecha_inicio ASC, ds_soporte.estado DESC";
             echo '<td class="align-middle text-secondary">'.$PersonalSoporte.'</td>';
             echo '<td class="align-middle">'.$fechaterminoreal.'</td>';
 
-            echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
+            echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.','.$Session_IDUsuarioBD.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
             echo '<td class="align-middle text-center"> 
             <div class="dropdown">
             <a class="btn btn-sm btn-icon-only text-dropdown-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">

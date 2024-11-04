@@ -135,12 +135,12 @@ require 'app/help.php';
 
     }
 
-    function ModalComentarios(idticket) {
+    function ModalComentarios(idticket,usuario) {
       $('#ModalComentario').modal('show');
-      $('#DivContenidoComentario').load('app/vistas/soporte/modal-comentarios-ticket.php?idticket=' + idticket);
+      $('#DivContenidoComentario').load('app/vistas/soporte/modal-comentarios-ticket.php?idticket=' + idticket + '&usuario=' + usuario);
     }
 
-    function GuardarComentario(idticket) {
+    function GuardarComentario(idticket,usuario) {
 
       var Comentario = $('#Comentario').val();
 
@@ -351,7 +351,7 @@ require 'app/help.php';
   </div>
 
   <div class="modal" id="ModalComentario">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div id="DivContenidoComentario"></div>
       </div>
