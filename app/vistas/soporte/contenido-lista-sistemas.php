@@ -62,9 +62,17 @@ function actualizarPorcentajeActividades($conexion, $idTicket, $fechaActual)
 
     // Días transcurridos desde el inicio hasta la fecha actual
     $diasTranscurridos = $fechaInicio->diff($fechaActualDate)->days;
+    // Si ya pasó la fecha de término, envía una alerta
+    if ($fechaActualDate > $fechaTermino) {
+      $diasRetraso = $fechaTermino->diff($fechaActualDate)->days;
 
+      if ($diasRetraso > 1) {
+        $actualizarPorcentaje = "UPDATE ds_soporte SET porcentaje = 60 ,estado = 5 WHERE id_ticket = $id";
+        $conexion->query($actualizarPorcentaje);
+      }
+    }
     // Cálculo de porcentaje basado en la regla de tres
-    if ($tiempoSolucion > 0) { // Evitar división por cero
+    if ($tiempoSolucion > 0 && $fechaActualDate < $fechaTermino) { // Evitar división por cero
       $nuevoPorcentaje = ($diasTranscurridos / $tiempoSolucion) * 100;
 
       // Asegurar que el porcentaje no supere el 100%
@@ -75,15 +83,6 @@ function actualizarPorcentajeActividades($conexion, $idTicket, $fechaActual)
       // Solo actualizar si el nuevo porcentaje es mayor al actual
       if ($nuevoPorcentaje > $porcentajeActual) {
         $actualizarPorcentaje = "UPDATE ds_soporte SET porcentaje = $nuevoPorcentaje WHERE id_ticket = $id";
-        $conexion->query($actualizarPorcentaje);
-      }
-    }
-    // Si ya pasó la fecha de término, envía una alerta
-    if ($fechaActualDate > $fechaTermino) {
-      $diasRetraso = $fechaTermino->diff($fechaActualDate)->days;
-
-      if ($diasRetraso > 1) {
-        $actualizarPorcentaje = "UPDATE ds_soporte SET porcentaje = 60 ,estado = 5 WHERE id_ticket = $id";
         $conexion->query($actualizarPorcentaje);
       }
     }
