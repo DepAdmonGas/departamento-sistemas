@@ -74,7 +74,7 @@ function actualizarPorcentajeActividades($conexion, $idTicket, $fechaActual)
 
       // Solo actualizar si el nuevo porcentaje es mayor al actual
       if ($nuevoPorcentaje > $porcentajeActual) {
-        $actualizarPorcentaje = "UPDATE ds_soporte SET porcentaje = $nuevoPorcentaje WHERE id = $id";
+        $actualizarPorcentaje = "UPDATE ds_soporte SET porcentaje = $nuevoPorcentaje WHERE id_ticket = $id";
         $conexion->query($actualizarPorcentaje);
       }
     }
