@@ -32,6 +32,60 @@ function contarActividadesIncompletas($con, $opcion,$admin,$usuario): int
 
   return $cantidad;
 }
+
+// asignar porcentaje avance
+function actualizarPorcentajeActividades($conexion, $fechaActual)
+{
+  // Consulta SQL para obtener actividades incompletas del ticket especificado
+  $sql = "SELECT id_ticket, descripcion, fecha_inicio, fecha_termino, tiempo_solucion, porcentaje, id_personal_soporte 
+          FROM ds_soporte
+          WHERE porcentaje < 100 
+          AND estado <> 4 
+          AND estado <> 0 
+          AND fecha_inicio != '0000-00-00 00:00:00'
+          AND fecha_termino != '0000-00-00 00:00:00' ";
+
+  $resultado = $conexion->query($sql);
+
+  while ($actividad = $resultado->fetch_assoc()) {
+    $id = $actividad['id_ticket'];
+    $descripcion = $actividad['descripcion'];
+    $fechaInicio = new DateTime($actividad['fecha_inicio']);
+    $fechaTermino = new DateTime($actividad['fecha_termino']);
+    $fechaActualDate = new DateTime($fechaActual);
+    $tiempoSolucion = $actividad['tiempo_solucion'];
+    $porcentajeActual = $actividad['porcentaje'];
+
+    // Días transcurridos desde el inicio hasta la fecha actual
+    $diasTranscurridos = $fechaInicio->diff($fechaActualDate)->days;
+    // Si ya pasó la fecha de término, envía una alerta
+    if ($fechaActualDate > $fechaTermino) {
+      $diasRetraso = $fechaTermino->diff($fechaActualDate)->days;
+
+      if ($diasRetraso > 1) {
+        $actualizarPorcentaje = "UPDATE ds_soporte SET porcentaje = 60 ,estado = 5 WHERE id_ticket = $id";
+        $conexion->query($actualizarPorcentaje);
+      }
+    }
+    // Cálculo de porcentaje basado en la regla de tres
+    if ($tiempoSolucion > 0 && $fechaActualDate <= $fechaTermino) { // Evitar división por cero
+      $nuevoPorcentaje = ($diasTranscurridos / $tiempoSolucion) * 100;
+
+      // Asegurar que el porcentaje no supere el 100%
+      if ($nuevoPorcentaje > 100) {
+        $nuevoPorcentaje = 100;
+      }
+
+      // Solo actualizar si el nuevo porcentaje es mayor al actual
+      if ($nuevoPorcentaje > $porcentajeActual) {
+        $actualizarPorcentaje = "UPDATE ds_soporte SET porcentaje = $nuevoPorcentaje WHERE id_ticket = $id";
+        $conexion->query($actualizarPorcentaje);
+      }
+    }
+  }
+}
+$fecha_del_dia = date("Y-m-d H:i:s");
+actualizarPorcentajeActividades($con, $fecha_del_dia);
 $admin = 0;
 if($Session_IDUsuarioBD == 496){
   $admin = 1;

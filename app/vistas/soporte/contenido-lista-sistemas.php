@@ -36,59 +36,6 @@ $sql = "SELECT
         $result = mysqli_query($con, $sql);
         $numero = mysqli_num_rows($result);
 
-
-function actualizarPorcentajeActividades($conexion, $idTicket, $fechaActual)
-{
-  // Consulta SQL para obtener actividades incompletas del ticket especificado
-  $sql = "SELECT id_ticket, descripcion, fecha_inicio, fecha_termino, tiempo_solucion, porcentaje, id_personal_soporte 
-          FROM ds_soporte 
-          WHERE id_ticket = $idTicket
-          AND porcentaje < 100 
-          AND estado <> 4 
-          AND estado <> 0 
-          AND fecha_inicio != '0000-00-00 00:00:00'
-          AND fecha_termino != '0000-00-00 00:00:00' ";
-
-  $resultado = $conexion->query($sql);
-
-  while ($actividad = $resultado->fetch_assoc()) {
-    $id = $actividad['id_ticket'];
-    $descripcion = $actividad['descripcion'];
-    $fechaInicio = new DateTime($actividad['fecha_inicio']);
-    $fechaTermino = new DateTime($actividad['fecha_termino']);
-    $fechaActualDate = new DateTime($fechaActual);
-    $tiempoSolucion = $actividad['tiempo_solucion'];
-    $porcentajeActual = $actividad['porcentaje'];
-
-    // Días transcurridos desde el inicio hasta la fecha actual
-    $diasTranscurridos = $fechaInicio->diff($fechaActualDate)->days;
-    // Si ya pasó la fecha de término, envía una alerta
-    if ($fechaActualDate > $fechaTermino) {
-      $diasRetraso = $fechaTermino->diff($fechaActualDate)->days;
-
-      if ($diasRetraso > 1) {
-        $actualizarPorcentaje = "UPDATE ds_soporte SET porcentaje = 60 ,estado = 5 WHERE id_ticket = $id";
-        $conexion->query($actualizarPorcentaje);
-      }
-    }
-    // Cálculo de porcentaje basado en la regla de tres
-    if ($tiempoSolucion > 0 && $fechaActualDate < $fechaTermino) { // Evitar división por cero
-      $nuevoPorcentaje = ($diasTranscurridos / $tiempoSolucion) * 100;
-
-      // Asegurar que el porcentaje no supere el 100%
-      if ($nuevoPorcentaje > 100) {
-        $nuevoPorcentaje = 100;
-      }
-
-      // Solo actualizar si el nuevo porcentaje es mayor al actual
-      if ($nuevoPorcentaje > $porcentajeActual) {
-        $actualizarPorcentaje = "UPDATE ds_soporte SET porcentaje = $nuevoPorcentaje WHERE id_ticket = $id";
-        $conexion->query($actualizarPorcentaje);
-      }
-    }
-  }
-}
-
 ?>
 <div class="table-responsive">
   <table id="tabla-sistemas" class="custom-table mt-2" style="font-size: 14px;" width="100%">
@@ -120,7 +67,6 @@ function actualizarPorcentajeActividades($conexion, $idTicket, $fechaActual)
 
         while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
           $id_ticket = $row['id_ticket'];
-          actualizarPorcentajeActividades($con, $id_ticket, $fecha_del_dia);
           $descripcion = $row['descripcion'];
           $prioridad = $row['prioridad'];
           $porcentaje = $row['porcentaje'];
