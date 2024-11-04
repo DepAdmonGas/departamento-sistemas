@@ -126,7 +126,15 @@ ORDER BY ds_soporte.fecha_inicio ASC, ds_soporte.estado DESC";
             $estado = 'Cancelado';
             $Editar = '<a class="dropdown-item grayscale"><i class="fa-solid fa-pencil"></i> Responsable</a>';
             $Eliminar = '<a class="dropdown-item grayscale" ><i class="fa-regular fa-trash-can"></i> Eliminar</a>';
-        }
+        } else if ($row['estado'] == 5) {
+            $Detalle = '<a class="dropdown-item ' . $none . '"><i class="fa-regular fa-eye"></i> Asignacion</a>';
+            //$trColor = 'table-danger';
+            $colorPrioridad = 'text-danger';
+            $trColor = 'background-color: #ffb6af';
+            $estado = 'Expiracion Fecha';
+            $Editar = '<a class="dropdown-item grayscale"><i class="fa-solid fa-pencil"></i> Responsable</a>';
+            $Eliminar = '<a class="dropdown-item grayscale" ><i class="fa-regular fa-trash-can"></i> Eliminar</a>';
+          }
 
         $explode1 = explode(' ',$row['fecha_inicio']);
         if($explode1[0] == '0000-00-00'){
@@ -254,7 +262,36 @@ ORDER BY ds_soporte.fecha_inicio ASC, ds_soporte.estado DESC";
             </td>';
             echo '</tr>';
   
-       }
+       }    else if($row['estado'] == 5){
+        echo '<tr style="' . $trColor . '">';
+        echo '<th class="align-middle"><b>0' . $id_ticket . '</b></th>';
+        echo '<td class="align-middle">' . $fechaCreacion . '</td>';
+        echo '<td class="align-middle">' . $descripcion . '</td>';
+        echo '<td class="align-middle"><b>' . $EstacionDepartamento . '</b></td>';
+        echo '<td class="align-middle ' . $colorPrioridad . '"><b>' . $prioridad . '</b></td>';
+
+        echo '<td class="align-middle">' . $fechaInicio . '</td>';
+        echo '<td class="align-middle">' . $fechaTermino . '</td>';
+
+        echo '<td class="align-middle">' . $estado . '</td>';
+        echo '<td class="align-middle">' . $porcentaje . ' %</td>';
+        echo '<td class="align-middle fw-bold">' . $PersonalSoporte . '</td>';
+        echo '<td class="align-middle"><b>' . $fechaterminoreal . '</b></td>';
+        echo '<td class="align-middle text-center position-relative" onclick="ModalComentarios(' . $id_ticket . ',' . $usuario . ')">' . $ToComent . '<img class="pointer" src="' . RUTA_IMG_ICONOS . 'comentarios.png" data-toggle="tooltip" data-placement="top" title="Comentarios"></td>';
+        //echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.','.$usuario.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
+        echo '<td class="align-middle text-center"> 
+        <div class="dropdown">
+        <a class="btn btn-sm btn-icon-only text-dropdown-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-ellipsis-v"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+            ' . $Detalle . '
+            ' . $Eliminar . '
+        </div>
+        </div>
+        </td>';
+        echo '</tr>';
+      }
 
 		}
 
