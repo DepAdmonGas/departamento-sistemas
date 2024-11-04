@@ -200,7 +200,9 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
     }
 
     function EditarTicket(Detalle, idticket, opcion) {
-
+      if(Detalle == ""){
+        alertify.error('Debes de ingresar fecha Termino')
+      }
       let parametros = {
         "Accion": "editar-registro",
         "Detalle": Detalle,
@@ -213,7 +215,11 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         type: 'post',
         beforeSend: function() {},
         complete: function() {},
-        success: function(response) {}
+        success: function(response) {
+          if(response == 1 && opcion == 3){
+            regresarP()
+          }
+        }
       });
 
     }
@@ -244,6 +250,10 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
     }
 
     function FinalizarEdicion(idticket) {
+      const fechaTerminoGlobal = '<?= $fechatermino ?>';
+      if(fechaTerminoGlobal == ''){
+        alert("Debera de registrar fecha Termino")
+      }
       let Responsable = $('#Responsable').val();
 
       if (Responsable != 0) {
@@ -499,7 +509,9 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         <?php } ?>
 
         <div class="row">
-          <?php if ($numeroActividad > 0) {
+          <?php
+          $fechaFinGuardar = ""; 
+          if ($numeroActividad > 0) {
             $idActividad = '';
             $sqlActividad = "SELECT fecha_termino FROM ds_soporte_actividades WHERE id_ticket = '" . $idticket . "' ORDER BY id ASC";
             $resultActividad = mysqli_query($con, $sqlActividad);
@@ -512,7 +524,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
               $fechaTerminoGlobal = FormatoFecha($idActividad);
               $fechaFinGuardar = $idActividad;
             }
-          } elseif ($numeroActividad == 0) {
+          } elseif ($numeroActividad == 0 ) {
             $idActividad = '';
             $sqlActividad = "SELECT fecha_termino FROM ds_soporte WHERE id_ticket = '" . $idticket . "' ORDER BY id_ticket ASC";
             $resultActividad = mysqli_query($con, $sqlActividad);
@@ -521,9 +533,24 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
               $idActividad = $rowActividad['fecha_termino'];
             }
             $fechaTerminoGlobal = 'S/I';
-            if ($idActividad != '0000-00-00') {
+            if ($idActividad != '0000-00-00 00:00:00') {
               $fechaTerminoGlobal = FormatoFecha($idActividad);
               $fechaFinGuardar = $idActividad;
+            }else {
+              $fechaTerminoGlobal = FormatoFecha($fechaFin->format('Y-m-d'));
+              $fechaFinGuardar = $fechaFin->format('Y-m-d');
+            ?>
+            <div class="col-3 mt-3">
+              <form method="get" id="diasHabilesForm">
+                <h6 class="text-secondary" for="dias_habiles">Tiempo solucion</h6>
+                <?php if ($fechatermino == '') : ?>
+                  <input type="number" name="dias_habiles" id="dias_habiles" value="<?php echo $diasHabiles; ?>" min="1" style="text-align: right;">
+                <?php else : echo $tiemposolucion;
+                endif; ?>
+              </form>
+            </div>
+            <?php
+
             }
           } else {
             $fechaTerminoGlobal = FormatoFecha($fechaFin->format('Y-m-d'));
@@ -570,8 +597,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
           <?php if ($fechaTermino == '') { ?>
             <button type="button" class="btn btn-labeled2 btn-success"
               onclick="
-              FinalizarEdicion(<?= $idticket; ?>);
-              EditarTicket('<?= $fechaInicio->format('Y-m-d') ?>',<?= $idticket; ?>,2);
+              EditarTicket('<?= $fechaInicio->format('Y-m-d') ?>',<?= $idticket; ?>,2)
               EditarTicket('<?= $fechaFinGuardar ?>',<?= $idticket; ?>,3)">
               <span class="btn-label2"><i class="fa-solid fa-check"></i></span>Finalizar edicion</button>
           <?php } else { ?>

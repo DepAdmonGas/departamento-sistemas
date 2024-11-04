@@ -1,14 +1,26 @@
 <?php
-require '../help.php';
-require 'tokenTelegram.php';
+$mensaje = "hola desde Fechas";
+
+require_once '../help.php';
+$mensaje = "hola desde Fechas";
+
 $conexion = $ClassConexionBD->conectarBD();
-$telegram = new Telegram($conexion);
+
 // Fecha actual
 $fechaActual = date('Y-m-d');
+
 // mensaje
-$mensaje = "";
-// Consulta para seleccionar actividades con porcentaje menor al 100% y verificar la fecha de término
-$sql = "SELECT id_ticket, descripcion, fecha_inicio, fecha_termino, tiempo_solucion, porcentaje FROM ds_soporte WHERE porcentaje < 100";
+$mensaje = "hola desde Fechas";
+
+// Consulta para seleccionar actividades con porcentaje menor al 100% y fechas válidas
+$sql = "SELECT id_ticket, descripcion, fecha_inicio, fecha_termino, tiempo_solucion, porcentaje, id_personal_soporte 
+        FROM ds_soporte 
+        WHERE porcentaje < 100 
+        AND estado <> 4 
+        AND estado <> 0 
+        AND fecha_inicio != '0000-00-00 00:00:00' 
+        AND fecha_termino != '0000-00-00 00:00:00'";
+
 $resultado = $conexion->query($sql);
 
 while ($actividad = $resultado->fetch_assoc()) {
@@ -45,7 +57,7 @@ while ($actividad = $resultado->fetch_assoc()) {
 
             if ($diasRetraso == 1) {
                 $mensaje = "La actividad con ID $id y descripción '$descripcion' ha pasado su fecha de término";
-                $telegram->enviarToken($personal,$mensaje);
+                echo $mensaje;
             }
         }
     }
