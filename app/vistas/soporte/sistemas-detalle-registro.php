@@ -356,7 +356,26 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
             <h6 class="mt-2 text-secondary">Descripción</h6>
             <div><?= $descripcion; ?></div>
           </div>
-          <div class="text-end mt-3">
+        </div>
+        <div class="row mt-3">
+          <div class="col-8">
+            <h6 class="text-secondary">Responsable</h6>
+            <select class="form-select rounded-0" onchange="EditarTicket(this,<?= $idticket; ?>,4)" id="Responsable">
+              <option value="<?= $idPersonalSoporte; ?>"><?= $PersonalSoporte; ?></option>
+              <?php
+
+              $sql_resp = "SELECT id, nombre FROM tb_usuarios WHERE id_puesto = 25 ";
+              $result_resp = mysqli_query($con, $sql_resp);
+              $numero_resp = mysqli_num_rows($result_resp);
+              while ($row_resp = mysqli_fetch_array($result_resp, MYSQLI_ASSOC)) {
+
+                echo '<option value="' . $row_resp['id'] . '">' . $row_resp['nombre'] . '</option>';
+              }
+
+              ?>
+            </select>
+          </div>
+          <div class="col-4 text-end mt-4">
             <button type="button" class="btn btn-labeled2 btn-primary" onclick="FinalizarEdicion(<?= $idticket ?>)">
               <span class="btn-label2"><i class="fa fa-check"></i></span>Finalizar</button>
           </div>
@@ -436,38 +455,6 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         <hr>
 
         <div class="row">
-          <div class="col-12">
-
-            <div class="row">
-              <div class="col-4 mt-3">
-                <h6 class="text-secondary">Responsable</h6>
-                <select class="form-select rounded-0" onchange="EditarTicket(this,<?= $idticket; ?>,4)" id="Responsable">
-                  <option value="<?= $idPersonalSoporte; ?>"><?= $PersonalSoporte; ?></option>
-                  <?php
-
-                  $sql_resp = "SELECT id, nombre FROM tb_usuarios WHERE id_puesto = 25 ";
-                  $result_resp = mysqli_query($con, $sql_resp);
-                  $numero_resp = mysqli_num_rows($result_resp);
-                  while ($row_resp = mysqli_fetch_array($result_resp, MYSQLI_ASSOC)) {
-
-                    echo '<option value="' . $row_resp['id'] . '">' . $row_resp['nombre'] . '</option>';
-                  }
-
-                  ?>
-                </select>
-              </div>
-              <div class="col-4 mt-3">
-                <h6 class="text-secondary">Porcentaje</h6>
-                <?= $porcentaje ?> %
-              </div>
-              <div class="col-4 mt-3">
-                <h6 class="text-secondary">Estado</h6>
-                <?= $porcentaje ?> %
-              </div>
-
-
-            </div>
-          </div>
           <div class="col-8">
             <div id="ContenidoComentarios"></div>
           </div>
