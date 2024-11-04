@@ -1,8 +1,12 @@
 <?php
 require('app/help.php');
 $con = $ClassConexionBD->conectarBD();
-function contarActividadesIncompletas($con, $opcion): int
+function contarActividadesIncompletas($con, $opcion,$admin,$usuario): int
 {
+  $user = "";
+  if($admin != 1){
+    $user = "AND ds.id_personal_soporte =" .(int)$usuario;
+  }
   // Define la condición en base a la opción recibida
   $condicion = "AND tb_puestos.tipo_puesto = 'Departamento Sistemas'";
   if ($opcion == 1) {
@@ -15,7 +19,7 @@ function contarActividadesIncompletas($con, $opcion): int
           INNER JOIN tb_usuarios ON ds.id_personal = tb_usuarios.id
           INNER JOIN tb_estaciones ON tb_usuarios.id_gas = tb_estaciones.id
           INNER JOIN tb_puestos ON tb_usuarios.id_puesto = tb_puestos.id
-          WHERE ds.porcentaje <> 100 $condicion AND ds.estado <> 4 AND ds.estado <> 0";
+          WHERE ds.porcentaje <> 100 $user $condicion AND ds.estado <> 4 AND ds.estado <> 0";
 
   $result = $con->query($sql);
 
@@ -28,8 +32,12 @@ function contarActividadesIncompletas($con, $opcion): int
 
   return $cantidad;
 }
-$sistemas = contarActividadesIncompletas($con,0);
-$tickets = contarActividadesIncompletas($con,1);
+$admin = 0;
+if($Session_IDUsuarioBD == 496){
+  $admin = 1;
+}
+$sistemas = contarActividadesIncompletas($con,0,$admin,$Session_IDUsuarioBD);
+$tickets = contarActividadesIncompletas($con,1,$admin,$Session_IDUsuarioBD);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -37,7 +45,7 @@ $tickets = contarActividadesIncompletas($con,1);
 <head>
 <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Departamento Sistemas</title>
+  <title>Departamento Sistemas<?=$Session_IDUsuarioBD?></title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width initial-scale=1.0">
   <link rel="shortcut icon" href="<?= RUTA_IMG_ICONOS ?>/icono-web.png">
