@@ -47,7 +47,7 @@ if ($soporteContenido['estado'] == 3 || $soporteContenido['estado'] == 4) {
       </tr>
     </thead>
 
-    <tbody class="bg-white">
+    <tbody style="background-color: #f0f0f0">
 
       <tr>
         <th class="text-start no-hover p-0 fw-normal">
@@ -95,7 +95,7 @@ if ($soporteContenido['estado'] == 3 || $soporteContenido['estado'] == 4) {
       </tr>
 
       <tr>
-        <th class="text-start no-hover p-0 ">
+        <th class="text-start no-hover p-0 " class="bg-white" >
           <textarea class="form-control rounded-0 border-0" id="Comentario" placeholder="Escribe tu comentario aquí..." style="height: 100px;"></textarea>
         </th>
       </tr>

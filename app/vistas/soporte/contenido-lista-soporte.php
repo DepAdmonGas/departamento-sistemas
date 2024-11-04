@@ -218,7 +218,7 @@ $con = $ClassConexionBD->conectarBD();
             echo '<td class="align-middle text-center">'.$PersonalSoporte.'</td>';
             echo '<td class="align-middle text-center"><b>'.$fechaterminoreal.'</b></td>';  
     
-            echo '<td class="align-middle text-center"><a onclick="ModalComentarios('.$id_ticket.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
+            echo '<td class="align-middle text-center"><a onclick="ModalComentarios('.$id_ticket.') event.stopPropagation();">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
             echo '<td class="align-middle text-center"> 
             <div class="dropdown">
             <a class="btn btn-sm btn-icon-only text-dropdown-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">

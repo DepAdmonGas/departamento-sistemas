@@ -1,13 +1,16 @@
 <?php
 require "app/help.php";
-
+$btn = 'd-none';
+if ($Session_IDUsuarioBD == 496) {
+  $btn = '';
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
-<meta charset="utf-8">
+  <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>Portal AdmonGas</title>
   <meta name="description" content="">
@@ -32,12 +35,14 @@ require "app/help.php";
   <script type="text/javascript">
     $(document).ready(function($) {
       $(".LoaderPage").fadeOut("slow");
-      ContenidoSistemas(<?= $Session_IDUsuarioBD ?>);
+      ContenidoSistemas(<?= $Session_IDUsuarioBD ?>,0);
     });
 
- 
-    function ContenidoSistemas(usuario) {
-      $('#ContenidoSistemas').load('app/vistas/soporte/contenido-lista-sistemas.php?usuario='+ usuario, function() {
+    function regresaP(){
+      window.location.href = 'home';
+    }
+    function ContenidoSistemas(usuario,opcion) {
+      $('#ContenidoSistemas').load('app/vistas/soporte/contenido-lista-sistemas.php?usuario=' + usuario + '&opcion=' + opcion, function() {
         // Una vez que se carguen los datos en la tabla, inicializa DataTables
         $('#tabla-sistemas').DataTable({
           "language": {
@@ -60,7 +65,7 @@ require "app/help.php";
       });
     }
 
-    function EliminarTicket(idticket) {
+    function EliminarTicket(idticket,idUsuario) {
 
       let parametros = {
         "Accion": "cancelar-ticket",
@@ -80,7 +85,7 @@ require "app/help.php";
             },
             success: function(response) {
 
-              ContenidoSistemas(1);
+              ContenidoSistemas(idUsuario,0);
 
             }
           });
@@ -99,12 +104,12 @@ require "app/help.php";
 
     }
 
-    function ModalComentarios(idticket) {
+    function ModalComentarios(idticket,usuario) {
       $('#ModalComentario').modal('show');
-      $('#DivContenidoComentario').load('app/vistas/soporte/modal-comentarios-ticket.php?idticket=' + idticket);
+      $('#DivContenidoComentario').load('app/vistas/soporte/modal-comentarios-ticket.php?idticket=' + idticket + '&usuario=' + usuario);
     }
 
-    function GuardarComentario(idticket) {
+    function GuardarComentario(idticket,usuario) {
 
       var Comentario = $('#Comentario').val();
 
@@ -128,7 +133,7 @@ require "app/help.php";
           },
           success: function(response) {
 
-            ContenidoSistemas(1);
+            ContenidoSistemas(usuario,0);
             $('#DivContenidoComentario').load('app/vistas/soporte/modal-comentarios-ticket.php?idticket=' + idticket);
 
           }
@@ -194,13 +199,12 @@ require "app/help.php";
 
 
     window.addEventListener('pageshow', function(event) {
-  if (event.persisted) {
-  // Si la página está en la caché del navegador, recargarla
-  window.location.reload();
-  sizeWindow();
-  }
-  });
-
+      if (event.persisted) {
+        // Si la página está en la caché del navegador, recargarla
+        window.location.reload();
+        sizeWindow();
+      }
+    });
   </script>
   <style>
     .grayscale {
@@ -233,7 +237,7 @@ require "app/help.php";
 
           <div aria-label="breadcrumb" style="padding-left: 0; margin-bottom: 0;">
             <ol class="breadcrumb breadcrumb-caret">
-              <li class="breadcrumb-item"><a onclick="history.back()" class="text-uppercase text-primary pointer"><i class="fa-solid fa-house"></i> Inicio</a></li>
+              <li class="breadcrumb-item"><a onclick="regresaP()" class="text-uppercase text-primary pointer"><i class="fa-solid fa-house"></i> Inicio</a></li>
               <li aria-current="page" class="breadcrumb-item active text-uppercase">Departamento de Sistemas Soporte</li>
             </ol>
           </div>
@@ -249,6 +253,22 @@ require "app/help.php";
 
 
               <div class="text-end">
+                <div class="btn-group dropleft <?= $btn ?>">
+                  <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Usuarios
+                  </button>
+                  <div class="dropdown-menu">
+                    <?php
+                    $sql = "SELECT id, nombre FROM tb_usuarios WHERE id_puesto = 25";
+                    $result = mysqli_query($con, $sql);
+                    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+                    ?>
+                      <a class="dropdown-item pointer" onclick="ContenidoSistemas(<?= $row['id'] ?>,1)"><?= $row['nombre'] ?></a>
+                    <?php } ?>
+                  </div>
+
+
+                </div>
                 <div class="dropdown d-inline ms-2">
 
                   <button type="button" class="btn dropdown-toggle btn-primary" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -268,11 +288,11 @@ require "app/help.php";
         </div>
 
       </div>
-<hr>
-<div class="col-12 mb-2">
-<div id="ContenidoSistemas"></div>
+      <hr>
+      <div class="col-12 mb-2">
+        <div id="ContenidoSistemas"></div>
 
-</div>
+      </div>
 
     </div>
 
@@ -281,7 +301,7 @@ require "app/help.php";
   </div>
 
   <div class="modal" id="ModalComentario">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content" style="margin-top: 83px;">
         <div id="DivContenidoComentario"></div>
       </div>
@@ -297,8 +317,8 @@ require "app/help.php";
   </div>
 
   <script src="<?= RUTA_JS ?>bootstrap.min.js"></script>
-<!---------- LIBRERIAS DEL DATATABLE ---------->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <!---------- LIBRERIAS DEL DATATABLE ---------->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
   <script src="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.0.3/b-3.0.1/b-colvis-3.0.1/b-html5-3.0.1/b-print-3.0.1/datatables.min.js"></script>
 
