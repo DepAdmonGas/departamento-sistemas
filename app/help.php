@@ -5,11 +5,11 @@ include_once "modelo/Sistemas.php";
 include_once "modelo/SistemasContenido.php";
 include_once 'lib/jwt/vendor/autoload.php';
 include_once "config/ConfiguracionSesiones.php";
+include_once 'modelo/Home.php';
 
 $ClassConexionBD = new ConexionBD();
 $ClassSistemas = new Sistemas();
 $ClassContenido = new SistemasContenido();
-
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 // Valida si esta activa la sesion por medio de la cookie
@@ -28,6 +28,7 @@ if (isset($_COOKIE['COOKIEADMONGAS']) && !empty($_COOKIE['COOKIEADMONGAS'])) :
         $Session_NombreEstacion = $decoded->nombre_gas_usuario;
         $Session_TipoPuestoBD = $decoded->tipo_puesto_usuario;
         $con = $ClassConexionBD->conectarBD();
+        $Home = new Home($con);
     } catch (Exception $e) {
         echo 'Error: ', $e->getMessage();
     }

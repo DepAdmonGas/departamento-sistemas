@@ -127,7 +127,7 @@ ORDER BY ds_soporte.fecha_inicio ASC, ds_soporte.estado DESC";
             $Editar = '<a class="dropdown-item grayscale"><i class="fa-solid fa-pencil"></i> Responsable</a>';
             $Eliminar = '<a class="dropdown-item grayscale" ><i class="fa-regular fa-trash-can"></i> Eliminar</a>';
         } else if ($row['estado'] == 5) {
-            $Detalle = '<a class="dropdown-item ' . $none . '"><i class="fa-regular fa-eye"></i> Asignacion</a>';
+            $Detalle = '<a class="dropdown-item"><i class="fa-regular fa-eye"></i> Asignacion</a>';
             //$trColor = 'table-danger';
             $colorPrioridad = 'text-danger';
             $trColor = 'background-color: #ffb6af';
