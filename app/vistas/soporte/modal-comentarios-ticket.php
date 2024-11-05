@@ -54,7 +54,7 @@ while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
         <div><b>Prioridad:</b> <?= $prioridad ?></div>
         <div><b>Porcentaje:</b> <?= $porcentaje ?> %</div>
       </div>
-      <div><b>Descripción:</b> <?= $descripcion ?> <br></div>
+      <div class="ms-4"><b>Descripción:</b> <?= $descripcion ?> <br></div>
     </div>
 
 
