@@ -32,7 +32,7 @@ $sql = "SELECT
         ON tb_usuarios.id_gas = tb_estaciones.id
         INNER JOIN tb_puestos
         ON tb_usuarios.id_puesto = tb_puestos.id WHERE (ds_soporte.estado <> 0 AND ds_soporte.estado <> 4 AND tb_puestos.tipo_puesto <> 'Departamento Sistemas' $consulta) 
-        ORDER BY ds_soporte.estado ASC, ds_soporte.fecha_creacion DESC";
+        ORDER BY  ds_soporte.id_personal_soporte ASC, ds_soporte.estado ASC, ds_soporte.fecha_creacion DESC";
         $result = mysqli_query($con, $sql);
         $numero = mysqli_num_rows($result);
 

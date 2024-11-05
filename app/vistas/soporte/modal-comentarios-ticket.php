@@ -48,10 +48,15 @@ while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
   <div class="" style="height: 300px;overflow: auto;">
 
     <div style="font-size: .75em;" class="mb-1 text-secondary text-center fw-bold">Información</div>
-    <div class="bg-light fw-light pt-2 pb-1 ps-3 pe-3 mb-3" style="font-size: .85em;border-radius: 25px;">
-      <b>Descripcion:</b> <?= $descripcion ?> <br>
-      <b>Ticket:</b> <?= $idticket ?> <b>Prioridad:</b> <?= $prioridad ?> <b>Porcentaje:</b> <?= $porcentaje ?> %
+    <div class="bg-light fw-light pt-2 pb-1 ps-3 pe-3 mb-3" style="font-size: .85em; border-radius: 25px;">
+      <div class="text-center d-flex justify-content-around">
+        <div><b>Ticket:</b> <?= $idticket ?></div>
+        <div><b>Prioridad:</b> <?= $prioridad ?></div>
+        <div><b>Porcentaje:</b> <?= $porcentaje ?> %</div>
+      </div>
+      <div><b>Descripción:</b> <?= $descripcion ?> <br></div>
     </div>
+
 
 
     <div>

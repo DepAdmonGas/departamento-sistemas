@@ -4,7 +4,9 @@ $con = $ClassConexionBD->conectarBD();
 // Conteo de actividades por usuario
 $sistemas = $Home->contarActividadesIncompletas(0, $Session_IDUsuarioBD);
 $tickets = $Home->contarActividadesIncompletas(1, $Session_IDUsuarioBD);
-
+// Conteo actividades Vencidas
+$sistemasVencidas = $Home->actividadesVencidas(0, $Session_IDUsuarioBD);
+$ticketsVencidos = $Home->actividadesVencidas(1, $Session_IDUsuarioBD);
 // Asignar porcentaje avance por cada actividad
 $fecha_del_dia = date("Y-m-d H:i:s");
 $Home->actualizarPorcentajeActividades( $fecha_del_dia);
@@ -200,11 +202,14 @@ if ($Session_IDUsuarioBD == 496) {
                       <h2 class="mb-2">Soporte Estaciones</h2>
 
                       <div class="row justify-content-center">
-                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mt-2">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mt-2">
                           <span class="btn-label2"><i class="fa-solid fa-chart-simple"></i></span><?= $tickets ?> Tickets
                         </div>
-                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mt-2 <?=$ocultar?>">
-                          <span class="btn-label2"><i class="fa-solid fa-chart-simple"></i></span><?= $asignar ?> Sin asignar
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mt-2 <?=$ocultar?>">
+                          <span class="btn-label2"><i class="fa-solid fa-pen"></i></span><?= $asignar ?> Sin asignar
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mt-2">
+                          <span class="btn-label2"><i class="fa-solid fa-xmark"></i></span><?= $ticketsVencidos ?> Vencidas
                         </div>
                       </div>
 
@@ -227,8 +232,11 @@ if ($Session_IDUsuarioBD == 496) {
                       <h2 class="mb-2">Actividades</h2>
 
                       <div class="row justify-content-center">
-                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mt-2">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mt-2">
                           <span class="btn-label2"><i class="fa-solid fa-chart-simple"></i></span><?= $sistemas ?> Tickets
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mt-2">
+                          <span class="btn-label2"><i class="fa-solid fa-xmark"></i></span><?= $sistemasVencidas ?> Vencidas
                         </div>
 
                       </div>
