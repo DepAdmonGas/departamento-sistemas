@@ -126,7 +126,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 <html lang="es">
 
 <head>
-  <meta charset="utf-8">
+<meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>Portal AdmonGas</title>
   <meta name="description" content="">
@@ -140,6 +140,10 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
   <script type="text/javascript" src="<?= RUTA_JS ?>alertify.js"></script>
 
   <script type="text/javascript">
@@ -213,8 +217,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         type: 'post',
         beforeSend: function() {},
         complete: function() {},
-        success: function(response) {
-        }
+        success: function(response) {}
       });
 
     }
@@ -239,7 +242,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         success: function(response) {
           console.log(response)
           if (response == 1 && opcion == 2)
-          location.reload();
+            location.reload();
         }
       });
     }
@@ -297,6 +300,11 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         }
       }).show();
 
+    }
+
+    function fechasActividad(ticket) {
+      $('#ModalFecha').modal('show');
+      $('#DivModalFecha').load('../app/vistas/actividades/modal-fecha-actividades.php?idticket=' + ticket);
     }
   </script>
   <style>
@@ -420,6 +428,13 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 
         if ($numeroActividad > 0) {
         ?>
+          <div class="text-end p-3">
+            <button type="button" class="btn btn-labeled2 btn-primary float-end" onclick="fechasActividad(<?= $idticket ?>)">
+              <span class="btn-label2">
+                <i class="fa-regular fa-calendar-check"></i>
+              </span>Asignar Fechas
+            </button>
+          </div>
           <h6 class="mt-2 text-secondary">Actividad:</h6>
           <div class="table-responsive">
             <table id="tabla-sistemas" class="custom-table mt-2" style="font-size: 14px;" width="100%">
@@ -435,49 +450,49 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
               </thead>
               <tbody>
                 <?php
-                  $numActividad = 1;
+                $numActividad = 1;
 
-                  while ($rowActividad = mysqli_fetch_array($resultActividad, MYSQLI_ASSOC)) {
-                    $idActividad = $rowActividad['id'];
-                    $descripcionActividad = $rowActividad['descripcion'];
-                    $EstadoActividad = $rowActividad['estado'];
+                while ($rowActividad = mysqli_fetch_array($resultActividad, MYSQLI_ASSOC)) {
+                  $idActividad = $rowActividad['id'];
+                  $descripcionActividad = $rowActividad['descripcion'];
+                  $EstadoActividad = $rowActividad['estado'];
 
-                    if ($rowActividad['fecha_inicio'] == '0000-00-00') {
-                      $AtividadFechaInicio = '';
-                      $readonly = '';
-                    } else {
-                      $AtividadFechaInicio = $rowActividad['fecha_inicio'];
-                      $readonly = 'readonly';
-                    }
+                  if ($rowActividad['fecha_inicio'] == '0000-00-00') {
+                    $AtividadFechaInicio = '';
+                    $readonly = '';
+                  } else {
+                    $AtividadFechaInicio = $rowActividad['fecha_inicio'];
+                    $readonly = 'readonly';
+                  }
 
-                    if ($rowActividad['fecha_termino'] == '0000-00-00') {
-                      $AtividadFechaTermino = '';
-                      $readonly = '';
-                    } else {
-                      $AtividadFechaTermino = $rowActividad['fecha_termino'];
-                      $readonly = 'readonly';
-                    }
+                  if ($rowActividad['fecha_termino'] == '0000-00-00') {
+                    $AtividadFechaTermino = '';
+                    $readonly = '';
+                  } else {
+                    $AtividadFechaTermino = $rowActividad['fecha_termino'];
+                    $readonly = 'readonly';
+                  }
 
-                    if ($rowActividad['estado'] == 0) {
-                      $EstadoDetalle = 'Pendiente';
-                    } else if ($rowActividad['estado'] == 1) {
-                      $EstadoDetalle = 'En proceso';
-                    } else if ($rowActividad['estado'] == 2) {
-                      $EstadoDetalle = 'Finalizada';
-                    }
+                  if ($rowActividad['estado'] == 0) {
+                    $EstadoDetalle = 'Pendiente';
+                  } else if ($rowActividad['estado'] == 1) {
+                    $EstadoDetalle = 'En proceso';
+                  } else if ($rowActividad['estado'] == 2) {
+                    $EstadoDetalle = 'Finalizada';
+                  }
 
-                    if ($rowActividad['archivo'] == "") {
-                      $Archivo = '<a><img src="' . RUTA_IMG_ICONOS . 'eliminar.png" ></a>';
-                    } else {
-                      $Archivo = '<a href="' . RUTA_ARCHIVOS . $rowActividad['archivo'] . '" download><img src="' . RUTA_IMG_ICONOS . 'descargar.png" ></a>';
-                    }
+                  if ($rowActividad['archivo'] == "") {
+                    $Archivo = '<a><img src="' . RUTA_IMG_ICONOS . 'eliminar.png" ></a>';
+                  } else {
+                    $Archivo = '<a href="' . RUTA_ARCHIVOS . $rowActividad['archivo'] . '" download><img src="' . RUTA_IMG_ICONOS . 'descargar.png" ></a>';
+                  }
 
-                    echo '<tr>';
-                    echo '<th class="align-middle">' . $numActividad . '</th>';
-                    echo '<td class="align-middle">' . $descripcionActividad . '</td>';
-                    echo '<td class="p-0"><input type="date" class="border-0 form-control" value="' . $AtividadFechaInicio . '" onchange="EditarActividad(this,' . $idActividad . ',1)" ' . $readonly . ' ></td>';
-                    echo '<td class="p-0"><input type="date" class="border-0 form-control" value="' . $AtividadFechaTermino . '" onchange="EditarActividad(this,' . $idActividad . ',2)" ' . $readonly . ' ></td>';
-                    echo '<td class="p-0">
+                  echo '<tr>';
+                  echo '<th class="align-middle">' . $numActividad . '</th>';
+                  echo '<td class="align-middle">' . $descripcionActividad . '</td>';
+                  echo '<td class="p-0"><input type="date" class="border-0 form-control" value="' . $AtividadFechaInicio . '" onchange="EditarActividad(this,' . $idActividad . ',1)" ' . $readonly . ' ></td>';
+                  echo '<td class="p-0"><input type="date" class="border-0 form-control" value="' . $AtividadFechaTermino . '" onchange="EditarActividad(this,' . $idActividad . ',2)" ' . $readonly . ' ></td>';
+                  echo '<td class="p-0">
                             <select class="form-control rounded-0 border-0" onchange="EditarActividad(this,' . $idActividad . ',3)">
                                 <option value="' . $EstadoActividad . '">' . $EstadoDetalle . '</option>
                                 <option value="0">Pendiente</option>
@@ -485,12 +500,12 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
                                 <option value="2">Finalizada</option>
                             </select>
                           </td>';
-                    echo '<td class="align-middle">' . $Archivo . '</td>';
-                    echo '</tr>';
+                  echo '<td class="align-middle">' . $Archivo . '</td>';
+                  echo '</tr>';
 
-                    $numActividad++;
-                  }
-                
+                  $numActividad++;
+                }
+
 
                 ?>
               </tbody>
@@ -500,35 +515,35 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         <?php } ?>
 
         <div class="row">
-          <?php if($numeroActividad > 0){ 
+          <?php if ($numeroActividad > 0) {
             $idActividad = '';
             $sqlActividad = "SELECT fecha_termino FROM ds_soporte_actividades WHERE id_ticket = '" . $idticket . "' ORDER BY id ASC";
             $resultActividad = mysqli_query($con, $sqlActividad);
-            
-              while ($rowActividad = mysqli_fetch_array($resultActividad, MYSQLI_ASSOC)) {
-                $idActividad = $rowActividad['fecha_termino'];
-              }
-              $fechaTerminoGlobal = 'S/I';
-              if ($idActividad != '0000-00-00'){
-                $fechaTerminoGlobal = FormatoFecha($idActividad);
-                $fechaFinGuardar = $idActividad;
-              } 
-              }else { 
-                $fechaTerminoGlobal = FormatoFecha($fechaFin->format('Y-m-d'));
-                $fechaFinGuardar = $fechaFin->format('Y-m-d');
-            
-            ?>
-            
-          <div class="col-3 mt-3">
-            <form method="get" id="diasHabilesForm">
-              <h6 class="text-secondary" for="dias_habiles">Tiempo solucion</h6>
-              <?php if ($fechatermino == '') : ?>
-                <input type="number" name="dias_habiles" id="dias_habiles" value="<?php echo $diasHabiles; ?>" min="1" style="text-align: right;">
-              <?php else : echo $tiemposolucion;
-              endif; ?>
-            </form>
-          </div>    
-            <?php }?>
+
+            while ($rowActividad = mysqli_fetch_array($resultActividad, MYSQLI_ASSOC)) {
+              $idActividad = $rowActividad['fecha_termino'];
+            }
+            $fechaTerminoGlobal = 'S/I';
+            if ($idActividad != '0000-00-00') {
+              $fechaTerminoGlobal = FormatoFecha($idActividad);
+              $fechaFinGuardar = $idActividad;
+            }
+          } else {
+            $fechaTerminoGlobal = FormatoFecha($fechaFin->format('Y-m-d'));
+            $fechaFinGuardar = $fechaFin->format('Y-m-d');
+
+          ?>
+
+            <div class="col-3 mt-3">
+              <form method="get" id="diasHabilesForm">
+                <h6 class="text-secondary" for="dias_habiles">Tiempo solucion</h6>
+                <?php if ($fechatermino == '') : ?>
+                  <input type="number" name="dias_habiles" id="dias_habiles" value="<?php echo $diasHabiles; ?>" min="1" style="text-align: right;">
+                <?php else : echo $tiemposolucion;
+                endif; ?>
+              </form>
+            </div>
+          <?php } ?>
 
           <div class="col-3 mt-3">
             <h6 class="text-secondary">Fecha inicio</h6>
@@ -581,13 +596,14 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
     </div>
   </div>
 
-  <div class="modal fade bd-example-modal-lg" id="ModalActividades" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document" style="margin-top: 83px;">
+  <div class="modal" id="ModalFecha">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
-        <div id="DivModalActividades"></div>
+        <div id="DivModalFecha"></div>
       </div>
     </div>
-  </div>
+</div>
+
 
   <script src="<?= RUTA_JS ?>bootstrap.min.js"></script>
 
