@@ -104,4 +104,29 @@ class Home
     return $cantidad;
 
   }
+  public function actividadesVencidas($opcion,$usuario): int{
+    $condicion = "AND tb_puestos.tipo_puesto = 'Departamento Sistemas'";
+    if ($opcion == 1) {
+      $condicion = "AND tb_puestos.tipo_puesto <> 'Departamento Sistemas'";
+    }
+
+    // Consulta SQL para contar las actividades con porcentaje <> 100
+    $sql = "SELECT COUNT(*) AS actividades_vecnidas
+          FROM ds_soporte ds
+          INNER JOIN tb_usuarios ON ds.id_personal = tb_usuarios.id
+          INNER JOIN tb_estaciones ON tb_usuarios.id_gas = tb_estaciones.id
+          INNER JOIN tb_puestos ON tb_usuarios.id_puesto = tb_puestos.id
+          WHERE ds.estado = 5 AND ds.porcentaje <> 100 AND ds.id_personal_soporte = $usuario $condicion ";
+
+    $result = $this->con->query($sql);
+
+    // Valor inicial de cantidad
+    $cantidad = 0;
+    if ($result->num_rows > 0) {
+      $row = $result->fetch_assoc();
+      $cantidad = (int)$row["actividades_vecnidas"];
+    }
+
+    return $cantidad;
+  }
 }
