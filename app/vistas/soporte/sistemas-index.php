@@ -132,10 +132,8 @@ if ($Session_IDUsuarioBD == 496) {
 
           },
           success: function(response) {
-
+            $('#DivContenidoComentario').load('app/vistas/soporte/modal-comentarios-ticket.php?idticket=' + idticket + '&usuario=' + usuario);
             ContenidoSistemas(usuario,0);
-            $('#DivContenidoComentario').load('app/vistas/soporte/modal-comentarios-ticket.php?idticket=' + idticket);
-
           }
         });
 
@@ -301,8 +299,8 @@ if ($Session_IDUsuarioBD == 496) {
   </div>
 
   <div class="modal" id="ModalComentario">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content" style="margin-top: 83px;">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
         <div id="DivContenidoComentario"></div>
       </div>
     </div>

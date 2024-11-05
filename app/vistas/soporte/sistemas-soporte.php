@@ -351,7 +351,7 @@ require 'app/help.php';
   </div>
 
   <div class="modal" id="ModalComentario">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-md">
       <div class="modal-content">
         <div id="DivContenidoComentario"></div>
       </div>
