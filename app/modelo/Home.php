@@ -22,7 +22,7 @@ class Home
           INNER JOIN tb_usuarios ON ds.id_personal = tb_usuarios.id
           INNER JOIN tb_estaciones ON tb_usuarios.id_gas = tb_estaciones.id
           INNER JOIN tb_puestos ON tb_usuarios.id_puesto = tb_puestos.id
-          WHERE ds.porcentaje <> 100 AND ds.id_personal_soporte = $usuario $condicion AND ds.estado <> 4 AND ds.estado <> 0";
+          WHERE ds.porcentaje <> 100 AND ds.id_personal_soporte = $usuario $condicion AND ds.estado <> 4 AND ds.estado <> 0 AND ds.estado <> 5";
 
     $result = $this->con->query($sql);
 

@@ -75,7 +75,10 @@ $sql = "SELECT
           $idPersonalSoporte = $row['id_personal_soporte'];
           $PersonalSoporte = $ClassContenido->Responsable($idPersonalSoporte);
           $nombre = $row['nombre'];
-
+          $onclick = "";
+          if($PersonalSoporte == "Sistemas"){
+            $onclick = 'onclick="ModalDetalle(' . $id_ticket . ')"';
+          }
           $explode = explode(' ', $row['fecha_creacion']);
           if ($explode[0] == '0000-00-00') {
             $fechaCreacion = 'S/I';
@@ -90,12 +93,7 @@ $sql = "SELECT
           } else if ($prioridad == 'Alta') {
             $colorPrioridad = 'text-danger';
           }
-          $none = "d-none";
-          if ($Session_IDUsuarioBD == 496) {
-            $none = "";
-          }
           $Eliminar = '<a class="dropdown-item" onclick="EliminarTicket(' . $id_ticket . ',' . $usuario . ')"><i class="fa-regular fa-trash-can"></i> Eliminar</a>';
-          $Detalle = '<a class="dropdown-item ' . $none . '" onclick="ModalDetalle(' . $id_ticket . ')"><i class="fa-regular fa-eye"></i> Asignacion</a>';
           $editar = '<a class="dropdown-item" onclick="EditarTicket(' . $id_ticket . ')"><i class="fa-solid fa-pencil"></i> Seguimiento</a>';
           if ($row['estado'] == 0) {
 
@@ -120,7 +118,6 @@ $sql = "SELECT
             $Editar = '<a class="dropdown-item grayscale"><i class="fa-solid fa-pencil"></i> Responsable</a>';
             $Eliminar = '<a class="dropdown-item grayscale" ><i class="fa-regular fa-trash-can"></i> Eliminar</a>';
           } else if ($row['estado'] == 5) {
-            $Detalle = '<a class="dropdown-item ' . $none . '"><i class="fa-regular fa-eye"></i> Asignacion</a>';
             //$trColor = 'table-danger';
             $colorPrioridad = 'text-danger';
             $trColor = 'background-color: #ffb6af';
@@ -165,7 +162,7 @@ $sql = "SELECT
 
           if ($row['estado'] == 1) {
 
-            echo '<tr style="' . $trColor . '">';
+            echo '<tr '.$onclick.' style="' . $trColor . '">';
             echo '<th class="align-middle"><b>0' . $id_ticket . '</b></th>';
             echo '<td class="align-middle"><small>' . $fechaCreacion . '</small></td>';
             echo '<td class="align-middle">' . $descripcion . '</td>';
@@ -179,15 +176,14 @@ $sql = "SELECT
             echo '<td class="align-middle">' . $porcentaje . ' %</td>';
             echo '<td class="align-middle text-secondary">' . $PersonalSoporte . '</td>';
             echo '<td class="align-middle"><b>' . $fechaterminoreal . '</b></td>';
-            echo '<td class="align-middle text-center position-relative" onclick="ModalComentarios(' . $id_ticket . ',' . $usuario . ')">' . $ToComent . '<img class="pointer" src="' . RUTA_IMG_ICONOS . 'comentarios.png" data-toggle="tooltip" data-placement="top" title="Comentarios"></td>';
+            echo '<td class="align-middle text-center position-relative" onclick="ModalComentarios(' . $id_ticket . ', ' . $usuario . '); event.stopPropagation();" >' . $ToComent . '<img class="pointer" src="' . RUTA_IMG_ICONOS . 'comentarios.png" data-toggle="tooltip" data-placement="top" title="Comentarios"></td>';
             //echo '<td class="align-middle"><a onclick="ModalComentarios('.$id_ticket.','.$usuario.')">'.$ToComent.'<img src="'.RUTA_IMG_ICONOS.'comentarios.png" ></a></td>';
             echo '<td class="align-middle text-center"> 
             <div class="dropdown">
-            <a class="btn btn-sm btn-icon-only text-dropdown-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="btn btn-sm btn-icon-only text-dropdown-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" onclick="event.stopPropagation();">
                 <i class="fas fa-ellipsis-v"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                ' . $Detalle . '
                 ' . $editar . '
                 ' . $Eliminar . '
             </div>
@@ -218,7 +214,6 @@ $sql = "SELECT
                 <i class="fas fa-ellipsis-v"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                ' . $Detalle . '
                 ' . $editar . '
                 ' . $Eliminar . '
                 
@@ -250,7 +245,6 @@ $sql = "SELECT
                 <i class="fas fa-ellipsis-v"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                ' . $Detalle . '
                 ' . $editar . '
                 ' . $Eliminar . '
             </div>
@@ -280,7 +274,6 @@ $sql = "SELECT
                 <i class="fas fa-ellipsis-v"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                ' . $Detalle . '
                 ' . $Eliminar . '
             </div>
             </div>
