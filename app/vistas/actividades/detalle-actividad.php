@@ -200,9 +200,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         beforeSend: function() {},
         complete: function() {},
         success: function(response) {
-          console.log(response)
-          if (response == 1 && opcion == 2)
-            location.reload();
+  
         }
       });
     }
@@ -268,7 +266,8 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
     }
 
     function FinalizarFechasAsignacion() {
-
+      $('#ModalFecha').modal('hide');
+      location.reload();
     }
   </script>
   <style>
