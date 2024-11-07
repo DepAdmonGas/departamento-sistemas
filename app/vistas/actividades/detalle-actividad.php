@@ -411,15 +411,17 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 
           // Restamos un día al final porque el bucle suma un día extra
           $fechaFin->modify('-1 day');
+          $onclick = "onclick='fechasActividad($idticket, \"" . $fechaInicio->format('Y-m-d') . "\")'";
+        }else{
+          $onclick = "";
         }
-
         if ($numeroActividad > 0) {
         ?>
           <div class="text-end p-3">
-            <button type="button" class="btn btn-labeled2 btn-primary float-end" onclick="fechasActividad(<?= $idticket ?>,'<?= $fechaInicio->format('Y-m-d') ?>')">
-              <span class="btn-label2">
+          <button type="button" class="btn btn-labeled2 btn-primary float-end" <?= $onclick ?>>
+            <span class="btn-label2">
                 <i class="fa-regular fa-calendar-check"></i>
-              </span>Asignar Fechas
+              </span>Asignar Fechas 
             </button>
           </div>
           <h6 class="mt-2 text-secondary">Actividad:</h6>
