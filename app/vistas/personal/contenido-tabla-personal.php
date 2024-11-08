@@ -1,9 +1,15 @@
 <?php
 include_once "../../help.php";
+$numLista = $_GET['numLista'];
+$condicion = "";
+if ($numLista != 0) {
+  $condicion = "AND tb_estaciones.numlista = $numLista";
+}
 ?>
-<table class="table table-bordered table-sm table-hover table-striped bg-white" id="tabla-personal">
+<div class="table-responsive">
+  <table id="tabla-personal" class="custom-table" style="font-size: .8em;" width="100%">
     <thead class="bg-primary text-white">
-    <tr>
+      <tr>
         <th>#</th>
         <th>Nombre</th>
         <th>Puesto</th>
@@ -11,11 +17,11 @@ include_once "../../help.php";
         <th>Contraseña</th>
         <th>Estación</th>
         <th class="text-center align-middle" width="30px"><i class="fa-solid fa-ellipsis-vertical"></i></th>
-    </tr>
+      </tr>
     </thead>
-    <tbody>
-    <?php
-    $sql = "SELECT
+    <tbody class="bg-white">
+      <?php
+      $sql = "SELECT
     tb_usuarios.id,
     tb_usuarios.nombre,
     tb_usuarios.usuario,
@@ -27,34 +33,52 @@ include_once "../../help.php";
     INNER JOIN tb_puestos
     ON tb_usuarios.id_puesto = tb_puestos.id
     INNER JOIN tb_estaciones 
-    ON tb_usuarios.id_gas = tb_estaciones.id WHERE tb_usuarios.estatus = 0";
-    $result = mysqli_query($con, $sql);
-    $numero = mysqli_num_rows($result);
-    while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
-    echo '<tr>
-    <td class="text-center align-middle fw-bold">'.$row['id'].'</td>
-    <td class="align-middle">'.$row['nombre'].'</td>
-    <td class="align-middle">'.$row['tipo_puesto'].'</td>
-    <td class="align-middle">'.$row['usuario'].'</td>
-    <td class="align-middle">'.$row['password'].'</td>
-    <td class="align-middle text-primary"><a href="personal-estacion/'.$row['id_estacion'].'">'.$row['estacion'].'</a></td>
+    ON tb_usuarios.id_gas = tb_estaciones.id WHERE tb_usuarios.estatus = 0 $condicion";
+      $result = mysqli_query($con, $sql);
+      $numero = mysqli_num_rows($result);
+      while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+        $id = $row['id'];
+        $idestacion = $row['id_estacion'];
+        $estacion = $row['estacion'];
+        $nombre = $row['nombre'];
+        $puesto = $row['tipo_puesto'];
+        $usuario = $row['usuario'];
+        $contrasenia = $row['password'];
 
-    <td class="text-center align-middle">
+      ?>
+        <tr>
+          <th class="text-center align-middle fw-bold"><?= $id ?></th>
+          <td class="p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarPersonal(this, <?= $id; ?>, 1)"><?= $nombre ?></div>
+          </td>
+          <td class="p-0">
+            <input onchange="datosRazonSocial(this,4,5)" class="form-control border-0 text-start" type="text" value="<?= $puesto ?>" style="font-size: 1em;" disabled>
+          </td>
+          <td class="p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarPersonal(this, <?= $id; ?>, 2)"><?= $usuario ?></div>
+          </td>
+          <td class="p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarPersonal(this, <?= $id; ?>, 3)"><?= $contrasenia ?></div>
+          </td>
+          <td class="p-0">
+            <input onchange="datosRazonSocial(this,4,5)" class="form-control border-0 text-start" type="text" value="<?= $estacion ?>" style="font-size: 1em;" disabled>
+          </td>
 
-        <div class="btn-group">
-        <button class="btn" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="fa-solid fa-ellipsis-vertical"></i>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li><a class="dropdown-item"><i class="fa-solid fa-pencil"></i> Editar</a></li>
-            <li><a class="dropdown-item"><i class="fa-solid fa-sliders"></i> Permisos</a></li>
-            <li><a class="dropdown-item"><i class="fa-solid fa-trash-can"></i> Eliminar</a></li>
-        </ul>
-        </div>
-       
-    </td>
-    </tr>';
-    }
-    ?>
+          <td class="text-center align-middle">
+
+            <div class="btn-group">
+              <button class="btn" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item"><i class="fa-solid fa-sliders"></i> Permisos</a></li>
+                <li onclick="eliminarPersonal(<?= $id ?>)"><a class="dropdown-item"><i class="fa-solid fa-trash-can"></i> Eliminar</a></li>
+              </ul>
+            </div>
+
+          </td>
+        </tr>
+      <?php } ?>
     </tbody>
-</table>
+  </table>
+</div>
