@@ -140,12 +140,15 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
   <script type="text/javascript" src="<?= RUTA_JS ?>alertify.js"></script>
 
   <script type="text/javascript">
     $(document).ready(function() {
       $(".LoaderPage").fadeOut("slow");
-      ContenidoComentarios(<?= $idticket; ?>);
       $('#dias_habiles').focus();
       // JavaScript para detectar el cambio y actualizar automáticamente
       $('#dias_habiles').on('change', function() {
@@ -157,52 +160,11 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 
 
     function regresarP() {
-      window.location.href = '../sistemas';
-    }
-
-    function ContenidoComentarios(idticket) {
-      $('#ContenidoComentarios').load('../app/vistas/contenido-lista-comentarios.php?idticket=' + idticket);
-    }
-
-    function GuardarComentario(idticket) {
-
-      var Comentario = $('#Comentario').val();
-
-      if (Comentario != "") {
-        $('#Comentario').css('border', '');
-
-        let parametros = {
-          "Accion": "guardar-comentario",
-          "idticket": idticket,
-          "comentario": Comentario
-        };
-
-        $.ajax({
-          data: parametros,
-          url: '../app/modelo/controlador-sistemas.php',
-          type: 'post',
-          beforeSend: function() {},
-          complete: function() {
-
-          },
-          success: function(response) {
-
-            ContenidoComentarios(idticket);
-
-
-          }
-        });
-
-      } else {
-        $('#Comentario').css('border', '2px solid #A52525');
-      }
-
+      window.location.href = '../actividades';
     }
 
     function EditarTicket(Detalle, idticket, opcion) {
-      if(Detalle == ""){
-        alertify.error('Debes de ingresar fecha Termino')
-      }
+
       let parametros = {
         "Accion": "editar-registro",
         "Detalle": Detalle,
@@ -215,11 +177,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         type: 'post',
         beforeSend: function() {},
         complete: function() {},
-        success: function(response) {
-          if(response == 1 && opcion == 3){
-            regresarP()
-          }
-        }
+        success: function(response) {}
       });
 
     }
@@ -242,18 +200,12 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         beforeSend: function() {},
         complete: function() {},
         success: function(response) {
-          console.log(response)
-          if (response == 1 && opcion == 2)
-            location.reload();
+  
         }
       });
     }
 
     function FinalizarEdicion(idticket) {
-      const fechaTerminoGlobal = '<?= $fechatermino ?>';
-      if(fechaTerminoGlobal == ''){
-        alert("Debera de registrar fecha Termino")
-      }
       let Responsable = $('#Responsable').val();
 
       if (Responsable != 0) {
@@ -307,6 +259,16 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
       }).show();
 
     }
+
+    function fechasActividad(ticket, fecha) {
+      $('#ModalFecha').modal('show');
+      $('#DivModalFecha').load('../app/vistas/actividades/modal-fecha-actividades.php?idticket=' + ticket + '&fecha=' + fecha);
+    }
+
+    function FinalizarFechasAsignacion() {
+      $('#ModalFecha').modal('hide');
+      location.reload();
+    }
   </script>
   <style>
     .grayscale {
@@ -345,7 +307,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
           </div>
         </div>
 
-        <div class="row mt-3">
+        <div class="row mt-3 text-center d-flex justify-content-around">
           <div class="col-2">
             <h6 class="fw-bold"># Ticket</h6>
             <div>0<?= $id_ticket; ?></div>
@@ -367,9 +329,11 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
             <div class="<?= $colorPrioridad; ?>"><b><?= $prioridad; ?></b></div>
           </div>
         </div>
+        <div class="ms-5">
+          <h6 class="mt-2 fw-bold">Descripción</h6>
+          <div><?= $descripcion; ?></div>
+        </div>
 
-        <h6 class="mt-2 fw-bold">Descripción</h6>
-        <div><?= $descripcion; ?></div>
 
         <hr>
 
@@ -382,22 +346,44 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
           } else {
             $EstacionDepartamentoUltimoRegistro = $UltimoRegistro['nomestacion'];
           }
-
-          $explode3 = explode(' ', $UltimoRegistro['fechatermino']);
-          if ($explode3[0] == '0000-00-00') {
-            $FechaUltimoRegistro = FormatoFecha($fecha_del_dia);
-          } else {
-            $FechaUltimoRegistro = FormatoFecha($explode3[0]);
-          }
-
-          echo '<div class="alert alert-warning" role="alert">
+          // Verificacion si tiene fechas asignadas
+          if ($UltimoRegistro['fechatermino'] != "") {
+            $explode3 = explode(' ', $UltimoRegistro['fechatermino']);
+            if ($explode3[0] == '0000-00-00') {
+              $FechaUltimoRegistro = FormatoFecha($fecha_del_dia);
+            } else {
+              $FechaUltimoRegistro = FormatoFecha($explode3[0]);
+            }
+            $advertencia = '<div class="alert alert-warning" role="alert">
                   Información del ultimo registro agregado en la base de datos.</br>
                   # Ticket <b>0' . $UltimoRegistro['idticket'] . '</b>, Fecha termino: <b>' . $FechaUltimoRegistro . '</b>, Estación o Departamento:  <b>' . $EstacionDepartamentoUltimoRegistro . '</b> 
                   </div>';
+          }else{
+            $explode3[0] = '0000-00-00';
+            $advertencia = '<div class="alert alert-warning" role="alert">
+                  No hay ultimo registro agregado en la Base de Datos.</br></div>';
+          }
+
+
+          echo $advertencia;
 
           //Codigo que permite validar los dias habiles-->
-          $fechaInicio = new DateTime($explode3[0]);
-          $fechaInicio->modify('+1 day');
+          // Obtén la fecha de hoy
+          $fechaHoy = new DateTime();
+
+          // Crea un objeto DateTime con el valor de explode3[0]
+          $fechaExplode = new DateTime($explode3[0]);
+
+          // Compara las fechas
+          if ($fechaExplode <= $fechaHoy) {
+            // Si la fecha es menor o igual a hoy, asigna fecha de hoy +1 día
+            $fechaInicio = clone $fechaHoy;
+            $fechaInicio->modify('+1 day');
+          } else {
+            // Si la fecha es futura, usa la fecha original de explode3[0]
+            $fechaInicio = $fechaExplode->modify('+1 day');
+          }
+
 
           // Validación para que, si la fecha de inicio cae en sábado o domingo, empiece desde el próximo lunes
           if ($fechaInicio->format('N') == 6) {
@@ -425,10 +411,19 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 
           // Restamos un día al final porque el bucle suma un día extra
           $fechaFin->modify('-1 day');
+          $onclick = "onclick='fechasActividad($idticket, \"" . $fechaInicio->format('Y-m-d') . "\")'";
+        }else{
+          $onclick = "";
         }
-
         if ($numeroActividad > 0) {
         ?>
+          <div class="text-end p-3">
+          <button type="button" class="btn btn-labeled2 btn-primary float-end" <?= $onclick ?>>
+            <span class="btn-label2">
+                <i class="fa-regular fa-calendar-check"></i>
+              </span>Asignar Fechas 
+            </button>
+          </div>
           <h6 class="mt-2 text-secondary">Actividad:</h6>
           <div class="table-responsive">
             <table id="tabla-sistemas" class="custom-table mt-2" style="font-size: 14px;" width="100%">
@@ -452,19 +447,15 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
                   $EstadoActividad = $rowActividad['estado'];
 
                   if ($rowActividad['fecha_inicio'] == '0000-00-00') {
-                    $AtividadFechaInicio = '';
-                    $readonly = '';
+                    $AtividadFechaInicio = 'S/I';
                   } else {
-                    $AtividadFechaInicio = $rowActividad['fecha_inicio'];
-                    $readonly = 'readonly';
+                    $AtividadFechaInicio = FormatoFecha($rowActividad['fecha_inicio']);
                   }
 
                   if ($rowActividad['fecha_termino'] == '0000-00-00') {
-                    $AtividadFechaTermino = '';
-                    $readonly = '';
+                    $AtividadFechaTermino = 'S/I';
                   } else {
-                    $AtividadFechaTermino = $rowActividad['fecha_termino'];
-                    $readonly = 'readonly';
+                    $AtividadFechaTermino = FormatoFecha($rowActividad['fecha_termino']);
                   }
 
                   if ($rowActividad['estado'] == 0) {
@@ -484,8 +475,8 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
                   echo '<tr>';
                   echo '<th class="align-middle">' . $numActividad . '</th>';
                   echo '<td class="align-middle">' . $descripcionActividad . '</td>';
-                  echo '<td class="p-0"><input type="date" class="border-0 form-control" value="' . $AtividadFechaInicio . '" onchange="EditarActividad(this,' . $idActividad . ',1)" ' . $readonly . ' ></td>';
-                  echo '<td class="p-0"><input type="date" class="border-0 form-control" value="' . $AtividadFechaTermino . '" onchange="EditarActividad(this,' . $idActividad . ',2)" ' . $readonly . ' ></td>';
+                  echo '<td class="p-0"> ' . $AtividadFechaInicio . '</td>';
+                  echo '<td class="p-0"> ' . $AtividadFechaTermino . '</td>';
                   echo '<td class="p-0">
                             <select class="form-control rounded-0 border-0" onchange="EditarActividad(this,' . $idActividad . ',3)">
                                 <option value="' . $EstadoActividad . '">' . $EstadoDetalle . '</option>
@@ -509,9 +500,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         <?php } ?>
 
         <div class="row">
-          <?php
-          $fechaFinGuardar = ""; 
-          if ($numeroActividad > 0) {
+          <?php if ($numeroActividad > 0) {
             $idActividad = '';
             $sqlActividad = "SELECT fecha_termino FROM ds_soporte_actividades WHERE id_ticket = '" . $idticket . "' ORDER BY id ASC";
             $resultActividad = mysqli_query($con, $sqlActividad);
@@ -552,7 +541,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
             <?php
 
             }
-          } else {
+          }else {
             $fechaTerminoGlobal = FormatoFecha($fechaFin->format('Y-m-d'));
             $fechaFinGuardar = $fechaFin->format('Y-m-d');
 
@@ -597,7 +586,8 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
           <?php if ($fechaTermino == '') { ?>
             <button type="button" class="btn btn-labeled2 btn-success"
               onclick="
-              EditarTicket('<?= $fechaInicio->format('Y-m-d') ?>',<?= $idticket; ?>,2)
+              FinalizarEdicion(<?= $idticket; ?>);
+              EditarTicket('<?= $fechaInicio->format('Y-m-d') ?>',<?= $idticket; ?>,2);
               EditarTicket('<?= $fechaFinGuardar ?>',<?= $idticket; ?>,3)">
               <span class="btn-label2"><i class="fa-solid fa-check"></i></span>Finalizar edicion</button>
           <?php } else { ?>
@@ -619,13 +609,14 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
     </div>
   </div>
 
-  <div class="modal fade bd-example-modal-lg" id="ModalActividades" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document" style="margin-top: 83px;">
+  <div class="modal" id="ModalFecha">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
-        <div id="DivModalActividades"></div>
+        <div id="DivModalFecha"></div>
       </div>
     </div>
   </div>
+
 
   <script src="<?= RUTA_JS ?>bootstrap.min.js"></script>
 

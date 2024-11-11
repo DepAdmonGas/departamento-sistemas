@@ -34,9 +34,13 @@ require "app/help.php";
       contenidoEstaciones();
     });
 
-    function contenidoEstaciones(){
+    function home() {
+      window.location.href = "home";
+    }
 
-        $('#contenidoEstaciones').load('app/vistas/estaciones/contenido-tabla-estaciones.php', function() {
+    function contenidoEstaciones() {
+
+      $('#contenidoEstaciones').load('app/vistas/estaciones/contenido-tabla-estaciones.php', function() {
         $('#tabla-estaciones').DataTable({
           "language": {
             "url": "<?= RUTA_JS ?>/es-ES.json"
@@ -58,12 +62,107 @@ require "app/help.php";
       });
 
     }
-  </script>
-  <style>
-    .grayscale {
-      filter: opacity(50%);
+
+    function editarEstacion(celda, numLista, columna) {
+      concepto = celda.textContent;
+      switch (columna) {
+        case 1:
+          columna = "nombre";
+          break;
+        case 2:
+          columna = "permisocre";
+          break;
+        case 3:
+          columna = "razonsocial";
+          break;
+        case 4:
+          columna = "rfc";
+          break;
+        case 5:
+          columna = "direccioncompleta";
+          break;
+        case 6:
+          columna = "apoderado_legal";
+          break;
+      }
+
+      var parametros = {
+        "accion": "editar-estacion",
+        "numLista": numLista,
+        "concepto": concepto,
+        "columna": columna
+      };
+
+      $.ajax({
+        data: parametros,
+        url: 'app/controlador/estaciones.php',
+        type: 'post',
+        beforeSend: function() {
+          console.log(concepto)
+        },
+        complete: function() {},
+        success: function(response) {
+          if (response != 1) {
+            alertify.error('error');
+          }
+        }
+      });
+
     }
-  </style>
+
+    function eliminarEstacion(estacion) {
+      var parametros = {
+        "accion": "eliminar-estacion",
+        "numlista": estacion
+      };
+
+      alertify.confirm("Confirmación", "¿Estás seguro de que deseas eliminar este elemento?",
+        function() {
+          // Si el usuario confirma, se ejecuta la solicitud AJAX
+          $.ajax({
+            data: parametros,
+            url: 'app/controlador/estaciones.php',
+            type: 'post',
+            beforeSend: function() {},
+            complete: function() {},
+            success: function(response) {
+              if (response == 1) {
+                alertify.success('Elemento eliminado correctamente');
+                contenidoEstaciones();
+              }
+            }
+          });
+        },
+        function() {
+          // Si el usuario cancela, se muestra un mensaje opcional o no se hace nada
+          //alertify.error('Operación cancelada');
+        }
+      );
+
+
+    }
+
+    function personalEstacion(numeroLista) {
+      window.location.href = "personal?numLista=" + numeroLista;
+    }
+
+    function habilitarEdicion(celda) {
+      var divEditable = celda.querySelector('div');
+
+      if (divEditable) {
+        // Verificar si el contenido es editable
+        if (divEditable.contentEditable === "false") {
+          divEditable.contentEditable = "true"; // Habilitar la edición
+          divEditable.focus(); // Poner el foco en el div para que el usuario pueda empezar a escribir
+        } else {
+          divEditable.contentEditable = "false"; // Deshabilitar la edición si ya estaba habilitada
+          var nuevoValor = divEditable.textContent; // Obtener el nuevo valor
+          console.log("Valor actualizado: " + nuevoValor);
+          // Aquí puedes realizar un AJAX o alguna acción para guardar el cambio en el servidor
+        }
+      }
+    }
+  </script>
 </head>
 
 <body>
@@ -75,16 +174,35 @@ require "app/help.php";
 
     <div class="contendAG">
 
-    <div aria-label="breadcrumb">
-    <ol class="breadcrumb breadcrumb-caret">
-    <li class="breadcrumb-item"><a onclick="history.back()" class="text-uppercase text-primary pointer"><i class="fa-solid fa-house"></i> Inicio</a></li>
-    <li aria-current="page" class="breadcrumb-item active text-uppercase">Estaciones</li>
-    </ol>
-    </div>
+      <div class="col-12">
+        <div aria-label="breadcrumb" style="padding-left: 0; margin-bottom: 0;">
+          <ol class="breadcrumb breadcrumb-caret">
+            <li class="breadcrumb-item"><a onclick="home()" class="text-uppercase text-primary pointer"><i class="fa-solid fa-house"></i>
+                Inicio</a></li>
+            <li aria-current="page" class="breadcrumb-item active text-uppercase">
+              Estaciones
+            </li>
+          </ol>
+        </div>
+        <div class="row">
+          <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12">
+            <h3 class="text-secondary" style="padding-left: 0; margin-bottom: 0; margin-top: 0;">
+              Estaciones
+            </h3>
+          </div>
+          <!--
+          <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mt-2">
+            <button type="button" class="btn btn-labeled2 btn-primary float-end ms-2"
+              onclick="nuevaEstacion()">
+              <span class="btn-label2"><i class="fa-solid fa-plus"></i></span>Agregar</button>
+          </div>-->
 
-    <h3 class="text-secondary">Estaciones</h3>
-
-    <div id="contenidoEstaciones"></div>
+        </div>
+        <hr>
+      </div>
+      <div class="col-12">
+        <div id="contenidoEstaciones" class="mt-3"></div>
+      </div>
 
     </div>
 
