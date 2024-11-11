@@ -79,8 +79,14 @@ require "app/help.php";
           } else {
             contenidoPuesto();
             setTimeout(function() {
-              document.getElementById("concepto-" + response).disabled = false;
-              document.getElementById("concepto-" + response).focus();
+              var celda = document.getElementById("concepto-" + response);
+              if (celda) {
+                var divEditable = celda.querySelector('div');
+                if (divEditable) {
+                  divEditable.contentEditable = "true"; // Habilitar la edición
+                  divEditable.focus(); // Poner el cursor en el div
+                }
+              }
             }, 100); // Ajusta el tiempo según sea necesario
 
 
@@ -159,7 +165,6 @@ require "app/help.php";
         } else {
           divEditable.contentEditable = "false"; // Deshabilitar la edición si ya estaba habilitada
           var nuevoValor = divEditable.textContent; // Obtener el nuevo valor
-          console.log("Valor actualizado: " + nuevoValor);
           // Aquí puedes realizar un AJAX o alguna acción para guardar el cambio en el servidor
         }
       }

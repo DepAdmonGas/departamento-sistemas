@@ -23,7 +23,7 @@ include_once "../../help.php";
       ?>
         <tr>
           <th class="align-middle text-center fw-bold"><?= $id ?></th>
-          <td class="align-middle p-1" ondblclick="habilitarEdicion(this)">
+          <td id="concepto-<?=$id?>" class="align-middle p-1" ondblclick="habilitarEdicion(this)">
             <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarPuesto(this, <?= $id; ?>)"><?= $puesto ?></div>
           </td>
           <td class="text-center align-middle" onclick="eliminarPuesto(<?= $id ?>)">
