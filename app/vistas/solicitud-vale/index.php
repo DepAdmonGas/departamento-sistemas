@@ -47,22 +47,79 @@ require "app/help.php";
           "lengthMenu": [25, 50, 75, 100],
           "columnDefs": [{
               "orderable": false,
-              "targets": [10]
+              "targets": [9]
             },
             {
               "searchable": false,
-              "targets": [10]
+              "targets": [9]
             }
           ]
         });
       });
     }
-  </script>
-  <style>
-    .grayscale {
-      filter: opacity(50%);
+    function habilitarEdicion(celda) {
+      var divEditable = celda.querySelector('div');
+
+      if (divEditable) {
+        // Verificar si el contenido es editable
+        if (divEditable.contentEditable === "false") {
+          divEditable.contentEditable = "true"; // Habilitar la edición
+          divEditable.focus(); // Poner el foco en el div para que el usuario pueda empezar a escribir
+        } else {
+          divEditable.contentEditable = "false"; // Deshabilitar la edición si ya estaba habilitada
+          var nuevoValor = divEditable.textContent; // Obtener el nuevo valor
+          console.log("Valor actualizado: " + nuevoValor);
+          // Aquí puedes realizar un AJAX o alguna acción para guardar el cambio en el servidor
+        }
+      }
     }
-  </style>
+    function editarVale(celda, id, columna) {
+      concepto = celda.textContent;
+      switch (columna) {
+        case 1:
+          columna = "monto";
+          break;
+        case 2:
+          columna = "concepto";
+          break;
+        case 3:
+          columna = "solicitante";
+          break;
+        case 4:
+          columna = "autorizado_por";
+          break;
+        case 5:
+          columna = "metodo_autorizacion";
+          break;
+        case 6:
+          columna = "razonsocial";
+          break;
+        case 7:
+          columna = "cuenta";
+          break;
+      }
+
+      var parametros = {
+        "accion": "editar-vale",
+        "id": id,
+        "concepto": concepto,
+        "columna": columna
+      };
+
+      $.ajax({
+        data: parametros,
+        url: 'app/controlador/controladorVale.php',
+        type: 'post',
+        beforeSend: function() {},
+        complete: function() {},
+        success: function(response) {
+          if (response != 1) {
+            alertify.error('error');
+          }
+        }
+      });
+    }
+  </script>
 </head>
 
 <body>

@@ -24,7 +24,7 @@ if ($Session_IDUsuarioBD == 496) {
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Departamento Sistemas<?= $Session_IDUsuarioBD ?></title>
+  <title>Departamento Sistemas</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width initial-scale=1.0">
   <link rel="shortcut icon" href="<?= RUTA_IMG_ICONOS ?>/icono-web.png">

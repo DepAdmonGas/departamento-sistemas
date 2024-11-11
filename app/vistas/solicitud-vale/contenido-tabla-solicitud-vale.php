@@ -1,9 +1,10 @@
 <?php
 include_once "../../help.php";
 ?>
-<table class="table table-bordered table-sm table-hover table-striped bg-white" id="tabla-solicitud-vale">
+<div class="table-responsive">
+  <table id="tabla-solicitud-vale" class="custom-table" style="font-size: .8em;" width="100%">
     <thead class="bg-primary text-white">
-    <tr>
+      <tr>
         <th class="align-middle">Folio</th>
         <th class="align-middle" width="100px">Fecha</th>
         <th class="align-middle" width="100px">Hora</th>
@@ -14,13 +15,11 @@ include_once "../../help.php";
         <th class="align-middle">Metodo Autorización</th>
         <th class="align-middle">Razon Social</th>
         <th class="align-middle">Cuenta</th>
-        
-        <th class="text-center align-middle" width="30px"><i class="fa-solid fa-ellipsis-vertical"></i></th>
-    </tr>
+      </tr>
     </thead>
-    <tbody>
-    <?php
-    $sql = "SELECT 
+    <tbody class="bg-white">
+      <?php
+      $sql = "SELECT 
     op_solicitud_vale.id,
     op_solicitud_vale.folio,
     op_solicitud_vale.fecha,
@@ -40,37 +39,51 @@ include_once "../../help.php";
     ON op_solicitud_vale.id_estacion = tb_estaciones.id
     INNER JOIN tb_usuarios
     ON op_solicitud_vale.id_usuario = tb_usuarios.id";
-    $result = mysqli_query($con, $sql);
-    $numero = mysqli_num_rows($result);
-    while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
-    
-    echo '<tr>
-    <td class="text-center align-middle fw-bold">00'.$row['folio'].'</td>
-    <td class="align-middle">'.$row['fecha'].'</td>
-    <td class="align-middle">'.$row['hora'].'</td>
-    <td class="align-middle">$'.number_format($row['monto'],2).'</td>
-    <td class="align-middle">'.$row['concepto'].'</td>
-    <td class="align-middle">'.$row['solicitante'].'</td>
-    <td class="align-middle">'.$row['autorizado_por'].'</td>
-    <td class="align-middle">'.$row['metodo_autorizacion'].'</td>
+      $result = mysqli_query($con, $sql);
+      $numero = mysqli_num_rows($result);
+      while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+        $folio = $row['folio'];
+        $fecha = $row['fecha'];
+        $hora = $row['hora'];
+        $monto = $row['monto'];
+        $concepto = $row['concepto'];
+        $solicitante = $row['solicitante'];
+        $autorizado_por = $row['autorizado_por'];
+        $metodo_autorizacion = $row['metodo_autorizacion'];
+        $razon_social = $row['razonsocial'];
+        $cuenta = $row['cuenta'];
+      ?>
+        <tr>
+          <td class="text-center align-middle fw-bold">00<?= $folio ?></td>
+          <td class="align-middle"><?= $fecha ?></td>
+          <td class="align-middle"><?= $hora ?></td>
+          <td class="align-middle" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarVale(this, <?= $folio ?>, 1)">$<?= number_format($monto, 2) ?></div>
+          </td>
+          <td class="align-middle" ondblclick="habilitarEdicion(this)">
+          <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarVale(this, <?= $folio ?>, 2)"><?=$concepto?></div>
+          </td>
+          <td class="align-middle" ondblclick="habilitarEdicion(this)">
+          <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarVale(this, <?= $folio ?>, 3)"><?= $solicitante ?></div>
+          </td>
+          <td class="align-middle" ondblclick="habilitarEdicion(this)">
+          <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarVale(this, <?= $folio ?>, 4)"><?= $autorizado_por ?></div>
 
-    <td class="align-middle">'.$row['razonsocial'].'</td>
-    <td class="align-middle">'.$row['cuenta'].'</td>
-    
-    <td class="text-center align-middle">
+          </td>
+          <td class="align-middle" ondblclick="habilitarEdicion(this)">
+          <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarVale(this, <?= $folio ?>, 5)"><?= $metodo_autorizacion ?></div>
 
-        <div class="btn-group">
-        <button class="btn btn-sm" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="fa-solid fa-ellipsis-vertical"></i>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li><a class="dropdown-item"><i class="fa-solid fa-pencil"></i> Editar</a></li>
-        </ul>
-        </div>
-       
-    </td>
-    </tr>';
-    }
-    ?>
+          </td>
+          <td class="align-middle" ondblclick="habilitarEdicion(this)">
+          <?= $razon_social ?>
+          </td>
+          <td class="align-middle" ondblclick="habilitarEdicion(this)">
+          <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarVale(this, <?= $folio ?>, 7)"><?= $cuenta ?></div>
+  
+        </td>
+        </tr>
+      <?php }
+      ?>
     </tbody>
- </table>
+  </table>
+</div>
