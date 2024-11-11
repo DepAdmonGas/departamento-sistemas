@@ -34,9 +34,9 @@ require "app/help.php";
       contenidoSolicitudCheque();
     });
 
-    function contenidoSolicitudCheque(){
+    function contenidoSolicitudCheque() {
 
-        $('#contenidoSolicitudCheque').load('app/vistas/solicitud-cheque/contenido-tabla-solicitud-cheque.php', function() {
+      $('#contenidoSolicitudCheque').load('app/vistas/solicitud-cheque/contenido-tabla-solicitud-cheque.php', function() {
         $('#tabla-solicitud-cheque').DataTable({
           "language": {
             "url": "<?= RUTA_JS ?>/es-ES.json"
@@ -47,23 +47,88 @@ require "app/help.php";
           "lengthMenu": [25, 50, 75, 100],
           "columnDefs": [{
               "orderable": false,
-              "targets": [9]
+              "targets": [8]
             },
             {
               "searchable": false,
-              "targets": [9]
+              "targets": [8]
             }
           ]
         });
       });
     }
-  </script>
-  <style>
-    .grayscale {
-      filter: opacity(50%);
+
+    function habilitarEdicion(celda) {
+      var divEditable = celda.querySelector('div');
+
+      if (divEditable) {
+        // Verificar si el contenido es editable
+        if (divEditable.contentEditable === "false") {
+          divEditable.contentEditable = "true"; // Habilitar la edición
+          divEditable.focus(); // Poner el foco en el div para que el usuario pueda empezar a escribir
+        } else {
+          divEditable.contentEditable = "false"; // Deshabilitar la edición si ya estaba habilitada
+          var nuevoValor = divEditable.textContent; // Obtener el nuevo valor
+          console.log("Valor actualizado: " + nuevoValor);
+          // Aquí puedes realizar un AJAX o alguna acción para guardar el cambio en el servidor
+        }
+      }
     }
-  </style>
-</head>
+
+    function editarCheque(celda, id, columna , id_estacion = 0) {
+      concepto = celda.textContent;
+      switch (columna) {
+        case 1:
+          columna = "fecha";
+          break;
+        case 2:
+          columna = "hora";
+          break;
+        case 3:
+          columna = "beneficiario";
+          break;
+        case 4:
+          columna = "monto";
+          break;
+        case 5:
+          columna = "no_factura";
+          break;
+        case 6:
+          columna = "concepto";
+          break;
+        case 7:
+          columna = "solicitante";
+          break;
+        case 8:
+          if(id_estacion == 8){
+            columna = "razonSocialSolicitud";
+          }
+          columna = "razonSocialEstacion";
+          break;
+      }
+
+      var parametros = {
+        "accion": "editar-cheque",
+        "id": id,
+        "concepto": concepto,
+        "columna": columna
+      };
+
+      $.ajax({
+        data: parametros,
+        url: 'app/controlador/controladorCheque.php',
+        type: 'post',
+        beforeSend: function() {},
+        complete: function() {},
+        success: function(response) {
+          console.log(response)
+          if (response != 1) {
+            alertify.error('error');
+          }
+        }
+      });
+    }
+  </script>
 
 <body>
   <div class="LoaderPage"></div>
@@ -74,15 +139,15 @@ require "app/help.php";
 
     <div class="contendAG">
 
-    <div aria-label="breadcrumb">
-    <ol class="breadcrumb breadcrumb-caret">
-    <li class="breadcrumb-item"><a onclick="history.back()" class="text-uppercase text-primary pointer"><i class="fa-solid fa-house"></i> Inicio</a></li>
-    <li aria-current="page" class="breadcrumb-item active text-uppercase">Solicitud Cheque</li>
-    </ol>
-    </div>
+      <div aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-caret">
+          <li class="breadcrumb-item"><a onclick="history.back()" class="text-uppercase text-primary pointer"><i class="fa-solid fa-house"></i> Inicio</a></li>
+          <li aria-current="page" class="breadcrumb-item active text-uppercase">Solicitud Cheque</li>
+        </ol>
+      </div>
 
-    <h3 class="text-secondary">Solicitud Cheque</h3>
-    <div id="contenidoSolicitudCheque" class="mt-3"></div>
+      <h3 class="text-secondary">Solicitud Cheque</h3>
+      <div id="contenidoSolicitudCheque" class="mt-3"></div>
 
     </div>
 
