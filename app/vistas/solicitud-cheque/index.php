@@ -110,6 +110,7 @@ require "app/help.php";
       var parametros = {
         "accion": "editar-cheque",
         "id": id,
+        "id_estacion" : id_estacion,
         "concepto": concepto,
         "columna": columna
       };
@@ -121,7 +122,6 @@ require "app/help.php";
         beforeSend: function() {},
         complete: function() {},
         success: function(response) {
-          console.log(response)
           if (response != 1) {
             alertify.error('error');
           }

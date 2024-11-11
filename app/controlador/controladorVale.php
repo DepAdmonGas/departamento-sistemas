@@ -1,15 +1,14 @@
 <?php
-require_once "../modelo/Cheque.php";
+require_once "../modelo/Vale.php";
 require_once "../bd/ConexionBD.php";
 $conexion = new ConexionBD();
-$cheque = new Cheque($conexion->conectarBD());
+$vale = new Vale($conexion->conectarBD());
 
 switch ($_POST['accion']) {
-    case 'editar-cheque':
+    case 'editar-vale':
         $numLista = $_POST['id'];
         $valor = $_POST['concepto'];
         $columna = $_POST['columna'];
-        $idEstacion = $_POST['id_estacion'];
-        echo $cheque->editarCheque($numLista,$columna,$valor,$idEstacion);
+        echo $vale->editarVale($numLista,$columna,$valor);
         break;
     }

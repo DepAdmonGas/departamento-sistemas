@@ -7,17 +7,20 @@ class Cheque
   {
     $this->conexion = $conexion;
   }
-  public function editarCheque($numLista, $columna, $valor): bool
+  public function editarCheque($numLista, $columna, $valor,$idEstacion):bool
   {
     $resultado = true;
     $tabla = "op_solicitud_cheque";
-    if($valor == "razonSocialEstacion"){
+    $id = "id = $numLista";
+    if($columna == "razonSocialEstacion"){
         $tabla = "tb_estaciones";
+        $id = "id = $idEstacion";
     }
-    if($valor == "razonSocialEstacion" || $valor == "razonSocialSolicitud"){
-        $valor = "razonsocial";
+    if($columna == "razonSocialEstacion" || $columna == "razonSocialSolicitud"){
+        $columna = "razonsocial";
     }
-    $sql = "UPDATE $tabla SET $columna = '$valor' WHERE id = $numLista";
+    
+    $sql = "UPDATE $tabla SET $columna = '$valor' WHERE $id";
     $result = $this->conexion->query($sql);
     if (!$result) {
       $resultado = false;
