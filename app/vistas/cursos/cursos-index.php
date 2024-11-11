@@ -34,9 +34,52 @@ require "app/help.php";
       contenidoCursos();
     });
 
-    function contenidoCursos(){
+    function home() {
+      window.location.href = "home";
+    }
 
-        $('#contenidoCursos').load('app/vistas/cursos/contenido-tabla-cursos.php', function() {
+    function modalModulos() {
+      $('#CursoModulos').modal('show');
+      $('#DivCursoModulos').load('app/vistas/cursos/modal-modulos.php');
+    }
+
+    function modalTemas() {
+      $('#CursoTemas').modal('show');
+      $('#DivCursoTemas').load('app/vistas/cursos/modal-tema.php');
+    }
+
+    function agregarModulo() {
+      var nombre = $('#titulo').val();
+      if (nombre != "") {
+        $('#titulo').css('border', '');
+
+        var parametros = {
+          "accion": "agregar-modulo",
+          "titulo": nombre
+        };
+
+        $.ajax({
+          data: parametros,
+          url: 'app/controlador/controladorCurso.php',
+          type: 'post',
+          beforeSend: function() {},
+          complete: function() {},
+          success: function(response) {
+            console.log(response)
+            if (response == 1) {
+              modalModulos()
+            }
+          }
+        });
+
+      } else {
+        $('#titulo').css('border', '2px solid #A52525');
+      }
+    }
+
+    function contenidoCursos() {
+
+      $('#contenidoCursos').load('app/vistas/cursos/contenido-tabla-cursos.php', function() {
         $('#tabla-cursos').DataTable({
           "language": {
             "url": "<?= RUTA_JS ?>/es-ES.json"
@@ -47,23 +90,92 @@ require "app/help.php";
           "lengthMenu": [25, 50, 75, 100],
           "columnDefs": [{
               "orderable": false,
-              "targets": [4,5]
+              "targets": [4, 5]
             },
             {
               "searchable": false,
-              "targets": [4,5]
+              "targets": [4, 5]
             }
           ]
         });
       });
 
     }
-  </script>
-  <style>
-    .grayscale {
-      filter: opacity(50%);
+
+    function habilitarEdicion(celda) {
+      var divEditable = celda.querySelector('div');
+
+      if (divEditable) {
+        // Verificar si el contenido es editable
+        if (divEditable.contentEditable === "false") {
+          divEditable.contentEditable = "true"; // Habilitar la edición
+          divEditable.focus(); // Poner el foco en el div para que el usuario pueda empezar a escribir
+        } else {
+          divEditable.contentEditable = "false"; // Deshabilitar la edición si ya estaba habilitada
+          var nuevoValor = divEditable.textContent; // Obtener el nuevo valor
+          // Aquí puedes realizar un AJAX o alguna acción para guardar el cambio en el servidor
+        }
+      }
     }
-  </style>
+
+    function editarCurso(celda, id, numTema, columna) {
+      concepto = celda.textContent;
+      switch (columna) {
+        case 1:
+          columna = "titulo";
+          break;
+        case 2:
+          columna = "categoria";
+          break;
+      }
+
+      var parametros = {
+        "accion": "editar-tema",
+        "id": id,
+        "concepto": concepto,
+        "columna": columna,
+        "numTema": numTema
+      };
+
+      $.ajax({
+        data: parametros,
+        url: 'app/controlador/controladorCurso.php',
+        type: 'post',
+        beforeSend: function() {},
+        complete: function() {},
+        success: function(response) {
+          console.log(response)
+          if (response != 1) {
+            alertify.error('error');
+          }
+        }
+      });
+    }
+
+    function editarModulo(celda, id) {
+
+      concepto = celda.textContent;
+      var parametros = {
+        "accion": "editar-modulo",
+        "id": id,
+        "concepto": concepto,
+      };
+
+      $.ajax({
+        data: parametros,
+        url: 'app/controlador/controladorCurso.php',
+        type: 'post',
+        beforeSend: function() {},
+        complete: function() {},
+        success: function(response) {
+          console.log(response)
+          if (response != 1) {
+            alertify.error('error');
+          }
+        }
+      });
+    }
+  </script>
 </head>
 
 <body>
@@ -75,33 +187,56 @@ require "app/help.php";
 
     <div class="contendAG">
 
-    <div aria-label="breadcrumb">
-    <ol class="breadcrumb breadcrumb-caret">
-    <li class="breadcrumb-item"><a onclick="history.back()" class="text-uppercase text-primary pointer"><i class="fa-solid fa-house"></i> Inicio</a></li>
-    <li aria-current="page" class="breadcrumb-item active text-uppercase">Cursos</li>
-    </ol>
+      <div class="col-12">
+        <div aria-label="breadcrumb" style="padding-left: 0; margin-bottom: 0;">
+          <ol class="breadcrumb breadcrumb-caret">
+            <li class="breadcrumb-item"><a onclick="home()" class="text-uppercase text-primary pointer"><i class="fa-solid fa-house"></i>
+                Inicio</a></li>
+            <li aria-current="page" class="breadcrumb-item active text-uppercase">
+              Cursos
+            </li>
+          </ol>
+        </div>
+        <div class="row">
+          <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12">
+            <h3 class="text-secondary" style="padding-left: 0; margin-bottom: 0; margin-top: 0;">
+              Cursos
+            </h3>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mt-2">
+            <button type="button" class="float-end ms-2 btn dropdown-toggle btn-primary" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-screwdriver-wrench"></i></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li onclick="modalModulos()"><a class="dropdown-item pointer"><i class="fa-solid fa-list"></i> Modulos</a></li>
+              <li onclick="modalTemas()"><a class="dropdown-item pointer"><i class="fa-solid fa-plus"></i> Nuevo Tema</a></li>
+            </ul>
+          </div>
+
+        </div>
+        <hr>
+      </div>
+      <div class="col-12">
+        <div id="contenidoCursos" class="mt-3"></div>
+      </div>
     </div>
 
-    <div class="float-end">
-    <div class="dropdown d-inline ms-2">
-    <button type="button" class="btn dropdown-toggle btn-primary" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-    <i class="fa-solid fa-screwdriver-wrench"></i></span>
-    </button>
-    <ul class="dropdown-menu">
-    <li><a class="dropdown-item pointer"><i class="fa-solid fa-list"></i> Modulos</a></li>
-    <li><a class="dropdown-item pointer"><i class="fa-solid fa-plus"></i> Nueno Tema</a></li>
-    </ul>
+    <!--Modal Curso Modulos-->
+    <div class="modal fade" id="CursoModulos" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="DivCursoModulos">
+        </div>
+      </div>
     </div>
+    <!--Modal Curso Temas-->
+    <div class="modal fade" id="CursoTemas" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="DivCursoTemas">
+        </div>
+      </div>
     </div>
-
-    <h3 class="text-secondary">Cursos</h3>
-
-    <div id="contenidoCursos" class="mt-3"></div>
-
-    </div>
-
   </div>
-  </div>
+
 
   <script src="<?= RUTA_JS ?>bootstrap.min.js"></script>
   <!---------- LIBRERIAS DEL DATATABLE ---------->
