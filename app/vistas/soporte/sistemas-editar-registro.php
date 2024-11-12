@@ -160,25 +160,28 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 
 
     function regresarP() {
-      window.location.href = '../actividades';
+      window.location.href = '../sistemas';
     }
 
     function EditarTicket(Detalle, idticket, opcion) {
-
-      let parametros = {
-        "Accion": "editar-registro",
-        "Detalle": Detalle,
-        "idticket": idticket,
-        "opcion": opcion
-      };
-      $.ajax({
-        data: parametros,
-        url: '../app/modelo/controlador-sistemas.php',
-        type: 'post',
-        beforeSend: function() {},
-        complete: function() {},
-        success: function(response) {}
-      });
+      if (opcion == 3 && Detalle == "") {
+        alertify.error("Falta ingresar fecha termino")
+      } else {
+        let parametros = {
+          "Accion": "editar-registro",
+          "Detalle": Detalle,
+          "idticket": idticket,
+          "opcion": opcion
+        };
+        $.ajax({
+          data: parametros,
+          url: '../app/modelo/controlador-sistemas.php',
+          type: 'post',
+          beforeSend: function() {},
+          complete: function() {},
+          success: function(response) {}
+        });
+      }
 
     }
 
@@ -200,7 +203,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         beforeSend: function() {},
         complete: function() {},
         success: function(response) {
-  
+
         }
       });
     }
@@ -358,7 +361,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
                   Información del ultimo registro agregado en la base de datos.</br>
                   # Ticket <b>0' . $UltimoRegistro['idticket'] . '</b>, Fecha termino: <b>' . $FechaUltimoRegistro . '</b>, Estación o Departamento:  <b>' . $EstacionDepartamentoUltimoRegistro . '</b> 
                   </div>';
-          }else{
+          } else {
             $explode3[0] = '0000-00-00';
             $advertencia = '<div class="alert alert-warning" role="alert">
                   No hay ultimo registro agregado en la Base de Datos.</br></div>';
@@ -412,16 +415,16 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
           // Restamos un día al final porque el bucle suma un día extra
           $fechaFin->modify('-1 day');
           $onclick = "onclick='fechasActividad($idticket, \"" . $fechaInicio->format('Y-m-d') . "\")'";
-        }else{
+        } else {
           $onclick = "";
         }
         if ($numeroActividad > 0) {
         ?>
           <div class="text-end p-3">
-          <button type="button" class="btn btn-labeled2 btn-primary float-end" <?= $onclick ?>>
-            <span class="btn-label2">
+            <button type="button" class="btn btn-labeled2 btn-primary float-end" <?= $onclick ?>>
+              <span class="btn-label2">
                 <i class="fa-regular fa-calendar-check"></i>
-              </span>Asignar Fechas 
+              </span>Asignar Fechas
             </button>
           </div>
           <h6 class="mt-2 text-secondary">Actividad:</h6>
@@ -509,11 +512,12 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
               $idActividad = $rowActividad['fecha_termino'];
             }
             $fechaTerminoGlobal = 'S/I';
+            $fechaFinGuardar = '';
             if ($idActividad != '0000-00-00') {
               $fechaTerminoGlobal = FormatoFecha($idActividad);
               $fechaFinGuardar = $idActividad;
             }
-          } elseif ($numeroActividad == 0 ) {
+          } elseif ($numeroActividad == 0) {
             $idActividad = '';
             $sqlActividad = "SELECT fecha_termino FROM ds_soporte WHERE id_ticket = '" . $idticket . "' ORDER BY id_ticket ASC";
             $resultActividad = mysqli_query($con, $sqlActividad);
@@ -525,27 +529,27 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
             if ($idActividad != '0000-00-00 00:00:00') {
               $fechaTerminoGlobal = FormatoFecha($idActividad);
               $fechaFinGuardar = $idActividad;
-            }else {
+            } else {
               $fechaTerminoGlobal = FormatoFecha($fechaFin->format('Y-m-d'));
               $fechaFinGuardar = $fechaFin->format('Y-m-d');
-            ?>
-            <div class="col-3 mt-3">
-              <form method="get" id="diasHabilesForm">
-                <h6 class="text-secondary" for="dias_habiles">Tiempo solucion</h6>
-                <?php if ($fechatermino == '') : ?>
-                  <input type="number" name="dias_habiles" id="dias_habiles" value="<?php echo $diasHabiles; ?>" min="1" style="text-align: right;">
-                <?php else : echo $tiemposolucion;
-                endif; ?>
-              </form>
-            </div>
+          ?>
+              <div class="col-3 mt-3">
+                <form method="get" id="diasHabilesForm">
+                  <h6 class="text-secondary" for="dias_habiles">Tiempo solucion</h6>
+                  <?php if ($fechatermino == '') : ?>
+                    <input type="number" name="dias_habiles" id="dias_habiles" value="<?php echo $diasHabiles; ?>" min="1" style="text-align: right;">
+                  <?php else : echo $tiemposolucion;
+                  endif; ?>
+                </form>
+              </div>
             <?php
 
             }
-          }else {
+          } else {
             $fechaTerminoGlobal = FormatoFecha($fechaFin->format('Y-m-d'));
             $fechaFinGuardar = $fechaFin->format('Y-m-d');
 
-          ?>
+            ?>
 
             <div class="col-3 mt-3">
               <form method="get" id="diasHabilesForm">

@@ -280,7 +280,7 @@ if ($Session_IDUsuarioBD == 496) {
                   </button>
                   <div class="dropdown-menu">
                     <?php
-                    $sql = "SELECT id, nombre FROM tb_usuarios WHERE id_puesto = 25";
+                    $sql = "SELECT id, nombre FROM tb_usuarios WHERE id_puesto = 25 AND estatus = 0";
                     $result = mysqli_query($con, $sql);
                     while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
                     ?>

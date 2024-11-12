@@ -39,6 +39,7 @@ $con = $ClassConexionBD->conectarBD();
     <tr>
             <th class="align-middle text-center"># Ticket</th>
 			<th class="align-middle text-center">Descripción</th>
+            <th class="align-middle text-center">Fecha Creacion</th>
             <th class="align-middle text-center">Prioridad</th>
 
             <th class="align-middle text-center">Fecha inicio</th>
@@ -151,6 +152,7 @@ $con = $ClassConexionBD->conectarBD();
             echo '<tr '.$trColor.'>';
             echo '<th class="align-middle text-center"><b>0'.$id_ticket.'</b></th>';
             echo '<td class="align-middle text-center">'.$descripcion.'</td>';
+            echo '<td class="align-middle text-center">'.$fechaCreacion.'</td>';
             echo '<td class="align-middle text-center '.$colorPrioridad.'"><small><b>'.$prioridad.'</b></small></td>';
     
             echo '<td class="align-middle text-center"><small class="text-dark"><b>'.$fechaInicio.'</b></small></td>';
@@ -179,6 +181,7 @@ $con = $ClassConexionBD->conectarBD();
             echo '<tr '.$trColor.'>';
             echo '<th class="align-middle text-center"><b>0'.$id_ticket.'</b></th>';
             echo '<td class="align-middle text-center">'.$descripcion.'</td>';
+            echo '<td class="align-middle text-center">'.$fechaCreacion.'</td>';
             echo '<td class="align-middle text-center '.$colorPrioridad.'"><small><b>'.$prioridad.'</b></small></td>';
     
             echo '<td class="align-middle text-center"><small class="text-dark"><b>'.$fechaInicio.'</b></small></td>';
@@ -208,6 +211,7 @@ $con = $ClassConexionBD->conectarBD();
             echo '<tr '.$trColor.' onclick="ModalDetalle('.$id_ticket.')">';
             echo '<th class="align-middle text-center"><b>0'.$id_ticket.'</b></th>';
             echo '<td class="align-middle text-center">'.$descripcion.'</td>';
+            echo '<td class="align-middle text-center">'.$fechaCreacion.'</td>';
             echo '<td class="align-middle text-center '.$colorPrioridad.'"><small><b>'.$prioridad.'</b></small></td>';
     
             echo '<td class="align-middle text-center"><small class="text-dark"><b>'.$fechaInicio.'</b></small></td>';
@@ -239,6 +243,7 @@ $con = $ClassConexionBD->conectarBD();
                 echo '<tr '.$trColor.'>';
                 echo '<th class="align-middle text-center"><b>0'.$id_ticket.'</b></th>';
                 echo '<td class="align-middle text-center">'.$descripcion.'</td>';
+                echo '<td class="align-middle text-center">'.$fechaCreacion.'</td>';
                 echo '<td class="align-middle text-center '.$colorPrioridad.'"><small><b>'.$prioridad.'</b></small></td>';
     
                 echo '<td class="align-middle text-center"><small class="text-dark"><b>'.$fechaInicio.'</b></small></td>';

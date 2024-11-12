@@ -229,7 +229,7 @@ class Sistemas
 
     if (mysqli_query($this->con, $sql)) {
       $this->PersonalSistemas($idRegistro, 1);
-      $this->telegram->enviarToken($usuario, $mensaje);
+      $this->telegram->enviarToken(496, $mensaje);
       $Resultado = 1;
     } else {
       $Resultado = 0;
@@ -381,8 +381,8 @@ class Sistemas
     } else {
       $Resultado = 0;
     }
-    $mensaje = "Tienes un nuevo comentario con el ticket $idticket";
-    $this->telegram->enviarToken($idPersonal, $mensaje);
+    //$mensaje = "Tienes un nuevo comentario con el ticket $idticket";
+    //$this->telegram->enviarToken($idPersonal, $mensaje);
     return $Resultado;
   }
 
@@ -534,7 +534,7 @@ class Sistemas
 
       if (mysqli_query($this->con, $sql)) {
         mysqli_query($this->con, $sql2);
-        $ResultComentario = $this->GuardarComentario($idticket, $comentario, $idPersonal, 2);
+        
         $Resultado = 1;
       } else {
         $Resultado = 0;
@@ -554,18 +554,20 @@ class Sistemas
 
       if (mysqli_query($this->con, $sql)) {
         mysqli_query($this->con, $sql2);
-        $ResultComentario = $this->GuardarComentario($idticket, $comentario, $idPersonal, 2);
         $Resultado = 1;
       } else {
         $Resultado = 0;
       }
     }
     $personal = $this->personal($idPersonal);
-    $mensaje = "$personal finalizo el soporte con ticket $idticket, favor de revisar y dar visto bueno a la actividad.";
-    $this->telegram->enviarToken($idPersonal, $mensaje);
     if ($finalizar == 3) {
-      $mensaje = "Se concluyo la actividad con exito del ticket $idticket";
-      $this->telegram->enviarToken($idPersonal, $mensaje);
+      $mensaje = "$personal finalizo el soporte con ticket $idticket";
+      $this->telegram->enviarToken(496, $mensaje);
+    }else if ($finalizar == 2){
+      $mensaje = "$personal finalizo el soporte con ticket $idticket, favor de revisar y dar visto bueno a la actividad";
+      $idVistoBueno = $this->idPErsonalVB($idticket);
+      $this->telegram->enviarToken($idVistoBueno, $mensaje);
+      $this->GuardarComentario($idticket, $comentario, $idPersonal, 2);
     }
     return $Resultado;
   }
@@ -585,6 +587,21 @@ class Sistemas
     }
     return $personal;
   }
+  private function idPErsonalVB($idTicket){
+    $personal = 0;
+    $sql = "SELECT id_personal FROM ds_soporte WHERE id_ticket = ?";
+    $stmt = $this->con->prepare($sql);
+    $stmt->bind_param("i", $idTicket);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Verifica si hay resultados
+    if ($result->num_rows > 0) {
+      $row = $result->fetch_assoc();
+      $personal = $row['id_personal'];
+    }
+    return $personal;
+  }
   public function asignarPersonal($idticket): int
   {
     $sql = "SELECT id_personal_soporte,prioridad FROM ds_soporte WHERE id_ticket='" . $idticket . "' ";
@@ -592,8 +609,9 @@ class Sistemas
     $result = mysqli_query($this->con, $sql);
     while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
       $prioridad = $row['prioridad'];
+      $personal = $row['id_personal_soporte'];
       $mensaje = "Silvino Lopéz Farfan te asigno una nueva actividad con el id ticket: $idticket y prioridad $prioridad";
-      $this->telegram->enviarToken($row['id_personal_soporte'], $mensaje);
+      $this->telegram->enviarToken($personal, $mensaje);
     }
     $Resultado = 1;
     return $Resultado;
