@@ -10,8 +10,8 @@ class Telegram extends Exception{
     public function enviarToken($idUsuario,$mensaje): bool{
 
         $result = true;
-        $chatId = 5429996294;
-        //$chatId = $this->getChatId($idUsuario);
+        //$chatId = 5429996294;
+        $chatId = $this->getChatId($idUsuario);
 
         $data = [
             'chat_id' => $chatId,
@@ -36,20 +36,20 @@ class Telegram extends Exception{
     }
     // Se obtiene el chat id que esta dado de alta en BD
     private function getChatID(int $idUsuario): int{
-    $GET_idChat = 0;
-    $estatus = 1;
-
-    $sql = "SELECT chat_id FROM op_token_telegram WHERE id_usuario = '" . $idUsuario . "' AND estatus = '" . $estatus . "' ORDER BY fecha_creacion DESC LIMIT 1";
-    $result = mysqli_query($this->con, $sql);
-    $numero_lista = mysqli_num_rows($result);
+        $GET_idChat = 0;
+        $estatus = 1;
     
-    if($numero_lista > 0){
-    while ($row_lista = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-    $GET_idChat = $row_lista['chat_id'];
-    }
-
-    }
-
-    return $GET_idChat;
-    }
+        $sql = "SELECT chat_id FROM op_token_telegram WHERE id_usuario = '" . $idUsuario . "' AND estatus = '" . $estatus . "' ORDER BY fecha_creacion DESC LIMIT 1";
+        $result = mysqli_query($this->con, $sql);
+        $numero_lista = mysqli_num_rows($result);
+        
+        if($numero_lista > 0){
+        while ($row_lista = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+        $GET_idChat = $row_lista['chat_id'];
+        }
+    
+        }
+    
+        return $GET_idChat;
+        }
 }
