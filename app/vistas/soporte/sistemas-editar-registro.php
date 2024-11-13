@@ -420,6 +420,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         }
         if ($numeroActividad > 0) {
         ?>
+          <?php if($Session_IDUsuarioBD != $idPersonalSoporte){?>
           <div class="text-end p-3">
             <button type="button" class="btn btn-labeled2 btn-primary float-end" <?= $onclick ?>>
               <span class="btn-label2">
@@ -427,6 +428,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
               </span>Asignar Fechas
             </button>
           </div>
+          <?php }?>
           <h6 class="mt-2 text-secondary">Actividad:</h6>
           <div class="table-responsive">
             <table id="tabla-sistemas" class="custom-table mt-2" style="font-size: 14px;" width="100%">
@@ -587,14 +589,14 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         </div>
 
         <div class="text-end mt-3">
-          <?php if ($fechaTermino == '' || $Session_IDUsuarioBD != $idPersonalSoporte) { ?>
+          <?php if ($fechaTermino == '' && $Session_IDUsuarioBD == $idPersonalSoporte) { ?>
             <button type="button" class="btn btn-labeled2 btn-success"
               onclick="
               FinalizarEdicion(<?= $idticket; ?>);
               EditarTicket('<?= $fechaInicio->format('Y-m-d') ?>',<?= $idticket; ?>,2);
               EditarTicket('<?= $fechaFinGuardar ?>',<?= $idticket; ?>,3)">
               <span class="btn-label2"><i class="fa-solid fa-check"></i></span>Finalizar edicion</button>
-          <?php } else { ?>
+          <?php } elseif($Session_IDUsuarioBD == $idPersonalSoporte) { ?>
             <button type="button" class="btn btn-labeled2 btn-success" onclick="FinalizarSoporte(<?= $idticket; ?>)">
               <span class="btn-label2"><i class="fa-solid fa-check"></i></span>Finalizar soporte</button>
           <?php } ?>
