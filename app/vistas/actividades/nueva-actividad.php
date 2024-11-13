@@ -108,13 +108,13 @@ if ($InformacionTicket['estado'] != 0) {
     function ActividadAgregar(idRegistro) {
 
       var data = new FormData();
-      let ActividadDescripcion = quill.root.innerHTML;
+      let ActividadDescripcion = $('#ActividadDescripcion').val();
       Archivo = document.getElementById("ActividadArchivo");
       Archivo_file = Archivo.files[0];
       Archivo_filePath = Archivo.value;
 
-      if (ActividadDescripcion.trim() != "" && ActividadDescripcion !== "<p><br></p>") {
-        $('#editor').css('border', '');
+      if (ActividadDescripcion != "") {
+        $('#ActividadDescripcion').css('border', '');
         data.append('Accion', 'agregar-actividad');
         data.append('idRegistro', idRegistro);
         data.append('ActividadDescripcion', ActividadDescripcion);
@@ -131,12 +131,13 @@ if ($InformacionTicket['estado'] != 0) {
           processData: false,
           cache: false
         }).done(function(data) {
+
           if (data == 1) {
 
             $(".LoaderPage").hide();
             $('#Modal').modal('hide');
             ContenidoActividad(idRegistro);
-            quill.setContents([]);
+
           } else {
             $(".LoaderPage").hide();
             alertify.error('Error al crear la actividad');
@@ -145,7 +146,7 @@ if ($InformacionTicket['estado'] != 0) {
         });
 
       } else {
-        $('#editor').css('border', '2px solid #A52525');
+        $('#ActividadDescripcion').css('border', '2px solid #A52525');
       }
 
     }
@@ -265,6 +266,13 @@ if ($InformacionTicket['estado'] != 0) {
         $('#Descripcion').css('border', '');
         if (["Baja", "Media", "Alta"].includes(prioridad)) {
           $('#Prioridad').css('border', '');
+          let parametros = {
+            "Accion": "finalizar-registro",
+            "idRegistro": idRegistro,
+            "usuario": idUsuario,
+            "ticket": <?= $GET_IdRegistro ?>
+          };
+
           alertify.confirm('',
             function() {
 
@@ -275,18 +283,14 @@ if ($InformacionTicket['estado'] != 0) {
                 beforeSend: function() {},
                 complete: function() {},
                 success: function(response) {
+
                   window.history.back();
+
                 }
               });
-
             },
             function() {
-              let parametros = {
-                "Accion": "finalizar-registro",
-                "idRegistro": idRegistro,
-                "usuario": idUsuario,
-                "ticket": <?= $GET_IdRegistro ?>
-              };
+
             }).setHeader('Mensaje').set({
             transition: 'zoom',
             message: '¿Desea finalizar el registro?',
@@ -295,13 +299,13 @@ if ($InformacionTicket['estado'] != 0) {
               cancel: 'Cancelar'
             }
           }).show();
+
         } else {
           $('#Prioridad').css('border', '2px solid #A52525');
         }
       } else {
         $('#Descripcion').css('border', '2px solid #A52525');
       }
-
     }
 
     function EditarTicket(Detalle, idticket, opcion) {
@@ -381,21 +385,14 @@ if ($InformacionTicket['estado'] != 0) {
             ?>
           </select>
         <?php endif; ?>
-
-
-        <h6 class="mt-2 fw-bold text-secondary">Detalle de la Actividad:</h6>
-        <div class="mb-2" style="height: 300px;font-size: 1em;" id="editor"></div>
-        <h6 class="fw-bold text-secondary">Agrege evidencias en el formato de tu elección, el cual puede ser: PDF, Excel, Word, JPG o PNG.</h6>
-        <input class="form-control rounded-0" type="file" id="ActividadArchivo">
         <hr>
-
         <div class="row">
           <div class="col-8">
-
+            <h6 class="mt-2 fw-bold text-secondary">Agrega las actividades en el formato de tu elección, el cual puede ser: PDF, Excel, Word, JPG o PNG.</h6>
           </div>
 
           <div class="col-4">
-            <button type="button" class="btn btn-labeled2 btn-primary float-end mb-3" onclick="ActividadAgregar(<?= $GET_IdRegistro; ?>)">
+            <button type="button" class="btn btn-labeled2 btn-primary float-end mb-3" onclick="ModalActividad(<?= $GET_IdRegistro; ?>)">
               <span class="btn-label2"><i class="fa-solid fa-plus"></i></span>Agregar</button>
           </div>
         </div>
