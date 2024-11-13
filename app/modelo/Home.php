@@ -39,12 +39,12 @@ class Home
   {
     // Consulta SQL para obtener actividades incompletas del ticket especificado
     $sql = "SELECT id_ticket, descripcion, fecha_inicio, fecha_termino, tiempo_solucion, porcentaje, id_personal_soporte 
-          FROM ds_soporte
-          WHERE porcentaje < 100 
-          AND estado <> 4 
-          AND estado <> 0 
-          AND fecha_inicio != '0000-00-00 00:00:00'
-          AND fecha_termino != '0000-00-00 00:00:00' ";
+            FROM ds_soporte
+            WHERE porcentaje < 100 
+            AND estado <> 4 
+            AND estado <> 0 
+            AND fecha_inicio != '0000-00-00 00:00:00'
+            AND fecha_termino != '0000-00-00 00:00:00'";
 
     $resultado = $this->con->query($sql);
 
@@ -57,35 +57,42 @@ class Home
       $tiempoSolucion = $actividad['tiempo_solucion'];
       $porcentajeActual = $actividad['porcentaje'];
 
-      // Días transcurridos desde el inicio hasta la fecha actual
-      $diasTranscurridos = $fechaInicio->diff($fechaActualDate)->days;
-      // Si ya pasó la fecha de término, envía una alerta
-      if ($fechaActualDate > $fechaTermino) {
-        $diasRetraso = $fechaTermino->diff($fechaActualDate)->days;
+      // Verificar si la fecha actual es igual o posterior a la fecha de inicio
+      if ($fechaActualDate >= $fechaInicio) {
+        // Días transcurridos desde el inicio hasta la fecha actual
+        $diasTranscurridos = $fechaInicio->diff($fechaActualDate)->days;
 
-        if ($diasRetraso > 1) {
-          $actualizarPorcentaje = "UPDATE ds_soporte SET porcentaje = 60 ,estado = 5 WHERE id_ticket = $id";
-          $this->con->query($actualizarPorcentaje);
-        }
-      }
-      // Cálculo de porcentaje basado en la regla de tres
-      if ($tiempoSolucion > 0 && $fechaActualDate <= $fechaTermino) { // Evitar división por cero
-        $nuevoPorcentaje = ($diasTranscurridos / $tiempoSolucion) * 100;
+        // Si ya pasó la fecha de término, envía una alerta
+        if ($fechaActualDate > $fechaTermino) {
+          $diasRetraso = $fechaTermino->diff($fechaActualDate)->days;
 
-        // Asegurar que el porcentaje no supere el 100%
-        if ($nuevoPorcentaje > 100) {
-          $nuevoPorcentaje = 100;
+          if ($diasRetraso > 1) {
+            $actualizarPorcentaje = "UPDATE ds_soporte SET porcentaje = 60 ,estado = 5 WHERE id_ticket = $id";
+            $this->con->query($actualizarPorcentaje);
+          }
         }
 
-        // Solo actualizar si el nuevo porcentaje es mayor al actual
-        if ($nuevoPorcentaje > $porcentajeActual) {
-          $actualizarPorcentaje = "UPDATE ds_soporte SET porcentaje = $nuevoPorcentaje WHERE id_ticket = $id";
-          $this->con->query($actualizarPorcentaje);
+        // Cálculo de porcentaje basado en la regla de tres
+        if ($tiempoSolucion > 0 && $fechaActualDate <= $fechaTermino) { // Evitar división por cero
+          $nuevoPorcentaje = ($diasTranscurridos / $tiempoSolucion) * 100;
+
+          // Asegurar que el porcentaje no supere el 100%
+          if ($nuevoPorcentaje > 100) {
+            $nuevoPorcentaje = 100;
+          }
+
+          // Solo actualizar si el nuevo porcentaje es mayor al actual
+          if ($nuevoPorcentaje > $porcentajeActual) {
+            $actualizarPorcentaje = "UPDATE ds_soporte SET porcentaje = $nuevoPorcentaje WHERE id_ticket = $id";
+            $this->con->query($actualizarPorcentaje);
+          }
         }
       }
     }
   }
-  public function asignar(): int{
+
+  public function asignar(): int
+  {
     $sql = "SELECT  COUNT(*) AS actividades_asignar 
           FROM ds_soporte
           WHERE porcentaje < 100 
@@ -102,9 +109,9 @@ class Home
     }
 
     return $cantidad;
-
   }
-  public function actividadesVencidas($opcion,$usuario): int{
+  public function actividadesVencidas($opcion, $usuario): int
+  {
     $condicion = "AND tb_puestos.tipo_puesto = 'Departamento Sistemas'";
     if ($opcion == 1) {
       $condicion = "AND tb_puestos.tipo_puesto <> 'Departamento Sistemas'";
