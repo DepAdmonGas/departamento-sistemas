@@ -587,7 +587,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         </div>
 
         <div class="text-end mt-3">
-          <?php if ($fechaTermino == '') { ?>
+          <?php if ($fechaTermino == '' || $Session_IDUsuarioBD != $idPersonalSoporte) { ?>
             <button type="button" class="btn btn-labeled2 btn-success"
               onclick="
               FinalizarEdicion(<?= $idticket; ?>);
