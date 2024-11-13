@@ -35,13 +35,14 @@ if ($Session_IDUsuarioBD == 496) {
   <script type="text/javascript">
     $(document).ready(function($) {
       $(".LoaderPage").fadeOut("slow");
-      ContenidoSistemas(<?= $Session_IDUsuarioBD ?>,0);
+      ContenidoSistemas(<?= $Session_IDUsuarioBD ?>, 0);
     });
 
-    function regresaP(){
+    function regresaP() {
       window.location.href = 'home';
     }
-    function ContenidoSistemas(usuario,opcion) {
+
+    function ContenidoSistemas(usuario, opcion) {
       $('#ContenidoSistemas').load('app/vistas/soporte/contenido-lista-sistemas.php?usuario=' + usuario + '&opcion=' + opcion, function() {
         // Una vez que se carguen los datos en la tabla, inicializa DataTables
         $('#tabla-sistemas').DataTable({
@@ -65,7 +66,7 @@ if ($Session_IDUsuarioBD == 496) {
       });
     }
 
-    function EliminarTicket(idticket,idUsuario) {
+    function EliminarTicket(idticket, idUsuario) {
 
       let parametros = {
         "Accion": "cancelar-ticket",
@@ -85,7 +86,7 @@ if ($Session_IDUsuarioBD == 496) {
             },
             success: function(response) {
 
-              ContenidoSistemas(idUsuario,0);
+              ContenidoSistemas(idUsuario, 0);
 
             }
           });
@@ -104,12 +105,56 @@ if ($Session_IDUsuarioBD == 496) {
 
     }
 
-    function ModalComentarios(idticket,usuario) {
+    function ModalComentarios(idticket, usuario) {
       $('#ModalComentario').modal('show');
       $('#DivContenidoComentario').load('app/vistas/soporte/modal-comentarios-ticket.php?idticket=' + idticket + '&usuario=' + usuario);
     }
 
-    function GuardarComentario(idticket,usuario) {
+    function ModalAsignarActividad(idticket) {
+      $('#ModalAsignarActividad').modal('show');
+      $('#DivModalAsignarActividad').load('app/vistas/soporte/modal-asignar-actividad.php?idticket=' + idticket);
+    }
+
+    function EditarResponsable(val, idticket, opcion) {
+      let Detalle = val.value;
+
+      let parametros = {
+        "Accion": "editar-registro",
+        "Detalle": Detalle,
+        "idticket": idticket,
+        "opcion": opcion
+      };
+
+      $.ajax({
+        data: parametros,
+        url: 'app/modelo/controlador-sistemas.php',
+        type: 'post',
+        beforeSend: function() {},
+        complete: function() {},
+        success: function(response) {}
+      });
+
+    }
+
+    function FinalizarEdicion(idticket) {
+      let parametros = {
+        "Accion": "asignar-personal-soporte",
+        "idticket": idticket
+      };
+
+      $.ajax({
+        data: parametros,
+        url: 'app/modelo/controlador-sistemas.php',
+        type: 'post',
+        beforeSend: function() {},
+        complete: function() {},
+        success: function(response) {
+          $('#ModalAsignarActividad').modal('hide');
+          ContenidoSistemas(<?= $Session_IDUsuarioBD ?>, 0);        }
+      });
+    }
+
+    function GuardarComentario(idticket, usuario) {
 
       var Comentario = $('#Comentario').val();
 
@@ -133,7 +178,7 @@ if ($Session_IDUsuarioBD == 496) {
           },
           success: function(response) {
             $('#DivContenidoComentario').load('app/vistas/soporte/modal-comentarios-ticket.php?idticket=' + idticket + '&usuario=' + usuario);
-            ContenidoSistemas(usuario,0);
+            ContenidoSistemas(usuario, 0);
           }
         });
 
@@ -302,6 +347,14 @@ if ($Session_IDUsuarioBD == 496) {
     <div class="modal-dialog modal-md">
       <div class="modal-content">
         <div id="DivContenidoComentario"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="ModalAsignarActividad">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div id="DivModalAsignarActividad"></div>
       </div>
     </div>
   </div>
