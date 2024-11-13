@@ -420,7 +420,7 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
         }
         if ($numeroActividad > 0) {
         ?>
-          <?php if($Session_IDUsuarioBD != $idPersonalSoporte){?>
+          <?php if($Session_IDUsuarioBD == $idPersonalSoporte){?>
           <div class="text-end p-3">
             <button type="button" class="btn btn-labeled2 btn-primary float-end" <?= $onclick ?>>
               <span class="btn-label2">
