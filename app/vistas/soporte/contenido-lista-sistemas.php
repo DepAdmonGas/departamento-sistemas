@@ -76,8 +76,11 @@ $sql = "SELECT
           $PersonalSoporte = $ClassContenido->Responsable($idPersonalSoporte);
           $nombre = $row['nombre'];
           $onclick = "";
+          $d_none = "";
           if($PersonalSoporte == "Sistemas"){
-            $onclick = 'onclick="ModalDetalle(' . $id_ticket . ')"';
+            $onclick = 'onclick="ModalAsignarActividad(' . $id_ticket . ')"';
+            //$onclick = 'onclick="ModalDetalle(' . $id_ticket . ')"';
+            $d_none = "d-none";
           }
           $explode = explode(' ', $row['fecha_creacion']);
           if ($explode[0] == '0000-00-00') {
@@ -94,7 +97,7 @@ $sql = "SELECT
             $colorPrioridad = 'text-danger';
           }
           $Eliminar = '<a class="dropdown-item" onclick="EliminarTicket(' . $id_ticket . ',' . $usuario . ')"><i class="fa-regular fa-trash-can"></i> Eliminar</a>';
-          $editar = '<a class="dropdown-item" onclick="EditarTicket(' . $id_ticket . ')"><i class="fa-solid fa-pencil"></i> Seguimiento</a>';
+          $editar = '<a class="dropdown-item '.$d_none.'" onclick="EditarTicket(' . $id_ticket . ')"><i class="fa-solid fa-pencil"></i> Seguimiento</a>';
           if ($row['estado'] == 0) {
 
             //$trColor = 'table-warning';
