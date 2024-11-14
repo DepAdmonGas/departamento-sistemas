@@ -26,7 +26,7 @@ $con = $ClassConexionBD->conectarBD();
         ON tb_usuarios.id_gas = tb_estaciones.id
         INNER JOIN tb_puestos
         ON tb_usuarios.id_puesto = tb_puestos.id
-        WHERE ds_soporte.id_personal = '".$Session_IDUsuarioBD."' ORDER BY ds_soporte.fecha_termino_real ASC";
+        WHERE ds_soporte.id_personal = $Session_IDUsuarioBD ORDER BY ds_soporte.fecha_termino_real ASC";
         $result = mysqli_query($con, $sql);
         $numero = mysqli_num_rows($result);
 ?>
@@ -238,8 +238,6 @@ $con = $ClassConexionBD->conectarBD();
         echo '</tr>';
         }else if($row['estado'] == 3){
 
-            if($FechaCierreTicket >= $fecha_del_dia){
-
                 echo '<tr '.$trColor.'>';
                 echo '<th class="align-middle text-center"><b>0'.$id_ticket.'</b></th>';
                 echo '<td class="align-middle text-center">'.$descripcion.'</td>';
@@ -269,8 +267,6 @@ $con = $ClassConexionBD->conectarBD();
                 </td>';
             echo '</tr>';
             
-            }
-
         }
                 
 		}

@@ -12,12 +12,13 @@ require "app/help.php";
   <title>Portal AdmonGas</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width initial-scale=1.0">
-  <link rel="shortcut icon" href="<?= RUTA_IMG_ICONOS ?>/icono-web.ico">
-  <link rel="apple-touch-icon" href="<?= RUTA_IMG_ICONOS ?>/icono-web.ico">
+  <link rel="shortcut icon" href="<?= RUTA_IMG_ICONOS ?>/icono-web.png">
+  <link rel="apple-touch-icon" href="<?= RUTA_IMG_ICONOS ?>/icono-web.png">
   <link rel="stylesheet" href="<?= RUTA_CSS ?>alertify.css">
   <link rel="stylesheet" href="<?= RUTA_CSS ?>themes/default.rtl.css">
-  <link href="<?= RUTA_CSS; ?>bootstrap.min.css" rel="stylesheet" />
-  <link href="<?= RUTA_CSS; ?>navbar-general.min.css" rel="stylesheet" />
+  <link href="<?= RUTA_CSS ?>bootstrap.min.css" rel="stylesheet" />
+  <link href="<?= RUTA_CSS ?>navbar-general.min.css" rel="stylesheet" />
+  <link href="<?= RUTA_CSS ?>cards-utilities.min.css" rel="stylesheet" />
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
@@ -161,6 +162,7 @@ require "app/help.php";
         // Verificar si el contenido es editable
         if (divEditable.contentEditable === "false") {
           divEditable.contentEditable = "true"; // Habilitar la edición
+          divEditable.style.cursor = "text"; // Cambiar el cursor a escritura
           divEditable.focus(); // Poner el foco en el div para que el usuario pueda empezar a escribir
         } else {
           divEditable.contentEditable = "false"; // Deshabilitar la edición si ya estaba habilitada

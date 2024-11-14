@@ -33,7 +33,7 @@ include_once "../../help.php";
     tb_estaciones.razonsocial AS razonSocialEstacion
     FROM op_solicitud_cheque 
     INNER JOIN tb_estaciones 
-    ON op_solicitud_cheque.id_estacion = tb_estaciones.id";
+    ON op_solicitud_cheque.id_estacion = tb_estaciones.id LIMIT 200";
       $result = mysqli_query($con, $sql);
       $numero = mysqli_num_rows($result);
       while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
