@@ -65,6 +65,7 @@ require "app/help.php";
         // Verificar si el contenido es editable
         if (divEditable.contentEditable === "false") {
           divEditable.contentEditable = "true"; // Habilitar la edición
+          divEditable.style.cursor = "text"; // Cambiar el cursor a escritura
           divEditable.focus(); // Poner el foco en el div para que el usuario pueda empezar a escribir
         } else {
           divEditable.contentEditable = "false"; // Deshabilitar la edición si ya estaba habilitada
