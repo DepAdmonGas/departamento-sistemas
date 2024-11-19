@@ -15,6 +15,7 @@ if ($numLista != 0) {
         <th>Puesto</th>
         <th>Usuario</th>
         <th>Contraseña</th>
+        <th>Bitacora</th>
         <th>Estación</th>
         <th class="text-center align-middle" width="30px"><i class="fa-solid fa-ellipsis-vertical"></i></th>
       </tr>
@@ -25,6 +26,7 @@ if ($numLista != 0) {
     tb_usuarios.id,
     tb_usuarios.nombre,
     tb_usuarios.usuario,
+    tb_usuarios.bitacora_app,
     tb_usuarios.password,
     tb_puestos.tipo_puesto,   
     tb_estaciones.id AS id_estacion,
@@ -44,27 +46,30 @@ if ($numLista != 0) {
         $puesto = $row['tipo_puesto'];
         $usuario = $row['usuario'];
         $contrasenia = $row['password'];
-
+        $bitacora = $row['bitacora_app'];
       ?>
         <tr>
-          <th class="text-center align-middle fw-bold"><?= $id ?></th>
-          <td class="p-0" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarPersonal(this, <?= $id; ?>, 1)"><?= $nombre ?></div>
+          <th class="p-0 no-hover text-center align-middle fw-bold"><?= $id ?></th>
+          <td class="no-hover p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start p-0 ms-1" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarPersonal(this, <?= $id; ?>, 1)"><?= $nombre ?></div>
           </td>
-          <td class="p-0">
-            <input onchange="datosRazonSocial(this,4,5)" class="form-control border-0 text-start" type="text" value="<?= $puesto ?>" style="font-size: 1em;" disabled>
+          <td class="no-hover p-0">
+            <input onchange="datosRazonSocial(this,4,5)" class="form-control border-0 text-start p-0 ms-1" type="text" value="<?= $puesto ?>" style="font-size: 1em;" disabled>
           </td>
-          <td class="p-0" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarPersonal(this, <?= $id; ?>, 2)"><?= $usuario ?></div>
+          <td class="no-hover p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start p-0 ms-1" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarPersonal(this, <?= $id; ?>, 2)"><?= $usuario ?></div>
           </td>
-          <td class="p-0" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarPersonal(this, <?= $id; ?>, 3)"><?= $contrasenia ?></div>
+          <td class="no-hover p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start p-0 ms-1" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarPersonal(this, <?= $id; ?>, 3)"><?= $contrasenia ?></div>
           </td>
-          <td class="p-0">
-            <input onchange="datosRazonSocial(this,4,5)" class="form-control border-0 text-start" type="text" value="<?= $estacion ?>" style="font-size: 1em;" disabled>
+          <td class="no-hover p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start p-0 ms-1" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarPersonal(this, <?= $id; ?>, 4)"><?= $bitacora ?></div>
+          </td>
+          <td class="no-hover p-0">
+            <input onchange="datosRazonSocial(this,4,5)" class="form-control border-0 text-start p-0 ms-1" type="text" value="<?= $estacion ?>" style="font-size: 1em;" disabled>
           </td>
 
-          <td class="text-center align-middle">
+          <td class="p-0 no-hover text-center align-middle">
 
             <div class="btn-group">
               <button class="btn" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">

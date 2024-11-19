@@ -36,27 +36,28 @@ include_once "../../help.php";
       while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
 
         $trColor = ($row['ventas'] == 1 && $row['tpv'] == 1 && $row['monedero'] == 1) ?  'background: #dffbe6' : 'background: #fbdfdf';
+        ?>
+        <tr style="<?=$trColor?>">
+        <th class="text-center align-middle p-0 fw-bold"><?=$row['idCorteDia']?></th>
+        <td class="align-middle p-0"><?=FormatoFecha($row['fecha'])?></td>
+        <td class="align-middle p-0 fw-bold"><?=$row['nomEstacion']?></td>
 
-        echo '<tr style="' . $trColor . '">
-        <th class="text-center align-middle fw-bold">' . $row['idCorteDia'] . '</th>
-        <td class="align-middle">' . FormatoFecha($row['fecha']) . '</td>
-        <td class="align-middle fw-bold">' . $row['nomEstacion'] . '</td>
-
-        <td class="text-center align-middle">
+        <td class="text-center align-middle p-0">
 
         <div class="btn-group">
         <a class="p-1" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
         <i class="fa-solid fa-ellipsis-vertical"></i>
         </a>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li><a class="dropdown-item"><i class="fa-solid fa-pencil"></i> Activar</a></li>
-            <li><a class="dropdown-item"><i class="fa-solid fa-sliders"></i> Finalizar</a></li>
+            <li onclick="activarCorte(<?=$row['idCorteDia']?>,<?=$Session_IDUsuarioBD?>)"><a class="dropdown-item"><i class="fa-solid fa-pencil"></i> Activar</a></li>
+            <li onclick="finalizarCorte(<?=$row['idCorteDia']?>)"><a class="dropdown-item"><i class="fa-solid fa-sliders"></i> Finalizar</a></li>
         </ul>
         </div>
        
         </td>
 
-        </tr>';
+        </tr>
+        <?php
       }
 
       ?>

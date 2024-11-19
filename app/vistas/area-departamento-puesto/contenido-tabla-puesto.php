@@ -22,11 +22,11 @@ include_once "../../help.php";
         $puesto = $row['tipo_puesto'];
       ?>
         <tr>
-          <th class="align-middle text-center fw-bold"><?= $id ?></th>
-          <td id="concepto-<?=$id?>" class="align-middle p-1" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarPuesto(this, <?= $id; ?>)"><?= $puesto ?></div>
+          <th class="no-hover align-middle text-center fw-bold p-0"><?= $id ?></th>
+          <td id="concepto-<?=$id?>" class="no-hover p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start p-0 ms-1" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarPuesto(this, <?= $id; ?>)"><?= $puesto ?></div>
           </td>
-          <td class="text-center align-middle" onclick="eliminarPuesto(<?= $id ?>)">
+          <td class="text-center no-hover align-middle p-0" onclick="eliminarPuesto(<?= $id ?>)">
             <img src="<?= RUTA_IMG_ICONOS ?>eliminar.png">
           </td>
         </tr>
