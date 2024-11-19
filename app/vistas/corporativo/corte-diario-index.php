@@ -58,12 +58,68 @@ require "app/help.php";
       });
 
     }
-  </script>
-  <style>
-    .grayscale {
-      filter: opacity(50%);
+    function activarCorte(idDias,usuario){
+      Detalle ="Sistemas";
+      var parametros = {
+        "accion":"activar-corte",
+        "idDias": idDias,
+        "Detalle": Detalle,
+        "usuario":usuario
+      };
+      alertify.confirm("Confirmación", "¿Estás seguro de que deseas activar este corte?",
+        function() {
+          // Si el usuario confirma, se ejecuta la solicitud AJAX
+          $.ajax({
+            data: parametros,
+            url: 'app/controlador/controladorCorteDiario.php',
+            type: 'post',
+            beforeSend: function() {},
+            complete: function() {},
+            success: function(response) {
+              if (response == 1) {
+                alertify.success('Elemento activado correctamente');
+                contenidoCorteDiario();
+              }
+            }
+          });
+        },
+        function() {
+          // Si el usuario cancela, se muestra un mensaje opcional o no se hace nada
+          //alertify.error('Operación cancelada');
+        }
+      );
     }
-  </style>
+    function finalizarCorte(idDias){
+      Detalle ="Sistemas";
+      var parametros = {
+        "accion":"finalizar-corte",
+        "idDias": idDias
+      };
+      alertify.confirm("Confirmación", "¿Estás seguro de que deseas finalizar este corte?",
+        function() {
+          // Si el usuario confirma, se ejecuta la solicitud AJAX
+          $.ajax({
+            data: parametros,
+            url: 'app/controlador/controladorCorteDiario.php',
+            type: 'post',
+            beforeSend: function() {},
+            complete: function() {},
+            success: function(response) {
+              if (response == 1) {
+                alertify.success('Elemento finalizado correctamente');
+                contenidoCorteDiario();
+              }
+            }
+          });
+        },
+        function() {
+          // Si el usuario cancela, se muestra un mensaje opcional o no se hace nada
+          //alertify.error('Operación cancelada');
+        }
+      );
+    }
+    
+  </script>
 </head>
 
 <body>

@@ -54,30 +54,30 @@ include_once "../../help.php";
         $cuenta = $row['cuenta'];
       ?>
         <tr>
-          <td class="text-center align-middle fw-bold">00<?= $folio ?></td>
-          <td class="align-middle"><?= $fecha ?></td>
-          <td class="align-middle"><?= $hora ?></td>
-          <td class="align-middle" ondblclick="habilitarEdicion(this)">
+          <th class="no-hover p-0 text-center align-middle fw-bold">00<?= $folio ?></th>
+          <td class="align-middle no-hover p-0"><?= $fecha ?></td>
+          <td class="align-middle no-hover p-0"><?= $hora ?></td>
+          <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
             <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarVale(this, <?= $folio ?>, 1)">$<?= number_format($monto, 2) ?></div>
           </td>
-          <td class="align-middle" ondblclick="habilitarEdicion(this)">
+          <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
           <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarVale(this, <?= $folio ?>, 2)"><?=$concepto?></div>
           </td>
-          <td class="align-middle" ondblclick="habilitarEdicion(this)">
+          <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
           <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarVale(this, <?= $folio ?>, 3)"><?= $solicitante ?></div>
           </td>
-          <td class="align-middle" ondblclick="habilitarEdicion(this)">
+          <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
           <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarVale(this, <?= $folio ?>, 4)"><?= $autorizado_por ?></div>
 
           </td>
-          <td class="align-middle" ondblclick="habilitarEdicion(this)">
+          <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
           <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarVale(this, <?= $folio ?>, 5)"><?= $metodo_autorizacion ?></div>
 
           </td>
-          <td class="align-middle" ondblclick="habilitarEdicion(this)">
+          <td class="text-start no-hover p-0" ondblclick="habilitarEdicion(this)">
           <?= $razon_social ?>
           </td>
-          <td class="align-middle" ondblclick="habilitarEdicion(this)">
+          <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
           <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarVale(this, <?= $folio ?>, 7)"><?= $cuenta ?></div>
   
         </td>

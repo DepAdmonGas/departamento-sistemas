@@ -18,6 +18,39 @@ include_once "../../help.php";
     </thead>
     <tbody class="bg-white">
       <?php
+      $idEstacion = $_GET['idEstacion'];
+      $GET_year = $_GET['year'];
+      $GET_mes = $_GET['mes'];
+      
+      if ($_GET['depu'] == 0) {
+        $depu = $session_idpuesto;
+      } else {
+        $depu = $_GET['depu']; 
+      }
+      
+      if ($idEstacion == 8) {
+        $sql_puesto = "SELECT tipo_puesto FROM tb_puestos WHERE id = '" . $depu . "' ";
+        $result_puesto = mysqli_query($con, $sql_puesto);
+        
+        while ($row_puesto = mysqli_fetch_array($result_puesto, MYSQLI_ASSOC)) {
+          $estacion = $row_puesto['tipo_puesto'];
+        }
+      
+         $busqueda = 'depto = ' . $depu;
+      
+      
+      } else {
+        $sql_listaestacion = "SELECT nombre, razonsocial FROM tb_estaciones WHERE id = '" . $idEstacion . "' ";
+        $result_listaestacion = mysqli_query($con, $sql_listaestacion);
+        while ($row_listaestacion = mysqli_fetch_array($result_listaestacion, MYSQLI_ASSOC)) {
+          $estacion = $row_listaestacion['nombre'];
+        }
+         $busqueda = 'id_estacion = ' . $idEstacion;
+      }
+      
+      $sql_lista = "SELECT * FROM op_solicitud_cheque WHERE id_year = '" . $GET_year . "' AND id_mes = '" . $GET_mes . "' AND $busqueda ORDER BY fecha ";
+
+      
       $sql = "SELECT
     op_solicitud_cheque.id,
     op_solicitud_cheque.id_estacion,
@@ -33,7 +66,7 @@ include_once "../../help.php";
     tb_estaciones.razonsocial AS razonSocialEstacion
     FROM op_solicitud_cheque 
     INNER JOIN tb_estaciones 
-    ON op_solicitud_cheque.id_estacion = tb_estaciones.id";
+    ON op_solicitud_cheque.id_estacion = tb_estaciones.id LIMIT 200";
       $result = mysqli_query($con, $sql);
       $numero = mysqli_num_rows($result);
       while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
@@ -49,35 +82,35 @@ include_once "../../help.php";
         $solicitante = $row['solicitante'];
       ?>
         <tr>
-          <th class="text-center align-middle fw-bold"><?= $id ?></th>
-          <td class="align-middle" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarCheque(this, <?= $id ?>, 1)"><?= $fecha ?></div>
+          <th class="no-hover p-0 text-center align-middle fw-bold"><?= $id ?></th>
+          <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarCheque(this, <?= $id ?>, 1)"><?= $fecha ?></div>
           </td>
-          <td class="align-middle" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarCheque(this, <?= $id ?>, 2)"><?= $hora ?></div>
+          <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarCheque(this, <?= $id ?>, 2)"><?= $hora ?></div>
           </td>
-          <td class="align-middle" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarCheque(this, <?= $id ?>,3)"><?= $beneficiario ?></div>
+          <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarCheque(this, <?= $id ?>,3)"><?= $beneficiario ?></div>
          
           </td>
-          <td class="align-middle" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarCheque(this, <?= $id ?>, 4)">$<?= number_format($monto, 2) ?></div>
+          <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarCheque(this, <?= $id ?>, 4)">$<?= number_format($monto, 2) ?></div>
             
           </td>
-          <td class="align-middle" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarCheque(this, <?= $id ?>, 5)"><?= $no_factura ?></div>
+          <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarCheque(this, <?= $id ?>, 5)"><?= $no_factura ?></div>
             
           </td>
-          <td class="align-middle" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarCheque(this, <?= $id ?>, 6)"><?= $concepto ?></div>
+          <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarCheque(this, <?= $id ?>, 6)"><?= $concepto ?></div>
             
           </td>
-          <td class="align-middle" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarCheque(this, <?= $id ?>, 7)"><?= $solicitante ?></div>
+          <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarCheque(this, <?= $id ?>, 7)"><?= $solicitante ?></div>
            
           </td>
-          <td class="align-middle" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarCheque(this, <?= $id ?>, 8,<?=$row['id_estacion']?>)"><?= $razonSocial ?></div>
+          <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarCheque(this, <?= $id ?>, 8,<?=$row['id_estacion']?>)"><?= $razonSocial ?></div>
             
           </td>
         </tr>

@@ -35,19 +35,19 @@ include_once "../../help.php";
         $categoria = $row['categoria'];
       ?>
         <tr>
-          <th class="text-center align-middle"><?= $numTema ?></th>
-          <td class="align-middle" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarModulo(this,<?=$idModulo?>)"><?= $nombreModulo ?></div>
+          <th class="no-hover text-center align-middle p-0"><?= $numTema ?></th>
+          <td class="align-middle p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarModulo(this,<?=$idModulo?>)"><?= $nombreModulo ?></div>
           </td>
-          <td class="align-middle" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarCurso(this, <?=$idModulo?> ,<?= $numTema ?>,1)"><?= $nombreTitulo ?></div>
+          <td class="align-middle p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarCurso(this, <?=$idModulo?> ,<?= $numTema ?>,1)"><?= $nombreTitulo ?></div>
           </td>
-          <td class="align-middle" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarCurso(this, <?=$idModulo?> ,<?= $numTema ?>,2)"><?= $categoria ?></div>
+          <td class="no-hover align-middle p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarCurso(this, <?=$idModulo?> ,<?= $numTema ?>,2)"><?= $categoria ?></div>
           </td>
-          <td class="text-center align-middle"><i class="fa-solid fa-file-pdf"></i></td>
+          <td class="no-hover text-center align-middle p-0"><i class="fa-solid fa-file-pdf"></i></td>
 
-          <td class="text-center align-middle">
+          <td class="no-hover text-center align-middle p-0">
 
             <div class="btn-group">
               <button class="btn btn-sm" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">

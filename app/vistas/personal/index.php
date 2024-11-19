@@ -60,7 +60,7 @@ $numLista = isset($_GET['numLista']) ? $_GET['numLista'] : 0;
             },
             {
               "searchable": false,
-              "targets": [6]
+              "targets": [7]
             },
             {
               "targets": [1, 2, 3, 4, 5], // Asegúrate de incluir las columnas con inputs
@@ -182,6 +182,7 @@ $numLista = isset($_GET['numLista']) ? $_GET['numLista'] : 0;
         // Verificar si el contenido es editable
         if (divEditable.contentEditable === "false") {
           divEditable.contentEditable = "true"; // Habilitar la edición
+          divEditable.style.cursor = "text"; // Cambiar el cursor a escritura
           divEditable.focus(); // Poner el foco en el div para que el usuario pueda empezar a escribir
         } else {
           divEditable.contentEditable = "false"; // Deshabilitar la edición si ya estaba habilitada
@@ -204,6 +205,9 @@ $numLista = isset($_GET['numLista']) ? $_GET['numLista'] : 0;
           break;
         case 3:
           columna = "password";
+          break;
+        case 4:
+          columna = "bitacora_app";
           break;
       }
 
