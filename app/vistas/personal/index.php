@@ -60,7 +60,7 @@ $numLista = isset($_GET['numLista']) ? $_GET['numLista'] : 0;
             },
             {
               "searchable": false,
-              "targets": [6]
+              "targets": [7]
             },
             {
               "targets": [1, 2, 3, 4, 5], // Asegúrate de incluir las columnas con inputs
@@ -205,6 +205,9 @@ $numLista = isset($_GET['numLista']) ? $_GET['numLista'] : 0;
           break;
         case 3:
           columna = "password";
+          break;
+        case 4:
+          columna = "bitacora_app";
           break;
       }
 

@@ -2,7 +2,7 @@
 include_once "../../help.php";
 ?>
 <div class="table-responsive">
-  <table id="tabla-estaciones" class="custom-table" style="font-size: .8em;" width="100%">
+  <table id="tabla-estaciones" class="custom-table" width="100%">
     <thead class="bg-primary text-white">
       <tr>
         <th class="text-center align-middle">#</th>
@@ -46,28 +46,28 @@ include_once "../../help.php";
       ?>
 
         <tr>
-          <th class="text-center align-middle fw-bold"><?= $numeroLista ?></th>
-          <td class="align-middle p-1" style="height: 100%; padding: 0;" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarEstacion(this, <?= $numeroLista; ?>, 1)"><?= $nombre ?></div>
+          <th class="no-hover text-center fw-bold p-0"><?= $numeroLista ?></th>
+          <td class="no-hover p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start p-0 ms-1" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarEstacion(this, <?= $numeroLista; ?>, 1)"><?= $nombre ?></div>
           </td>
-          <td class="align-middle p-1" style="height: 100%; padding: 0;" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarEstacion(this, <?= $numeroLista; ?>, 2)"><?= $permisoCRE ?></div>
+          <td class="no-hover p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start p-0 ms-1" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarEstacion(this, <?= $numeroLista; ?>, 2)"><?= $permisoCRE ?></div>
           </td>
-          <td class="align-middle p-1" style="height: 100%; padding: 0;" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarEstacion(this, <?= $numeroLista; ?>, 3)"><?= $razonSocial ?></div>
+          <td class="no-hover p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start p-0 ms-1" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarEstacion(this, <?= $numeroLista; ?>, 3)"><?= $razonSocial ?></div>
           </td>
-          <td class="align-middle p-1" style="height: 100%; padding: 0;" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarEstacion(this, <?= $numeroLista; ?>, 3)"><?= $rfc ?></div>
+          <td class="no-hover p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start p-0 ms-1" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarEstacion(this, <?= $numeroLista; ?>, 3)"><?= $rfc ?></div>
           </td>
-          <td class="align-middle p-1" style="height: 100%; padding: 0;" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarEstacion(this, <?= $numeroLista; ?>, 3)"><?= $direccion ?></div>
+          <td class="no-hover p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start p-0 ms-1" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarEstacion(this, <?= $numeroLista; ?>, 3)"><?= $direccion ?></div>
 
           </td>
-          <td class="align-middle p-1" style="height: 100%; padding: 0;" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarEstacion(this, <?= $numeroLista; ?>, 3)"><?= $apoderadoLegal ?></div>
+          <td class="no-hover p-0" ondblclick="habilitarEdicion(this)">
+            <div class="form-control border-0 text-start p-0 ms-1" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarEstacion(this, <?= $numeroLista; ?>, 3)"><?= $apoderadoLegal ?></div>
 
           </td>
-          <th class="text-center align-middle">
+          <th class="text-center no-hover p-0">
 
             <div class="btn-group">
               <button class="btn" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
