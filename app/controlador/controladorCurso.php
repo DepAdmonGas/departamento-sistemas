@@ -23,4 +23,9 @@ switch ($_POST['accion']) {
         $numTema = $_POST['numTema'];
         echo $curso->editarTema($numLista, $columna, $valor,$numTema);
         break;
+    case 'nuevo-tema':
+        $modulo = $_POST['modulo'];
+        $titulo = $_POST['nombre_tema'];
+        echo $curso->nuevoTema($modulo,$titulo);
+        break;
 }

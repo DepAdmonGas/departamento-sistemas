@@ -33,7 +33,7 @@ require "app/help.php";
   <link href="https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/css/selectize.default.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/js/standalone/selectize.min.js"></script>
 
-  
+
   <script type="text/javascript">
     $(document).ready(function($) {
       $(".LoaderPage").fadeOut("slow");
@@ -82,6 +82,50 @@ require "app/help.php";
         $('#titulo').css('border', '2px solid #A52525');
       }
     }
+    function cuestionario(idTema){
+      window.location.href = "cursos-cuestionario/"+idTema;
+    }
+    function agregarTema() {
+      var modulo = $('#modulo').val();
+      var selectizemodulo = $('#modulo')[0].selectize;
+      var nombre_tema = $('#nombre_tema').val();
+
+      if (modulo != "") {
+        $(selectizemodulo.$control).css('border', '');
+        if (nombre_tema != "") {
+          $('#nombre_tema').css('border', '');
+
+          var parametros = {
+            "accion": "nuevo-tema",
+            "modulo": modulo,
+            "nombre_tema": nombre_tema
+          };
+          $.ajax({
+            data: parametros,
+            url: 'app/controlador/controladorCurso.php',
+            type: 'post',
+            beforeSend: function() {},
+            complete: function() {},
+            success: function(response) {
+              if (response != 0) {
+                alertify.success('Tema agregado correctamente')
+                $('#CursoTemas').modal('hide')
+                cuestionario(response)
+              } else {
+                alertify.error('Hubo un error')
+              }
+            }
+          });
+
+        } else {
+          $('#nombre_tema').css('border', '2px solid #A52525');
+        }
+      } else {
+        $(selectizetema.$control).css('border', '2px solid #A52525');
+      }
+
+    }
+
 
     function contenidoCursos() {
 

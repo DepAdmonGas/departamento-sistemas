@@ -16,6 +16,7 @@ include_once "../../help.php";
     <tbody class="bg-white">
       <?php
       $sql = "SELECT
+            tb_cursos_temas.id,
             tb_cursos_temas.num_tema,
             tb_cursos_temas.titulo,
             tb_cursos_temas.archivo,
@@ -28,6 +29,7 @@ include_once "../../help.php";
       $result = mysqli_query($con, $sql);
       $numero = mysqli_num_rows($result);
       while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+        $idTema = $row['id'];
         $idModulo = $row['id_modulo'];
         $numTema = $row['num_tema'];
         $nombreModulo = $row['nomModulo'];
@@ -54,7 +56,7 @@ include_once "../../help.php";
                 <i class="fa-solid fa-ellipsis-vertical"></i>
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item"><i class="fa-solid fa-sliders"></i> Cuestionario</a></li>
+                <li onclick="cuestionario(<?=$idTema?>)"><a class="dropdown-item"><i class="fa-solid fa-sliders"></i> Cuestionario</a></li>
               </ul>
             </div>
 
