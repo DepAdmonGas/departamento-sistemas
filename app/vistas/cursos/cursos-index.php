@@ -32,8 +32,6 @@ require "app/help.php";
   <!--Selectize-->
   <link href="https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/css/selectize.default.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/js/standalone/selectize.min.js"></script>
-
-
   <script type="text/javascript">
     $(document).ready(function($) {
       $(".LoaderPage").fadeOut("slow");
