@@ -72,7 +72,6 @@ if ($partes_ruta[0] == 'departamento-sistemas')
         $GET_IdRegistro = $partes_ruta[2];
         $ruta_elegida = 'app/vistas/soporte/sistemas-nuevo-registro.php';
         }
-        //----- DETALLE REGISTRO -----//
          //----- NUEVA ACTIVIDAD -----//
          if ($partes_ruta[1] == 'nueva-actividad') {
             $GET_IdRegistro = $partes_ruta[2];
@@ -93,6 +92,11 @@ if ($partes_ruta[0] == 'departamento-sistemas')
             $GET_IdRegistro = $partes_ruta[2];
             $ruta_elegida = 'app/vistas/actividades/detalle-actividad.php';
             }
+        else if($partes_ruta[1] == 'cursos-cuestionario'){
+            $GET_IdTema = $partes_ruta[2];
+            $ruta_elegida = 'app/vistas/cursos/cuestionario.php';
+        }
+        
     }
 }
 

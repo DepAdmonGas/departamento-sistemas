@@ -54,4 +54,35 @@ class Curso
     }
     return $id;
   }
+  public function nuevoTema($modulo,$titulo){
+    $id = 1;
+    $numTema = 0;
+    $estado = 1;
+    $numTema = $this->ultimoRegistroTema($modulo);
+    $sql = "INSERT INTO tb_cursos_temas (id_modulo,num_tema,titulo,estado) VALUES ($modulo,$numTema,'$titulo',$estado)";
+    $result = $this->conexion->query($sql);
+    if(!$result){
+      return $numTema;
+    }
+    $id = $this->idAgregado();
+    return $id;
+  }
+  private function ultimoRegistroTema($modulo):int {
+    $id = 0;
+    $sql = "SELECT num_tema FROM tb_cursos_temas WHERE id_modulo = $modulo ORDER BY num_tema DESC LIMIT 1";
+    $result = $this->conexion->query($sql);
+    if ($result && $row = $result->fetch_assoc()) {
+      $id = ($row['num_tema'] + 1);
+    }
+    return $id;
+  }
+  private function idAgregado(): int{
+    $id = 0;
+    $sql = "SELECT id FROM tb_cursos_temas ORDER BY id DESC LIMIT 1";
+    $result = $this->conexion->query($sql);
+    if ($result && $row = $result->fetch_assoc()) {
+      $id = ($row['id']);
+    }
+    return $id;
+  }
 }
