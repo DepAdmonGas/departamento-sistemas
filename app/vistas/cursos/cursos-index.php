@@ -69,7 +69,6 @@ require "app/help.php";
           beforeSend: function() {},
           complete: function() {},
           success: function(response) {
-            console.log(response)
             if (response == 1) {
               modalModulos()
             }
@@ -193,7 +192,6 @@ require "app/help.php";
         beforeSend: function() {},
         complete: function() {},
         success: function(response) {
-          console.log(response)
           if (response != 1) {
             alertify.error('error');
           }
@@ -217,7 +215,6 @@ require "app/help.php";
         beforeSend: function() {},
         complete: function() {},
         success: function(response) {
-          console.log(response)
           if (response != 1) {
             alertify.error('error');
           }
