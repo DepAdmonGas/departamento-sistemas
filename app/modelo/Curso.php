@@ -50,7 +50,7 @@ class Curso
   }
   private function ultimoRegistro(): int
   {
-    $id = 0;
+    $id = 1;
     $sql = "SELECT num_modulo FROM tb_cursos_modulos ORDER BY num_modulo DESC LIMIT 1";
     $result = $this->conexion->query($sql);
     if ($result && $row = $result->fetch_assoc()) {
@@ -74,7 +74,7 @@ class Curso
   }
   private function ultimoRegistroTema($modulo): int
   {
-    $id = 0;
+    $id = 1;
     $sql = "SELECT num_tema FROM tb_cursos_temas WHERE id_modulo = $modulo ORDER BY num_tema DESC LIMIT 1";
     $result = $this->conexion->query($sql);
     if ($result && $row = $result->fetch_assoc()) {
@@ -130,7 +130,7 @@ class Curso
   }
   private function ultimaRespuesta($idTema): int
   {
-    $id = 0;
+    $id = 1;
     $sql = "SELECT num_respuesta FROM tb_cursos_temas_preguntas_respuestas WHERE id_pregunta = $idTema ORDER BY num_respuesta DESC LIMIT 1";
     $result = $this->conexion->query($sql);
     if ($result && $row = $result->fetch_assoc()) {
