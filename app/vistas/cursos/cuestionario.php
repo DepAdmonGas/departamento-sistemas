@@ -45,15 +45,171 @@ while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
   <script type="text/javascript" src="<?= RUTA_JS ?>alertify.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
-  <script type="text/javascript" src="<?php echo RUTA_JS ?>signature_pad.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+
+  <!--Selectize-->
+  <link href="https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/css/selectize.default.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/js/standalone/selectize.min.js"></script>
 
   <script type="text/javascript">
     $(document).ready(function($) {
       $(".LoaderPage").fadeOut("slow");
+      contenidoPreguntas(<?= $GET_IdTema ?>)
     });
+
+    function contenidoPreguntas(idTema) {
+      $('#contenidoPreguntas').load('../app/vistas/cursos/contenido-preguntas.php?idTema=' + idTema)
+    }
 
     function Regresar() {
       window.location.href = "../../cursos";
+    }
+
+    function modalPregunta(idTema) {
+      $('#Pregunta').modal('show');
+      $('#DivPregunta').load('../app/vistas/cursos/modal-pregunta.php?idTema=' + idTema);
+    }
+
+    function modalRespuesta(idTema, id_pregunta = 0) {
+      $('#Respuesta').modal('show');
+      $('#DivRespuesta').load('../app/vistas/cursos/modal-respuesta.php?idTema=' + idTema + '&idPregunta=' + id_pregunta);
+    }
+
+    function cargaRespuestas(idTema) {
+      var idPregunta = $('#pregunta').val();
+      modalRespuesta(idTema, idPregunta)
+    }
+
+    function agregarPregunta(idTema) {
+      var pregunta = $('#nueva-pregunta').val();
+      if (pregunta != "") {
+        $('#nueva-pregunta').css('border', '');
+
+        var parametros = {
+          "accion": "agregar-pregunta",
+          "titulo": pregunta,
+          "id_tema":idTema
+        };
+
+        $.ajax({
+          data: parametros,
+          url: '../app/controlador/controladorCurso.php',
+          type: 'post',
+          beforeSend: function() {},
+          complete: function() {},
+          success: function(response) {
+            if (response == 1) {
+              modalPregunta(idTema)
+              contenidoPreguntas(idTema)
+            }
+          }
+        });
+
+      } else {
+        $('#nueva-pregunta').css('border', '2px solid #A52525');
+      }
+    }
+
+    function agregarRespuesta(idTema, idPregunta) {
+
+      var respuesta = $('#respuesta').val();
+
+      if (respuesta != "") {
+        $('#respuesta').css('border', '');
+
+        var parametros = {
+          "accion": "nueva-respuesta",
+          "idTema": idPregunta,
+          "respuesta": respuesta
+        };
+        $.ajax({
+          data: parametros,
+          url: '../app/controlador/controladorCurso.php',
+          type: 'post',
+          beforeSend: function() {},
+          complete: function() {},
+          success: function(response) {
+            if (response != 0) {
+              alertify.success('Respuesta agregado correctamente')
+              modalRespuesta(idTema, idPregunta)
+              contenidoPreguntas(idTema)
+            } else {
+              alertify.error('Hubo un error')
+            }
+          }
+        });
+
+      } else {
+        $('#respuesta').css('border', '2px solid #A52525');
+      }
+
+
+    }
+
+    function editarPregunta(celda, id) {
+      concepto = celda.textContent;
+      columna = "titulo";
+
+      var parametros = {
+        "accion": "editar-pregunta",
+        "id": id,
+        "concepto": concepto,
+        "columna": columna
+      };
+
+      $.ajax({
+        data: parametros,
+        url: '../app/controlador/controladorCurso.php',
+        type: 'post',
+        beforeSend: function() {},
+        complete: function() {},
+        success: function(response) {
+          if (response != 1) {
+            alertify.error('error');
+          }
+        }
+      });
+
+    }
+
+    function GuardarRespuesta(id, id_pregunta) {
+
+      var parametros = {
+        "accion": "editar-pregunta-respuesta",
+        "id": id,
+        "id_pregunta": id_pregunta
+      };
+
+      $.ajax({
+        data: parametros,
+        url: '../app/controlador/controladorCurso.php',
+        type: 'post',
+        beforeSend: function() {},
+        complete: function() {},
+        success: function(response) {
+          if (response == 1) {
+            alertify.success('Respuesta asignado correctamente');
+          }
+        }
+      });
+
+    }
+
+    function habilitarEdicion(celda) {
+      // Selecciona solo el <b> dentro del div donde se hizo doble clic
+      var divEditable = celda.querySelector('b');
+
+      if (divEditable) {
+        // Verificar si el contenido es editable
+        if (celda.contentEditable === "true") {
+          celda.contentEditable = "false"; // Deshabilitar la edición si ya estaba habilitada
+          celda.style.cursor = "default"; // Restaurar el cursor
+        } else {
+          celda.contentEditable = "true"; // Habilitar la edición
+          celda.style.cursor = "text"; // Cambiar el cursor a escritura
+          celda.focus(); // Poner el foco en el div para que el usuario pueda empezar a escribir
+        }
+      }
     }
   </script>
 
@@ -70,7 +226,7 @@ while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
     <!---------- CONTENIDO PAGINA WEB---------->
     <div class="contendAG container">
       <div class="row">
-        <div class="col-12 mb-3">
+        <div id="contenidoCuestionario" class="col-12 mb-3">
           <div class="cardAG">
             <div class="border-0 p-3">
               <div class="row">
@@ -85,42 +241,25 @@ while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
                   </div>
 
                   <div class="row">
-                    <div class="col-8">
+                    <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12">
                       <h3 class="text-secondary" style="padding-left: 0; margin-bottom: 0; margin-top: 0;">Formulario (<?= $titulo_tema ?>)</h3>
                     </div>
-                    <div class="col-4">
-                      <button type="button" class="btn btn-labeled2 btn-primary float-end ms-2"
-                        onclick="modalAgregarPersonal()">
-                        <span class="btn-label2"><i class="fa-solid fa-plus"></i></span>Agregar</button>
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mt-2">
+                      <button type="button" class="float-end ms-2 btn dropdown-toggle btn-primary" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-screwdriver-wrench"></i></span>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li onclick="modalRespuesta(<?= $GET_IdTema ?>)"><a class="dropdown-item pointer"><i class="fa-solid fa-list"></i> Respuesta</a></li>
+                        <li onclick="modalPregunta(<?= $GET_IdTema ?>)"><a class="dropdown-item pointer"><i class="fa-solid fa-plus"></i> Pregunta</a></li>
+                      </ul>
                     </div>
                   </div>
 
                   <hr>
                 </div>
-
-                <?php
-                echo '<div class="row">';
-
-                $sqlPregunta = "SELECT * FROM tb_cursos_temas_preguntas WHERE id_tema = '" . $GET_IdTema . "' ";
-                $resultPregunta = mysqli_query($con, $sqlPregunta);
-                $numeroPregunta  = mysqli_num_rows($resultPregunta);
-                while ($rowPregunta = mysqli_fetch_array($resultPregunta, MYSQLI_ASSOC)) {
-                  echo '<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12"><b>' . $rowPregunta['num_pregunta'] . '.- ' . $rowPregunta['titulo'] . '</b>';
-                  echo '<div class="p-3"><ol style="list-style-type:lower-alpha">';
-                  $sqlRespuesta = "SELECT * FROM tb_cursos_temas_preguntas_respuestas WHERE id_pregunta = '" . $rowPregunta['id'] . "' ";
-                  $resultRespuesta = mysqli_query($con, $sqlRespuesta);
-                  $numeroRespuesta  = mysqli_num_rows($resultRespuesta);
-                  while ($rowRespuesta = mysqli_fetch_array($resultRespuesta, MYSQLI_ASSOC)) {
-                    echo '<li> <input type="radio" name="preg' . $rowPregunta['num_pregunta'] . '" onclick="GuardarRespuesta(' . $GET_IdTema . ',' . $rowPregunta['num_pregunta'] . ',' . $rowRespuesta['valor'] . ')" > ' . $rowRespuesta['titulo'] . '</li>';
-                  }
-                  echo '</ol></div>';
-                  echo '</div>';
-                }
-
-                echo '</div>';
-                ?>
-
-
+                <div class="col-12">
+                  <div id="contenidoPreguntas"></div>
+                </div>
               </div>
 
             </div>
@@ -133,10 +272,18 @@ while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
   </div>
 
 
-  <div class="modal" id="Modal">
-    <div class="modal-dialog">
+  <div class="modal" id="Respuesta">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
-        <div id="ContenidoModal"></div>
+        <div id="DivRespuesta"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="Pregunta">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div id="DivPregunta"></div>
       </div>
     </div>
   </div>
