@@ -28,7 +28,6 @@ if ($InformacionTicket['estado'] != 0) {
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   <script type="text/javascript" src="<?= RUTA_JS ?>alertify.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
 
   <script type="text/javascript">
     $(document).ready(function($) {
@@ -437,15 +436,6 @@ if ($InformacionTicket['estado'] != 0) {
   </div>
 
   <script src="<?= RUTA_JS ?>bootstrap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
-  <script>
-    const quill = new Quill('#editor', {
-      modules: {
-        toolbar: true
-      },
-      theme: 'snow'
-    });
-  </script>
 </body>
 
 </html>
