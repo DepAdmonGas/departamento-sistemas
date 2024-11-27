@@ -164,8 +164,8 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
     }
 
     function EditarTicket(Detalle, idticket, opcion) {
-      if (opcion == 3 && Detalle == "") {
-        alertify.error("Falta ingresar fecha termino")
+      if (Detalle == "") {
+        alertify.error("Ingresar fecha termino")
       } else {
         let parametros = {
           "Accion": "editar-registro",
@@ -179,7 +179,11 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
           type: 'post',
           beforeSend: function() {},
           complete: function() {},
-          success: function(response) {}
+          success: function(response) {
+            if(Detalle != "" && opcion == 3){
+              regresarP();
+            }
+          }
         });
       }
     }
@@ -205,18 +209,6 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
 
         }
       });
-    }
-
-    function FinalizarEdicion(idticket) {
-      let Responsable = $('#Responsable').val();
-
-      if (Responsable != 0) {
-        $('#Responsable').css('border', '');
-        regresarP();
-      } else {
-        $('#Responsable').css('border', '2px solid #A52525');
-      }
-
     }
 
     function FinalizarSoporte(idticket) {
@@ -589,7 +581,6 @@ $numeroEvidencia = mysqli_num_rows($resultEvidencia);
           <?php if ($fechaTermino == '') { ?>
             <button type="button" class="btn btn-labeled2 btn-success"
               onclick="
-              FinalizarEdicion(<?= $idticket; ?>);
               EditarTicket('<?= $fechaInicio->format('Y-m-d') ?>',<?= $idticket; ?>,2);
               EditarTicket('<?= $fechaFinGuardar ?>',<?= $idticket; ?>,3)">
               <span class="btn-label2"><i class="fa-solid fa-check"></i></span>Finalizar edicion</button>

@@ -520,8 +520,6 @@ class Sistemas
     if ($estado == 1) {
 
       $sql = "UPDATE ds_soporte SET 
-                fecha_inicio = '" . $hoy . "',
-                fecha_termino = '" . $hoy . "',
                 fecha_termino_real = '" . $hoy . "',
                 porcentaje = 100,
                 id_personal_soporte = '" . $idPersonal . "',
