@@ -50,11 +50,11 @@ include_once "../../help.php";
       ?>
         <tr>
           <th class="no-hover p-0 text-center align-middle fw-bold"><?= $id ?></th>
-          <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarCheque(this, <?= $id ?>, 1)"><?= $fecha ?></div>
+          <td class="align-middle no-hover p-0">
+            <div class="form-control border-0 text-start" style="font-size: 1em; width:auto;" contenteditable="false"><?= $fecha ?></div>
           </td>
-          <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarCheque(this, <?= $id ?>, 2)"><?= $hora ?></div>
+          <td class="align-middle no-hover p-0">
+            <div class="form-control border-0 text-start" style="font-size: 1em; width:auto;" contenteditable="false"><?= $hora ?></div>
           </td>
           <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
             <div class="form-control border-0 text-start" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarCheque(this, <?= $id ?>,3)"><?= $beneficiario ?></div>
@@ -72,12 +72,12 @@ include_once "../../help.php";
             <div class="form-control border-0 text-start" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarCheque(this, <?= $id ?>, 6)"><?= $concepto ?></div>
             
           </td>
-          <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarCheque(this, <?= $id ?>, 7)"><?= $solicitante ?></div>
+          <td class="align-middle no-hover p-0">
+            <div class="form-control border-0 text-start" style="font-size: 1em; width:auto;" contenteditable="false"><?= $solicitante ?></div>
            
           </td>
-          <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarCheque(this, <?= $id ?>, 8,<?=$row['id_estacion']?>)"><?= $razonSocial ?></div>
+          <td class="align-middle no-hover p-0">
+            <div class="form-control border-0 text-start" style="font-size: 1em; width:auto;" contenteditable="false"><?= $razonSocial ?></div>
             
           </td>
         </tr>

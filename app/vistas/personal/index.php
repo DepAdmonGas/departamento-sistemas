@@ -187,8 +187,6 @@ $numLista = isset($_GET['numLista']) ? $_GET['numLista'] : 0;
         } else {
           divEditable.contentEditable = "false"; // Deshabilitar la edición si ya estaba habilitada
           var nuevoValor = divEditable.textContent; // Obtener el nuevo valor
-          console.log("Valor actualizado: " + nuevoValor);
-          // Aquí puedes realizar un AJAX o alguna acción para guardar el cambio en el servidor
         }
       }
     }

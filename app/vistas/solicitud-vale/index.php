@@ -69,8 +69,6 @@ require "app/help.php";
         } else {
           divEditable.contentEditable = "false"; // Deshabilitar la edición si ya estaba habilitada
           var nuevoValor = divEditable.textContent; // Obtener el nuevo valor
-          console.log("Valor actualizado: " + nuevoValor);
-          // Aquí puedes realizar un AJAX o alguna acción para guardar el cambio en el servidor
         }
       }
     }
@@ -82,18 +80,6 @@ require "app/help.php";
           break;
         case 2:
           columna = "concepto";
-          break;
-        case 3:
-          columna = "solicitante";
-          break;
-        case 4:
-          columna = "autorizado_por";
-          break;
-        case 5:
-          columna = "metodo_autorizacion";
-          break;
-        case 6:
-          columna = "razonsocial";
           break;
         case 7:
           columna = "cuenta";

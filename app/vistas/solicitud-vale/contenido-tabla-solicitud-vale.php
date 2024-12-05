@@ -63,18 +63,18 @@ include_once "../../help.php";
           <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
           <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarVale(this, <?= $folio ?>, 2)"><?=$concepto?></div>
           </td>
-          <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
-          <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarVale(this, <?= $folio ?>, 3)"><?= $solicitante ?></div>
+          <td class="align-middle no-hover p-0">
+          <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false"><?= $solicitante ?></div>
           </td>
-          <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
-          <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarVale(this, <?= $folio ?>, 4)"><?= $autorizado_por ?></div>
+          <td class="align-middle no-hover p-0">
+          <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false"><?= $autorizado_por ?></div>
 
           </td>
-          <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">
-          <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false" oninput="editarVale(this, <?= $folio ?>, 5)"><?= $metodo_autorizacion ?></div>
+          <td class="align-middle no-hover p-0">
+          <div class="form-control border-0 text-start" style="font-size: 1em;" contenteditable="false"><?= $metodo_autorizacion ?></div>
 
           </td>
-          <td class="text-start no-hover p-0" ondblclick="habilitarEdicion(this)">
+          <td class="text-start no-hover p-0">
           <?= $razon_social ?>
           </td>
           <td class="align-middle no-hover p-0" ondblclick="habilitarEdicion(this)">

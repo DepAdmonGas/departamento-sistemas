@@ -30,7 +30,7 @@ include_once "../../help.php";
      INNER JOIN op_corte_mes 
      ON op_corte_mes.id_year = op_corte_year.id
      INNER JOIN op_corte_dia 
-     ON op_corte_dia.id_mes = op_corte_mes.id ORDER BY op_corte_dia.fecha DESC limit 300";
+     ON op_corte_dia.id_mes = op_corte_mes.id WHERE op_corte_dia.fecha <= CURRENT_DATE ORDER BY op_corte_dia.fecha DESC limit 300";
       $result = mysqli_query($con, $sql);
       $numero = mysqli_num_rows($result);
       while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
@@ -49,9 +49,14 @@ include_once "../../help.php";
         <i class="fa-solid fa-ellipsis-vertical"></i>
         </a>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <?php 
+          if($row['ventas'] == 1 && $row['tpv'] == 1 && $row['monedero'] == 1){         
+          ?>
             <li onclick="activarCorte(<?=$row['idCorteDia']?>,<?=$Session_IDUsuarioBD?>)"><a class="dropdown-item"><i class="fa-solid fa-pencil"></i> Activar</a></li>
+          <?php }else{ ?>
             <li onclick="finalizarCorte(<?=$row['idCorteDia']?>)"><a class="dropdown-item"><i class="fa-solid fa-sliders"></i> Finalizar</a></li>
-        </ul>
+          <?php }?>
+          </ul>
         </div>
        
         </td>
