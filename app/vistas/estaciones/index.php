@@ -81,9 +81,6 @@ require "app/help.php";
         case 5:
           columna = "direccioncompleta";
           break;
-        case 6:
-          columna = "apoderado_legal";
-          break;
       }
 
       var parametros = {
@@ -98,7 +95,6 @@ require "app/help.php";
         url: 'app/controlador/estaciones.php',
         type: 'post',
         beforeSend: function() {
-          console.log(concepto)
         },
         complete: function() {},
         success: function(response) {
@@ -158,7 +154,6 @@ require "app/help.php";
         } else {
           divEditable.contentEditable = "false"; // Deshabilitar la edición si ya estaba habilitada
           var nuevoValor = divEditable.textContent; // Obtener el nuevo valor
-          //console.log("Valor actualizado: " + nuevoValor);
           // Aquí puedes realizar un AJAX o alguna acción para guardar el cambio en el servidor
         }
       }

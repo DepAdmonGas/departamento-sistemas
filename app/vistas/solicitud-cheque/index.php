@@ -70,8 +70,6 @@ require "app/help.php";
         } else {
           divEditable.contentEditable = "false"; // Deshabilitar la edición si ya estaba habilitada
           var nuevoValor = divEditable.textContent; // Obtener el nuevo valor
-          console.log("Valor actualizado: " + nuevoValor);
-          // Aquí puedes realizar un AJAX o alguna acción para guardar el cambio en el servidor
         }
       }
     }
@@ -79,12 +77,6 @@ require "app/help.php";
     function editarCheque(celda, id, columna , id_estacion = 0) {
       concepto = celda.textContent;
       switch (columna) {
-        case 1:
-          columna = "fecha";
-          break;
-        case 2:
-          columna = "hora";
-          break;
         case 3:
           columna = "beneficiario";
           break;
@@ -96,15 +88,6 @@ require "app/help.php";
           break;
         case 6:
           columna = "concepto";
-          break;
-        case 7:
-          columna = "solicitante";
-          break;
-        case 8:
-          if(id_estacion == 8){
-            columna = "razonSocialSolicitud";
-          }
-          columna = "razonSocialEstacion";
           break;
       }
 

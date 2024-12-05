@@ -57,15 +57,14 @@ include_once "../../help.php";
             <div class="form-control border-0 text-start p-0 ms-1" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarEstacion(this, <?= $numeroLista; ?>, 3)"><?= $razonSocial ?></div>
           </td>
           <td class="no-hover p-0" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start p-0 ms-1" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarEstacion(this, <?= $numeroLista; ?>, 3)"><?= $rfc ?></div>
+            <div class="form-control border-0 text-start p-0 ms-1" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarEstacion(this, <?= $numeroLista; ?>, 4)"><?= $rfc ?></div>
           </td>
           <td class="no-hover p-0" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start p-0 ms-1" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarEstacion(this, <?= $numeroLista; ?>, 3)"><?= $direccion ?></div>
+            <div class="form-control border-0 text-start p-0 ms-1" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarEstacion(this, <?= $numeroLista; ?>, 5)"><?= $direccion ?></div>
 
           </td>
-          <td class="no-hover p-0" ondblclick="habilitarEdicion(this)">
-            <div class="form-control border-0 text-start p-0 ms-1" style="font-size: 1em; width:auto;" contenteditable="false" oninput="editarEstacion(this, <?= $numeroLista; ?>, 3)"><?= $apoderadoLegal ?></div>
-
+          <td class="no-hover p-0">
+            <div class="form-control border-0 text-start p-0 ms-1" style="font-size: 1em; width:auto;" contenteditable="false"><?= $apoderadoLegal ?></div>
           </td>
           <th class="text-center no-hover p-0">
 
