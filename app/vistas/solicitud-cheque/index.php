@@ -47,11 +47,11 @@ require "app/help.php";
           "lengthMenu": [25, 50, 75, 100],
           "columnDefs": [{
               "orderable": false,
-              "targets": [8]
+              "targets": [7]
             },
             {
               "searchable": false,
-              "targets": [8]
+              "targets": [7]
             }
           ]
         });
@@ -111,6 +111,40 @@ require "app/help.php";
           }
         }
       });
+    }
+
+    function firmar(id,opcion) {
+      var parametros = {
+        "accion": "firmar-cheque",
+        "id": id,
+        "opcion":opcion
+      };
+
+      alertify.confirm("Confirmación", "¿Estás seguro de que deseas firmar esta solicitud?",
+        function() {
+          // Si el usuario confirma, se ejecuta la solicitud AJAX
+          $.ajax({
+            data: parametros,
+            url: 'app/controlador/controladorCheque.php',
+            type: 'post',
+            beforeSend: function() {},
+            complete: function() {},
+            success: function(response) {
+              console.log(response)
+              if (response == 1) {
+                alertify.success('Elemento firmado correctamente');
+                contenidoSolicitudCheque();
+              }
+            }
+          });
+        },
+        function() {
+          // Si el usuario cancela, se muestra un mensaje opcional o no se hace nada
+          //alertify.error('Operación cancelada');
+        }
+      );
+
+
     }
   </script>
 

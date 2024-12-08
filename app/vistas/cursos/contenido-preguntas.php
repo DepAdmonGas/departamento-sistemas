@@ -16,7 +16,7 @@ while ($rowPregunta = mysqli_fetch_array($resultPregunta, MYSQLI_ASSOC)) {
   $resultRespuesta = mysqli_query($con, $sqlRespuesta);
   while ($rowRespuesta = mysqli_fetch_array($resultRespuesta, MYSQLI_ASSOC)) {
     $checked = $rowRespuesta['valor'] == 1 ? 'checked' : '';
-    echo '<li> <input type="radio" name="preg' . $rowPregunta['num_pregunta'] . '" onclick="GuardarRespuesta(' . $rowRespuesta['id'] . ',' . $rowRespuesta['id_pregunta'] . ')" ' . $checked . '> ' . $rowRespuesta['titulo'] . '</li>';
+    echo '<li> <input type="radio" name="preg' . $rowPregunta['num_pregunta'] . '" ondblclick="GuardarRespuesta(' . $rowRespuesta['id'] . ',' . $rowRespuesta['id_pregunta'] . ')" ' . $checked . '> ' . $rowRespuesta['titulo'] . '</li>';
   }
   echo '</ol>
                   </div>';
