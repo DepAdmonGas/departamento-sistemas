@@ -114,7 +114,10 @@ require "app/help.php";
     }
 
     function firmar(id,opcion) {
-      var parametros = {
+      if(opcion == 3){
+        alertify.warning('Elemento cuenta con sus firmas correspondientes')
+      }else{
+        var parametros = {
         "accion": "firmar-cheque",
         "id": id,
         "opcion":opcion
@@ -143,7 +146,7 @@ require "app/help.php";
           //alertify.error('Operación cancelada');
         }
       );
-
+      }
 
     }
   </script>

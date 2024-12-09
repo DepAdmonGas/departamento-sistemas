@@ -68,7 +68,7 @@ function FirmaSolicitud($idReporte, $con)
         } else if ($Firmas == 2) {
           $Firmar = '<img class="pointer" src="' . RUTA_IMG_ICONOS . 'icon-firmar-vb.png" onclick="firmar(' . $id . ',2)" data-toggle="tooltip" data-placement="top" title="Firmar solicitud">';
         } else if ($Firmas == 3 || $row['status'] == 2) {
-          $Firmar = '<img class="grayscale" src="' . RUTA_IMG_ICONOS . 'icon-firmar-ao.png" data-toggle="tooltip" data-placement="top" title="Firmar solicitud">';
+          $Firmar = '<img class="grayscale" src="' . RUTA_IMG_ICONOS . 'icon-firmar-ao.png" onclick="firmar(' . $id . ',3)" data-toggle="tooltip" data-placement="top" title="Firmar solicitud">';
         }
       ?>
         <tr>
